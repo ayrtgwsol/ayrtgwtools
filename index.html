@@ -9,12 +9,8 @@
         :root {
             --bg-image: url('./light.png');
             --brand-blue: #0052cc;
-            
-            /* Symmetrical Edge Spacing Constants */
             --edge-gap: 24px;
             --max-bound: 1400px;
-            
-            /* Pure Reactive Glassmorphism Specs (Light Theme Base) */
             --glass-bg: rgba(255, 255, 255, 0.35);
             --glass-card: rgba(255, 255, 255, 0.23);
             --glass-btn: rgba(255, 255, 255, 0.45);
@@ -25,8 +21,6 @@
 
         [data-theme="dark"] {
             --bg-image: url('./dark.png');
-            
-            /* Pure Reactive Glassmorphism Specs (Dark Theme Base) */
             --glass-bg: rgba(15, 23, 42, 0.45);
             --glass-card: rgba(15, 23, 42, 0.28);
             --glass-btn: rgba(255, 255, 255, 0.08);
@@ -35,13 +29,12 @@
             --modal-overlay: rgba(0, 0, 0, 0.55);
         }
 
-        /* Monolithic Structural Text Rules */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            color: var(--brand-blue) !important; /* Force precise single color across all interfaces */
+            color: var(--brand-blue) !important;
             transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
         }
 
@@ -59,19 +52,13 @@
             padding-right: var(--edge-gap);
         }
 
-        /* Prevent Background Window Document Drift Intercept Class */
-        body.modal-lock {
-            overflow: hidden !important;
-            height: 100vh !important;
-        }
+        body.modal-lock { overflow: hidden !important; height: 100vh !important; }
 
-        /* Symmetrically Proportioned Floating Top Navigation Bar Capsule */
         header {
             width: 100%;
             max-width: var(--max-bound);
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 0 2.5rem;
@@ -87,470 +74,92 @@
             box-shadow: 0 10px 30px var(--shadow-color);
         }
 
-        /* Mobile Hamburger Icon - Hidden by Default on Desktop */
-        .mobile-menu-trigger {
-            display: none;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-            flex-direction: column;
-            gap: 6px;
-            z-index: 110;
-        }
+        .mobile-menu-trigger { display: none; background: transparent; border: none; cursor: pointer; padding: 0.5rem; flex-direction: column; gap: 6px; z-index: 110; }
+        .mobile-menu-trigger span { display: block; width: 26px; height: 2.5px; background-color: var(--brand-blue); border-radius: 2px; }
+        
+        .logo-container img { height: 42px; cursor: pointer; }
+        .external-links { display: flex; gap: 1.2rem; }
+        .nav-btn { background: var(--glass-btn); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 0.6rem 1.4rem; border-radius: 10px; font-weight: 600; cursor: pointer; text-decoration: none; }
 
-        .mobile-menu-trigger span {
-            display: block;
-            width: 26px;
-            height: 2.5px;
-            background-color: var(--brand-blue);
-            border-radius: 2px;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
+        .mobile-sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100vh; background: var(--glass-card); backdrop-filter: blur(35px); z-index: 95; padding: calc(80px + var(--edge-gap) + 2rem) 1.5rem 2rem 1.5rem; display: flex; flex-direction: column; gap: 1.2rem; transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .mobile-sidebar.open { left: 0; }
 
-        /* Hamburger Transform Actions to Cross Configuration */
-        .mobile-menu-trigger.active .line-1 { transform: translateY(8.5px) rotate(45deg); }
-        .mobile-menu-trigger.active .line-2 { opacity: 0; }
-        .mobile-menu-trigger.active .line-3 { transform: translateY(-8.5px) rotate(-45deg); }
-
-        .logo-container img {
-            height: 42px;
-            display: block;
-            cursor: pointer;
-        }
-
-        .logo-container img:hover {
-            transform: scale(1.02);
-        }
-
-        .external-links {
-            display: flex;
-            gap: 1.2rem;
-        }
-
-        /* Semi-Transparent Glass Action Link Triggers */
-        .nav-btn {
-            background: var(--glass-btn);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            padding: 0.6rem 1.4rem;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.88rem;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: 0 4px 12px var(--shadow-color);
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            background: rgba(0, 82, 204, 0.08);
-            border-color: var(--brand-blue);
-        }
-
-        /* --- Translucent Glass Mobile Sidebar Menu --- */
-        .mobile-sidebar {
-            position: fixed;
-            top: 0;
-            left: -300px;
-            width: 280px;
-            height: 100vh;
-            background: var(--glass-card);
-            backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px);
-            border-right: 1px solid var(--glass-border);
-            z-index: 95;
-            padding: calc(80px + var(--edge-gap) + 2rem) 1.5rem 2rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-            box-shadow: 20px 0 50px rgba(0, 0, 0, 0.15);
-            transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .mobile-sidebar.open {
-            left: 0;
-        }
-
-        .mobile-sidebar .nav-btn {
-            width: 100%;
-            justify-content: center;
-            padding: 1rem;
-            font-size: 1rem;
-        }
-
-        /* Core Workspace Section Framework */
-        main {
-            margin-top: calc(80px + (var(--edge-gap) * 2) + 2rem);
-            flex: 1;
-            padding: 2rem 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-
-        /* Wide Asymmetric Column Pipeline */
-        .tools-column-pipeline {
-            width: 100%;
-            max-width: var(--max-bound);
-            display: flex;
-            flex-direction: column;
-            gap: 5rem;
-        }
-
-        .tool-row-node {
-            display: flex;
-            width: 100%;
-            align-items: center;
-            box-sizing: border-box;
-        }
-
-        /* Desktop Alternating Stagger Logic */
+        main { margin-top: calc(80px + (var(--edge-gap) * 2) + 2rem); flex: 1; padding: 2rem 0; display: flex; flex-direction: column; align-items: center; width: 100%; }
+        .tools-column-pipeline { width: 100%; max-width: var(--max-bound); display: flex; flex-direction: column; gap: 5rem; }
+        .tool-row-node { display: flex; width: 100%; align-items: center; box-sizing: border-box; }
+        
         .tool-row-node:nth-child(odd) { justify-content: flex-start; }
         .tool-row-node:nth-child(even) { justify-content: flex-end; }
 
-        /* Premium Minimalist Semi-Transparent Glass Card */
-        .tool-card {
-            background: var(--glass-card);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 3rem 2.5rem;
-            width: 100%;
-            max-width: 440px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            box-shadow: 0 12px 35px var(--shadow-color);
-        }
+        .tool-card { background: var(--glass-card); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem 2.5rem; width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; gap: 2rem; box-shadow: 0 12px 35px var(--shadow-color); }
+        .tool-name { font-size: 1.6rem; font-weight: 700; text-transform: uppercase; text-align: center; }
+        .launch-btn { width: 100%; background: var(--glass-btn); border: 1px solid var(--glass-border); padding: 0.9rem; border-radius: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
 
-        .tool-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--brand-blue);
-            box-shadow: 0 20px 45px rgba(0, 82, 204, 0.1);
-        }
+        .floating-theme-panel { position: fixed; bottom: var(--edge-gap); right: var(--edge-gap); z-index: 999; }
+        .glass-toggle-circle { width: 56px; height: 56px; border-radius: 50%; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        .tool-name {
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            text-transform: uppercase;
-            text-align: center;
-        }
+        .floating-window-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--modal-overlay); backdrop-filter: blur(12px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; }
+        .floating-window-overlay.active { opacity: 1; pointer-events: auto; }
+        .window-wrapper { width: 90%; max-width: 750px; height: 80vh; background: var(--glass-card); border: 1px solid var(--glass-border); border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; }
+        .window-header { padding: 1.2rem 2rem; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
+        .window-body-frame { flex: 1; width: 100%; height: 100%; border: none; background: transparent; }
 
-        .launch-btn {
-            width: 100%;
-            background: var(--glass-btn);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            padding: 0.9rem;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .launch-btn:hover {
-            background: rgba(0, 82, 204, 0.08);
-            border-color: var(--brand-blue);
-            transform: scale(1.01);
-        }
-
-        /* --- Floating Detached Corner Theme Configuration Panel --- */
-        .floating-theme-panel {
-            position: fixed;
-            bottom: var(--edge-gap);
-            right: var(--edge-gap);
-            z-index: 999;
-        }
-
-        .glass-toggle-circle {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px var(--shadow-color);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            outline: none;
-        }
-
-        .glass-toggle-circle:hover {
-            transform: scale(1.08);
-            border-color: var(--brand-blue);
-        }
-
-        .icon-vector {
-            width: 26px;
-            height: 26px;
-            fill: var(--brand-blue);
-        }
-
-        [data-theme="light"] .moon-shadow-icon { display: none; }
-        [data-theme="dark"] .sun-clear-icon { display: none; }
-
-        /* --- Floating Context Dynamic Tab Frame Modals --- */
-        .floating-window-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: var(--modal-overlay);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .floating-window-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .window-wrapper {
-            width: 90%;
-            max-width: 750px;
-            height: 80vh;
-            background: var(--glass-card);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transform: scale(0.96);
-            transition: transform 0.3s ease;
-        }
-
-        .floating-window-overlay.active .window-wrapper {
-            transform: scale(1);
-        }
-
-        .window-header {
-            padding: 1.2rem 2rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .window-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: -0.2px;
-        }
-
-        .close-window-btn {
-            background: transparent;
-            border: none;
-            font-size: 2rem;
-            line-height: 1;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .close-window-btn:hover {
-            transform: scale(1.15);
-        }
-
-        .window-body-frame {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: transparent;
-        }
-
-        /* Balanced Glassmorphic Floating Bottom Footer Bar Capsule */
-        footer {
-            width: 100%;
-            max-width: var(--max-bound);
-            padding: 1.8rem;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            margin: auto auto 0 auto;
-            position: relative;
-            z-index: 90;
-            box-shadow: 0 -10px 30px var(--shadow-color);
-        }
-
-        /* --- Responsive Media Viewport Breaks --- */
-        @media (max-width: 900px) {
-            :root { --edge-gap: 16px; }
-            header { padding: 0 1.5rem; }
-            main { padding: 2rem 0; }
-            .tools-column-pipeline { gap: 3.5rem; }
-        }
+        footer { width: 100%; max-width: var(--max-bound); padding: 1.8rem; text-align: center; background: var(--glass-bg); border-radius: 20px; margin: auto auto 0 auto; position: relative; z-index: 90; }
 
         @media (max-width: 768px) {
-            body { padding-top: calc(80px + var(--edge-gap)); }
-            
-            header {
-                padding: 0 1.2rem;
-                display: grid;
-                grid-template-columns: 40px 1fr 40px;
-                align-items: center;
-                justify-content: stretch;
-            }
-
-            .mobile-menu-trigger {
-                display: flex;
-                grid-column: 1;
-                justify-self: start;
-            }
-
-            .logo-container {
-                grid-column: 2;
-                justify-self: center;
-            }
-
-            header::after {
-                content: "";
-                grid-column: 3;
-                width: 40px;
-                display: block;
-            }
-
-            .external-links {
-                display: none;
-            }
-
-            main { padding: 1.5rem 0; margin-top: 0; }
-
-            /* Mobile Asymmetric Zig-Zag Intercept System */
-            .tools-column-pipeline { gap: 2.5rem; }
-            
-            .tool-row-node:nth-child(odd) { 
-                justify-content: flex-start !important; 
-            }
-            .tool-row-node:nth-child(even) { 
-                justify-content: flex-end !important; 
-            }
-
-            /* Responsive Narrow Card Scaling Framework */
-            .tool-card {
-                width: 82%;
-                max-width: none;
-                padding: 2.2rem 1.8rem;
-                gap: 1.5rem;
-                border-radius: 16px;
-            }
-
-            .tool-name {
-                font-size: 1.25rem;
-                letter-spacing: -0.3px;
-            }
-
-            .launch-btn {
-                padding: 0.75rem;
-                font-size: 0.85rem;
-                border-radius: 10px;
-            }
-
-            footer { width: 100%; font-size: 0.8rem; letter-spacing: 3px; padding: 1.4rem; }
+            .mobile-menu-trigger { display: flex; }
+            .external-links { display: none; }
+            .tool-card { width: 85%; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <button class="mobile-menu-trigger" id="sidebarMenuToggle" aria-label="Toggle Navigation Sidebar Menu">
-            <span class="line-1"></span>
-            <span class="line-2"></span>
-            <span class="line-3"></span>
-        </button>
-        
-        <div class="logo-container" onclick="launchFloatingTool('./tool/rotate-tool.html', 'Rotation Vector Framework')" title="Click Logo to Launch Principal System Framework">
-            <img src="./Logo2.png" alt="AYR TGW Solutions Logo">
-        </div>
-        
+        <button class="mobile-menu-trigger" id="sidebarMenuToggle"><span></span><span></span><span></span></button>
+        <div class="logo-container"><img src="./Logo2.png" alt="Logo"></div>
         <div class="external-links">
-            <a href="https://forms.gle/qD4b8aAvsNsw3R8x6" target="_blank" class="nav-btn">Clients Form</a>
-            <a href="https://forms.gle/iZ4bZfq4rwQCZMQm7" target="_blank" class="nav-btn">Partners Form</a>
-            <a href="https://forms.gle/8qiENB9tPN7QneCD6" target="_blank" class="nav-btn">Inquiry Form</a>
+            <a href="#" class="nav-btn">Clients Form</a>
+            <a href="#" class="nav-btn">Partners Form</a>
         </div>
     </header>
 
     <nav class="mobile-sidebar" id="mobileSidebarMenu">
-        <a href="https://forms.gle/qD4b8aAvsNsw3R8x6" target="_blank" class="nav-btn">Clients Form</a>
-        <a href="https://forms.gle/iZ4bZfq4rwQCZMQm7" target="_blank" class="nav-btn">Partners Form</a>
-        <a href="https://forms.gle/8qiENB9tPN7QneCD6" target="_blank" class="nav-btn">Inquiry Form</a>
+        <a href="#" class="nav-btn">Clients Form</a>
+        <a href="#" class="nav-btn">Partners Form</a>
     </nav>
 
     <main>
-        <div class="tools-column-pipeline" id="staggeredPipelineMatrix">
+        <div class="tools-column-pipeline">
             
             <div class="tool-row-node">
                 <div class="tool-card">
-                    <div class="tool-name">Rotate Tool</div>
-                    <button class="launch-btn" onclick="launchFloatingTool('./tool/rotate-tool.html', 'Rotation Vector Framework')">Launch Framework</button>
+                    <div class="tool-name">Savings Calculator</div>
+                    <button class="launch-btn" onclick="launchFloatingTool('./tool/savings-calculator.html', 'Savings Finance Calculator')">Launch Framework</button>
                 </div>
             </div>
 
             <div class="tool-row-node">
                 <div class="tool-card">
-                    <div class="tool-name">Analysis Node</div>
-                    <button class="launch-btn" onclick="alert('Analysis infrastructure node initiated.')">Launch Framework</button>
+                    <div class="tool-name">Finance Growth</div>
+                    <button class="launch-btn" onclick="launchFloatingTool('./tool/financial-calculator.html', 'Finance Growth Calculator')">Launch Framework</button>
                 </div>
             </div>
 
         </div>
     </main>
 
-    <footer>
-        Trust • Growth • Wealth
-    </footer>
+    <footer>Trust • Growth • Wealth</footer>
 
     <div class="floating-theme-panel">
-        <button class="glass-toggle-circle" id="themeEngineToggle" aria-label="Switch Design Mode Theme">
-            <svg class="icon-vector sun-clear-icon" viewBox="0 0 24 24">
-                <path d="M12 6.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 1.5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0-6a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 12 2zm0 16a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75zm8.485-13.425a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0zm-12.728 12.728a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0zM22 12a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 22 12zM5.5 12a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 5.5 12zm14.985 5.485a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0zM6.414 5.414a.75.75 0 0 1 0 1.06L5.354 7.536a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0z"/>
-            </svg>
-            <svg class="icon-vector moon-shadow-icon" viewBox="0 0 24 24">
-                <path d="M12.1 22a9.9 9.9 0 0 1-7-2.9 10 10 0 0 1 0-14.2 9.9 9.9 0 0 1 8.2-2.7c.5.1.9.5.8 1-.1.5-.6.9-1.1.8a8.4 8.4 0 0 0-5 1.5 8.5 8.5 0 0 0 0 12c1.6 1.6 3.8 2.5 6.1 2.5 3.3 0 6.2-2 7.4-5 .2-.5.7-.7 1.2-.6.5.2.8.7.6 1.2A9.9 9.9 0 0 1 12.1 22z" fill-rule="evenodd"/>
-                <path d="M13.5 6a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zm-5 6.5a5 5 0 1 1 10 0 5 5 0 0 1-10 0z" opacity="0.3"/>
-            </svg>
-        </button>
+        <button class="glass-toggle-circle" id="themeEngineToggle"></button>
     </div>
 
     <div class="floating-window-overlay" id="globalAppOverlay">
         <div class="window-wrapper">
             <div class="window-header">
                 <span class="window-title" id="globalAppTitle">Tool Workspace</span>
-                <button class="close-window-btn" onclick="terminateFloatingTool()" aria-label="Dismiss Modal Frame Window Instance">×</button>
+                <button class="close-window-btn" onclick="terminateFloatingTool()">×</button>
             </div>
             <iframe class="window-body-frame" id="globalAppIframe" src="about:blank"></iframe>
         </div>
@@ -561,82 +170,30 @@
         const rootElement = document.documentElement;
         const globalAppOverlay = document.getElementById('globalAppOverlay');
         const globalAppIframe = document.getElementById('globalAppIframe');
-        const globalAppTitle = document.getElementById('globalAppTitle');
-        
-        // Mobile Sidebar Selectors
         const sidebarMenuToggle = document.getElementById('sidebarMenuToggle');
         const mobileSidebarMenu = document.getElementById('mobileSidebarMenu');
 
-        // Mobile Sidebar Trigger Intercept Pipeline
-        sidebarMenuToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sidebarMenuToggle.classList.toggle('active');
+        sidebarMenuToggle.addEventListener('click', () => {
             mobileSidebarMenu.classList.toggle('open');
         });
 
-        // Close Sidebar when clicking outside of it
-        document.addEventListener('click', (e) => {
-            if (mobileSidebarMenu.classList.contains('open') && !mobileSidebarMenu.contains(e.target) && e.target !== sidebarMenuToggle) {
-                sidebarMenuToggle.classList.remove('active');
-                mobileSidebarMenu.classList.remove('open');
-            }
-        });
-
-        // Theme Toggle Intercept Pipeline
         themeEngineToggle.addEventListener('click', () => {
-            const activeTheme = rootElement.getAttribute('data-theme');
-            const calculatedNextTheme = activeTheme === 'dark' ? 'light' : 'dark';
-            
-            rootElement.setAttribute('data-theme', calculatedNextTheme);
-            localStorage.setItem('ayr-workspace-theme', calculatedNextTheme);
-            
-            synchronizeChildIframeTheme();
+            const nextTheme = rootElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            rootElement.setAttribute('data-theme', nextTheme);
         });
 
-        // Frame Control Engine Actions (Now includes background window scroll preventative hooks)
-        function launchFloatingTool(applicationPath, applicationLabel) {
-            globalAppTitle.textContent = applicationLabel;
-            globalAppIframe.src = applicationPath;
+        function launchFloatingTool(path, label) {
+            document.getElementById('globalAppTitle').textContent = label;
+            globalAppIframe.src = path;
             globalAppOverlay.classList.add('active');
-            document.body.classList.add('modal-lock'); // Activates full vertical lock matrix
-            
-            sidebarMenuToggle.classList.remove('active');
-            mobileSidebarMenu.classList.remove('open');
-            
-            setTimeout(synchronizeChildIframeTheme, 150);
+            document.body.classList.add('modal-lock');
         }
 
         function terminateFloatingTool() {
             globalAppOverlay.classList.remove('active');
-            document.body.classList.remove('modal-lock'); // Releases structural container scroll locks
+            document.body.classList.remove('modal-lock');
             globalAppIframe.src = 'about:blank';
         }
-
-        function synchronizeChildIframeTheme() {
-            if (globalAppIframe.contentWindow) {
-                const currentSystemActiveTheme = rootElement.getAttribute('data-theme');
-                try {
-                    globalAppIframe.contentWindow.document.documentElement.setAttribute('data-theme', currentSystemActiveTheme);
-                } catch (e) {}
-            }
-        }
-
-        // Apply preserved defaults during initial render cycles
-        window.addEventListener('DOMContentLoaded', () => {
-            const preservedUserThemeSelection = localStorage.getItem('ayr-workspace-theme') || 'light';
-            rootElement.setAttribute('data-theme', preservedUserThemeSelection);
-        });
-
-        // Native Escape key interface cancellation action hooks
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                if (globalAppOverlay.classList.contains('active')) terminateFloatingTool();
-                if (mobileSidebarMenu.classList.contains('open')) {
-                    sidebarMenuToggle.classList.remove('active');
-                    mobileSidebarMenu.classList.remove('open');
-                }
-            }
-        });
     </script>
 </body>
 </html>
