@@ -86,23 +86,15 @@
 
         main { margin-top: calc(80px + (var(--edge-gap) * 2) + 2rem); flex: 1; padding: 2rem 0; display: flex; flex-direction: column; align-items: center; width: 100%; }
         .tools-column-pipeline { width: 100%; max-width: var(--max-bound); display: flex; flex-direction: column; gap: 5rem; }
-        .tool-row-node { display: flex; width: 100%; align-items: center; box-sizing: border-box; }
         
-        .tool-row-node:nth-child(odd) { justify-content: flex-start; }
-        .tool-row-node:nth-child(even) { justify-content: flex-end; }
-
+        .tool-row-node { display: flex; width: 100%; align-items: center; justify-content: center !important; box-sizing: border-box; }
+        
         .tool-card { background: var(--glass-card); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem 2.5rem; width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; gap: 2rem; box-shadow: 0 12px 35px var(--shadow-color); }
-        .tool-name { font-size: 1.6rem; font-weight: 700; text-transform: uppercase; text-align: center; }
-        .launch-btn { width: 100%; background: var(--glass-btn); border: 1px solid var(--glass-border); padding: 0.9rem; border-radius: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .tool-name { font-size: 1.6rem; font-weight: 700; text-transform: uppercase; text-align: center; margin-bottom: 0.5rem; }
+        .launch-btn { width: 100%; background: var(--glass-btn); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; text-align: center; text-decoration: none; display: block; }
 
         .floating-theme-panel { position: fixed; bottom: var(--edge-gap); right: var(--edge-gap); z-index: 999; }
         .glass-toggle-circle { width: 56px; height: 56px; border-radius: 50%; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        .floating-window-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--modal-overlay); backdrop-filter: blur(12px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; }
-        .floating-window-overlay.active { opacity: 1; pointer-events: auto; }
-        .window-wrapper { width: 90%; max-width: 750px; height: 80vh; background: var(--glass-card); border: 1px solid var(--glass-border); border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; }
-        .window-header { padding: 1.2rem 2rem; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
-        .window-body-frame { flex: 1; width: 100%; height: 100%; border: none; background: transparent; }
 
         footer { width: 100%; max-width: var(--max-bound); padding: 1.8rem; text-align: center; background: var(--glass-bg); border-radius: 20px; margin: auto auto 0 auto; position: relative; z-index: 90; }
 
@@ -134,15 +126,8 @@
             
             <div class="tool-row-node">
                 <div class="tool-card">
-                    <div class="tool-name">Savings Calculator</div>
-                    <button class="launch-btn" onclick="launchFloatingTool('./tool/savings-calculator.html', 'Savings Finance Calculator')">Launch Framework</button>
-                </div>
-            </div>
-
-            <div class="tool-row-node">
-                <div class="tool-card">
-                    <div class="tool-name">Finance Growth</div>
-                    <button class="launch-btn" onclick="launchFloatingTool('./tool/financial-calculator.html', 'Finance Growth Calculator')">Launch Framework</button>
+                    <div class="tool-name">Financial Tools</div>
+                    <a href="https://financial-calculators.ca/#/" target="_blank" class="launch-btn">Open Calculator Portal</a>
                 </div>
             </div>
 
@@ -155,21 +140,9 @@
         <button class="glass-toggle-circle" id="themeEngineToggle"></button>
     </div>
 
-    <div class="floating-window-overlay" id="globalAppOverlay">
-        <div class="window-wrapper">
-            <div class="window-header">
-                <span class="window-title" id="globalAppTitle">Tool Workspace</span>
-                <button class="close-window-btn" onclick="terminateFloatingTool()">×</button>
-            </div>
-            <iframe class="window-body-frame" id="globalAppIframe" src="about:blank"></iframe>
-        </div>
-    </div>
-
     <script>
         const themeEngineToggle = document.getElementById('themeEngineToggle');
         const rootElement = document.documentElement;
-        const globalAppOverlay = document.getElementById('globalAppOverlay');
-        const globalAppIframe = document.getElementById('globalAppIframe');
         const sidebarMenuToggle = document.getElementById('sidebarMenuToggle');
         const mobileSidebarMenu = document.getElementById('mobileSidebarMenu');
 
@@ -181,19 +154,6 @@
             const nextTheme = rootElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             rootElement.setAttribute('data-theme', nextTheme);
         });
-
-        function launchFloatingTool(path, label) {
-            document.getElementById('globalAppTitle').textContent = label;
-            globalAppIframe.src = path;
-            globalAppOverlay.classList.add('active');
-            document.body.classList.add('modal-lock');
-        }
-
-        function terminateFloatingTool() {
-            globalAppOverlay.classList.remove('active');
-            document.body.classList.remove('modal-lock');
-            globalAppIframe.src = 'about:blank';
-        }
     </script>
 </body>
 </html>
