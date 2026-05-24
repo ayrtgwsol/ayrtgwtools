@@ -59,6 +59,12 @@
             padding-right: var(--edge-gap);
         }
 
+        /* Prevent Background Window Document Drift Intercept Class */
+        body.modal-lock {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
+
         /* Symmetrically Proportioned Floating Top Navigation Bar Capsule */
         header {
             width: 100%;
@@ -200,6 +206,7 @@
             display: flex;
             width: 100%;
             align-items: center;
+            box-sizing: border-box;
         }
 
         /* Desktop Alternating Stagger Logic */
@@ -261,8 +268,8 @@
         /* --- Floating Detached Corner Theme Configuration Panel --- */
         .floating-theme-panel {
             position: fixed;
-            bottom: var(--edge-gap); /* Perfect identical spacing from bottom screen boundary */
-            right: var(--edge-gap);  /* Perfect identical spacing from right side screen boundary */
+            bottom: var(--edge-gap);
+            right: var(--edge-gap);
             z-index: 999;
         }
 
@@ -411,7 +418,6 @@
         @media (max-width: 768px) {
             body { padding-top: calc(80px + var(--edge-gap)); }
             
-            /* Structural Changes for Mobile Header Layout Grid */
             header {
                 padding: 0 1.2rem;
                 display: grid;
@@ -587,11 +593,12 @@
             synchronizeChildIframeTheme();
         });
 
-        // Frame Control Engine Actions
+        // Frame Control Engine Actions (Now includes background window scroll preventative hooks)
         function launchFloatingTool(applicationPath, applicationLabel) {
             globalAppTitle.textContent = applicationLabel;
             globalAppIframe.src = applicationPath;
             globalAppOverlay.classList.add('active');
+            document.body.classList.add('modal-lock'); // Activates full vertical lock matrix
             
             sidebarMenuToggle.classList.remove('active');
             mobileSidebarMenu.classList.remove('open');
@@ -601,6 +608,7 @@
 
         function terminateFloatingTool() {
             globalAppOverlay.classList.remove('active');
+            document.body.classList.remove('modal-lock'); // Releases structural container scroll locks
             globalAppIframe.src = 'about:blank';
         }
 
