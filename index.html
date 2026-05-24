@@ -10,6 +10,10 @@
             --bg-image: url('./light.png');
             --brand-blue: #0052cc;
             
+            /* Symmetrical Edge Spacing Constant */
+            --edge-gap: 24px;
+            --max-bound: 1400px;
+            
             /* Pure Reactive Glassmorphism Specs (Light Theme Base) */
             --glass-bg: rgba(255, 255, 255, 0.35);
             --glass-card: rgba(255, 255, 255, 0.23);
@@ -51,24 +55,26 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
             overflow-x: hidden;
-            padding: 20px; /* Outer frame breathing room for floating layout system */
+            /* Side padding matches side borders of floating capsules exactly */
+            padding-left: var(--edge-gap);
+            padding-right: var(--edge-gap);
         }
 
-        /* Glassmorphic Floating Top Navigation Header Bar Capsule */
+        /* Symmetrically Proportioned Floating Top Navigation Bar Capsule */
         header {
-            width: calc(100% - 40px);
-            max-width: 1400px;
+            width: calc(100% - (var(--edge-gap) * 2));
+            max-width: var(--max-bound);
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px; /* High curvature profile mapping */
+            border-radius: 20px;
             padding: 0 2.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: fixed;
-            top: 20px;
+            top: var(--edge-gap); /* Vertical offset exactly equal to horizontal offset */
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
@@ -116,7 +122,7 @@
 
         /* Core Workspace Section Framework */
         main {
-            margin-top: 130px;
+            margin-top: calc(80px + (var(--edge-gap) * 2) + 2rem); /* Dynamic header height clear */
             flex: 1;
             padding: 2rem 0;
             display: flex;
@@ -125,10 +131,10 @@
             width: 100%;
         }
 
-        /* Wide Asymmetric Edge-to-Edge Column Pipeline */
+        /* Wide Asymmetric Column Pipeline - Matches Header/Footer bounds */
         .tools-column-pipeline {
             width: 100%;
-            max-width: 1400px; /* Expanded envelope layout boundary */
+            max-width: var(--max-bound);
             display: flex;
             flex-direction: column;
             gap: 5rem;
@@ -206,8 +212,8 @@
         /* --- Floating Detached Corner Theme Configuration Panel --- */
         .floating-theme-panel {
             position: fixed;
-            bottom: 7.5rem; 
-            right: 2.5rem;
+            bottom: calc(var(--edge-gap) + 80px + 1.5rem); 
+            right: calc(var(--edge-gap) + 1rem);
             z-index: 999;
         }
 
@@ -325,10 +331,10 @@
             background: transparent;
         }
 
-        /* Glassmorphic Floating Bottom Footer Bar Capsule */
+        /* Balanced Glassmorphic Floating Bottom Footer Bar Capsule */
         footer {
-            width: calc(100% - 40px);
-            max-width: 1400px;
+            width: 100%;
+            max-width: var(--max-bound);
             padding: 1.8rem;
             text-align: center;
             font-size: 0.9rem;
@@ -339,31 +345,30 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px; /* High curvature profile mapping */
-            margin: 20px auto 0 auto;
+            border-radius: 20px;
+            margin: auto auto var(--edge-gap) auto; /* Bottom offset perfectly equals gap variable */
             position: relative;
             z-index: 90;
             box-shadow: 0 -10px 30px var(--shadow-color);
         }
 
-        /* Grid Adaptation Systems */
+        /* Mobile Optimization and Breaking Adapters */
         @media (max-width: 900px) {
-            header, footer { width: calc(100% - 30px); padding: 0 1.5rem; }
-            main { padding: 2rem 1rem; }
-            .floating-theme-panel { right: 1.5rem; bottom: 7rem; }
+            :root { --edge-gap: 16px; }
+            header { padding: 0 1.5rem; }
+            main { padding: 2rem 0; }
         }
 
         @media (max-width: 768px) {
+            body { padding-top: calc(80px + (var(--edge-gap) * 2)); }
             header {
                 flex-direction: column;
                 height: auto;
                 padding: 1.5rem 1rem;
-                position: relative;
-                top: 0;
-                width: 100%;
+                position: absolute;
                 gap: 1rem;
             }
-            main { margin-top: 1rem; }
+            main { margin-top: 0; }
             .tool-row-node, .tool-row-node:nth-child(even) { justify-content: center; }
             .external-links {
                 flex-direction: column;
@@ -371,8 +376,6 @@
                 gap: 0.5rem;
             }
             .nav-btn { width: 100%; justify-content: center; }
-            .floating-theme-panel { bottom: 8rem; right: 1.5rem; }
-            footer { width: 100%; }
         }
     </style>
 </head>
