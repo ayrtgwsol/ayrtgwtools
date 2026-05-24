@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Growth Calculator</title>
+    <style>
+        :root {
+            --brand-blue: #0052cc;
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-card: rgba(255, 255, 255, 0.4);
+            --text-color: #1e293b;
+        }
+        [data-theme="dark"] {
+            --glass-bg: rgba(15, 23, 42, 0.7);
+            --glass-card: rgba(15, 23, 42, 0.4);
+            --text-color: #f1f5f9;
+        }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--glass-bg); color: var(--text-color); padding: 20px; display: flex; justify-content: center; }
+        .calc-card { background: var(--glass-card); backdrop-filter: blur(20px); padding: 2rem; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .input-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.3rem; font-size: 0.85rem; font-weight: 600; }
+        input { width: 100%; padding: 0.7rem; border-radius: 8px; border: 1px solid rgba(0,82,204,0.2); background: rgba(255,255,255,0.8); }
+        button { width: 100%; padding: 1rem; margin-top: 1rem; background: var(--brand-blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        #results { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1); }
+        .result-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+
+<div class="calc-card">
+    <div class="input-group">
+        <label>Principal Amount ($)</label>
+        <input type="number" id="principal" value="10000">
+    </div>
+    <div class="input-group">
+        <label>Annual Interest (%)</label>
+        <input type="number" id="rate" value="5">
+    </div>
+    <div class="input-group">
+        <label>Years</label>
+        <input type="number" id="years" value="10">
+    </div>
+    <button onclick="calculate()">Calculate Future Value</button>
+
+    <div id="results">
+        <div class="result-row"><span>Future Value:</span> <strong id="res-total">$0</strong></div>
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        const P = parseFloat(document.getElementById('principal').value);
+        const r = parseFloat(document.getElementById('rate').value) / 100;
+        const t = parseFloat(document.getElementById('years').value);
+        // Standard Compound Interest Formula: A = P(1 + r)^t
+        const A = P * Math.pow((1 + r), t);
+        document.getElementById('res-total').textContent = '$' + A.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+</script>
+</body>
+</html>
