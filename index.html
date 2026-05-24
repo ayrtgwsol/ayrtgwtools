@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AYR TGW Tools Workspace</title>
     <style>
+        /* Definitive Brand Controls & Adaptive Paths */
         :root {
-            --bg-image: url('light.jpg');
+            --bg-image: url('./light.jpg');
             --text-color: #0052cc;
             --card-bg: rgba(255, 255, 255, 0.45);
             --card-border: rgba(255, 255, 255, 0.4);
@@ -18,7 +19,7 @@
         }
 
         [data-theme="dark"] {
-            --bg-image: url('dark.jpg');
+            --bg-image: url('./dark.jpg');
             --text-color: #ffffff;
             --card-bg: rgba(15, 23, 42, 0.45);
             --card-border: rgba(255, 255, 255, 0.1);
@@ -34,7 +35,13 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text-color) !important;
             transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        /* Enforce raw styles to bypass global color overrides on buttons */
+        .nav-btn, .launch-btn {
+            color: var(--btn-text) !important;
         }
 
         body {
@@ -56,7 +63,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--card-border);
-            padding: 1rem 2rem;
+            padding: 1rem 4rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -64,68 +71,43 @@
             top: 0;
             left: 0;
             z-index: 100;
+            height: 90px;
         }
 
         .logo-container img {
-            height: 40px;
+            height: 48px;
             display: block;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
         }
 
         .external-links {
             display: flex;
-            gap: 0.75rem;
+            gap: 1rem;
         }
 
         .nav-btn {
             background: var(--btn-bg);
-            color: var(--btn-text);
             border: none;
-            padding: 0.5rem 1.2rem;
+            padding: 0.6rem 1.4rem;
             border-radius: 6px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             cursor: pointer;
             text-decoration: none;
             box-shadow: 0 4px 12px var(--shadow-color);
-        }
-
-        /* --- Crescent Moon Theme Engine Toggle --- */
-        .theme-toggle-wrapper {
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            position: relative;
         }
 
-        .moon-element {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: transparent;
-            box-shadow: -6px 6px 0 0 var(--text-color);
-            transform: rotate(-25deg);
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
-        }
-
-        [data-theme="dark"] .moon-element {
-            transform: rotate(155deg) scale(0.9);
-            box-shadow: -8px 4px 0 0 #f1c40f;
+        .nav-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(0, 82, 204, 0.2);
         }
 
         /* Main Workspace Hub Grid */
         main {
-            margin-top: 100px;
+            margin-top: 130px;
             flex: 1;
-            padding: 3rem 2rem;
+            padding: 3rem 4rem;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -133,13 +115,12 @@
 
         .hero-section {
             text-align: center;
-            margin-bottom: 3.5rem;
+            margin-bottom: 4rem;
         }
 
         .hero-title {
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             font-weight: 700;
-            color: var(--text-color);
             margin-bottom: 0.5rem;
             letter-spacing: -0.5px;
         }
@@ -148,7 +129,6 @@
             font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: var(--text-color);
             opacity: 0.8;
             font-weight: 600;
         }
@@ -158,8 +138,7 @@
             max-width: 1200px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            padding: 1rem;
+            gap: 2.5rem;
         }
 
         /* Glassmorphism Interactive Cards */
@@ -169,42 +148,79 @@
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--card-border);
             border-radius: 16px;
-            padding: 2rem;
+            padding: 2.5rem 2rem;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            min-height: 240px;
+            min-height: 260px;
             box-shadow: 0 8px 32px var(--shadow-color);
         }
 
         .tool-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
-            color: var(--text-color);
         }
 
         .tool-name {
             font-size: 1.3rem;
             font-weight: 700;
-            color: var(--text-color);
             margin-bottom: 1.5rem;
+            text-transform: capitalize;
         }
 
         .launch-btn {
             width: 100%;
             background: var(--btn-bg);
-            color: var(--btn-text);
             border: 1px solid var(--card-border);
-            padding: 0.75rem;
+            padding: 0.8rem;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             letter-spacing: 0.3px;
         }
 
-        /* --- Floating Window Overlay (Modal Interface) --- */
+        /* --- Isolated Floating Theme Controls --- */
+        .floating-theme-panel {
+            position: fixed;
+            bottom: 7rem; /* Explicitly hovers safely over the footer level */
+            right: 2.5rem;
+            z-index: 999;
+        }
+
+        .glass-toggle-circle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 8px 32px var(--shadow-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+        }
+
+        .glass-toggle-circle:hover {
+            transform: scale(1.05);
+        }
+
+        /* Icon Graphic Layout Vectors */
+        .icon-vector {
+            width: 26px;
+            height: 26px;
+            fill: var(--text-color);
+        }
+
+        /* Complex Moon with partially hidden shadow mask layer */
+        [data-theme="light"] .moon-shadow-icon { display: none; }
+        [data-theme="dark"] .sun-clear-icon { display: none; }
+
+        /* --- Floating Windows Overlay System --- */
         .floating-window-overlay {
             position: fixed;
             top: 0;
@@ -230,18 +246,18 @@
 
         .window-wrapper {
             width: 90%;
-            max-width: 650px;
+            max-width: 750px;
             height: 80vh;
             background: var(--card-bg);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--card-border);
             border-radius: 20px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transform: scale(0.95);
+            transform: scale(0.96);
             transition: transform 0.3s ease;
         }
 
@@ -250,8 +266,8 @@
         }
 
         .window-header {
-            padding: 1rem 1.5rem;
-            background: rgba(0, 0, 0, 0.05);
+            padding: 1.2rem 1.8rem;
+            background: rgba(0, 0, 0, 0.03);
             border-bottom: 1px solid var(--card-border);
             display: flex;
             justify-content: space-between;
@@ -260,26 +276,24 @@
 
         .window-title {
             font-weight: 700;
-            color: var(--text-color);
+            font-size: 1.1rem;
         }
 
         .close-window-btn {
             background: transparent;
             border: none;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-color);
+            font-size: 1.8rem;
+            line-height: 1;
             cursor: pointer;
-            width: 32px;
-            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
+            opacity: 0.8;
         }
 
         .close-window-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            opacity: 1;
+            transform: scale(1.1);
         }
 
         .window-body-frame {
@@ -290,17 +304,46 @@
             background: transparent;
         }
 
-        /* Branding Footer Placement */
+        /* Grounded Platform Footer Layout */
         footer {
             width: 100%;
-            padding: 2rem;
+            padding: 2.2rem;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             text-transform: uppercase;
-            color: var(--text-color);
-            opacity: 0.7;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--card-border);
+            margin-top: auto;
+            z-index: 90;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 900px) {
+            header { padding: 0 2rem; }
+            main { padding: 3rem 2rem; }
+            .floating-theme-panel { right: 1.5rem; bottom: 6.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                height: auto;
+                padding: 1.5rem 1rem;
+                position: relative;
+            }
+            main { margin-top: 2rem; }
+            .external-links {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+            .nav-btn { width: 100%; justify-content: center; }
+            .floating-theme-panel { bottom: 8rem; right: 1.5rem; }
         }
     </style>
 </head>
@@ -308,17 +351,12 @@
 
     <header>
         <div class="logo-container">
-            <img src="Logo2.png" alt="AYR TGW Solutions Logo">
+            <img src="./Logo2.png" alt="AYR TGW Solutions Logo">
         </div>
-        <div class="nav-actions">
-            <div class="external-links">
-                <a href="#" class="nav-btn">Clients Form</a>
-                <a href="#" class="nav-btn">Partners Form</a>
-                <a href="#" class="nav-btn">Inquiry Form</a>
-            </div>
-            <div class="theme-toggle-wrapper" id="themeEngineToggle" title="Toggle System Theme Interface">
-                <div class="moon-element"></div>
-            </div>
+        <div class="external-links">
+            <a href="https://forms.gle/qD4b8aAvsNsw3R8x6" target="_blank" class="nav-btn">Clients Form</a>
+            <a href="https://forms.gle/iZ4bZfq4rwQCZMQm7" target="_blank" class="nav-btn">Partners Form</a>
+            <a href="https://forms.gle/8qiENB9tPN7QneCD6" target="_blank" class="nav-btn">Inquiry Form</a>
         </div>
     </header>
 
@@ -332,7 +370,7 @@
             <div class="tool-card">
                 <div class="tool-icon">🔄</div>
                 <div class="tool-name">Rotate Tool</div>
-                <button class="launch-btn" onclick="launchFloatingTool('tool/rotate-tool.html', 'Rotation Vector Framework')">Launch Framework</button>
+                <button class="launch-btn" onclick="launchFloatingTool('./tool/rotate-tool.html', 'Rotation Vector Framework')">Launch Framework</button>
             </div>
         </div>
     </main>
@@ -341,49 +379,56 @@
         Trust • Growth • Wealth
     </footer>
 
+    <div class="floating-theme-panel">
+        <button class="glass-toggle-circle" id="themeEngineToggle" aria-label="Switch Design Mode Theme">
+            <svg class="icon-vector sun-clear-icon" viewBox="0 0 24 24">
+                <path d="M12 6.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 1.5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0-6a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 12 2zm0 16a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75zm8.485-13.425a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0zm-12.728 12.728a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0zM22 12a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 22 12zM5.5 12a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 5.5 12zm14.985 5.485a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0zM6.414 5.414a.75.75 0 0 1 0 1.06L5.354 7.536a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0z"/>
+            </svg>
+            <svg class="icon-vector moon-shadow-icon" viewBox="0 0 24 24">
+                <path d="M12.1 22a9.9 9.9 0 0 1-7-2.9 10 10 0 0 1 0-14.2 9.9 9.9 0 0 1 8.2-2.7c.5.1.9.5.8 1-.1.5-.6.9-1.1.8a8.4 8.4 0 0 0-5 1.5 8.5 8.5 0 0 0 0 12c1.6 1.6 3.8 2.5 6.1 2.5 3.3 0 6.2-2 7.4-5 .2-.5.7-.7 1.2-.6.5.2.8.7.6 1.2A9.9 9.9 0 0 1 12.1 22z" fill-rule="evenodd"/>
+                <path d="M13.5 6a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zm-5 6.5a5 5 0 1 1 10 0 5 5 0 0 1-10 0z" opacity="0.3"/>
+            </svg>
+        </button>
+    </div>
+
     <div class="floating-window-overlay" id="globalAppOverlay">
         <div class="window-wrapper">
             <div class="window-header">
-                <span class="window-title" id="globalAppTitle">Tool Instance Workspace</span>
-                <button class="close-window-btn" onclick="terminateFloatingTool()" aria-label="Close interface window">×</button>
+                <span class="window-title" id="globalAppTitle">Tool Workspace</span>
+                <button class="close-window-btn" onclick="terminateFloatingTool()" aria-label="Close UI Window">×</button>
             </div>
             <iframe class="window-body-frame" id="globalAppIframe" src="about:blank"></iframe>
         </div>
     </div>
 
     <script>
-        // Core Storage and Engine System Definitions
         const themeEngineToggle = document.getElementById('themeEngineToggle');
         const rootElement = document.documentElement;
         const globalAppOverlay = document.getElementById('globalAppOverlay');
         const globalAppIframe = document.getElementById('globalAppIframe');
         const globalAppTitle = document.getElementById('globalAppTitle');
 
-        // Theme Toggle Mechanism Implementation
+        // Dynamic State Intercept Controllers
         themeEngineToggle.addEventListener('click', () => {
-            const currentInterfaceTheme = rootElement.getAttribute('data-theme');
-            const targetInterfaceTheme = currentInterfaceTheme === 'dark' ? 'light' : 'dark';
+            const activeTheme = rootElement.getAttribute('data-theme');
+            const calculatedNextTheme = activeTheme === 'dark' ? 'light' : 'dark';
             
-            rootElement.setAttribute('data-theme', targetInterfaceTheme);
-            localStorage.setItem('ayr-workspace-theme', targetInterfaceTheme);
+            rootElement.setAttribute('data-theme', calculatedNextTheme);
+            localStorage.setItem('ayr-workspace-theme', calculatedNextTheme);
             
-            // Sync current theme state configuration straight down to active framework tool views inside the matrix frames
             synchronizeChildIframeTheme();
         });
 
-        // Floating App Launcher Controller Matrix Operations
         function launchFloatingTool(applicationPath, applicationLabel) {
             globalAppTitle.textContent = applicationLabel;
             globalAppIframe.src = applicationPath;
             globalAppOverlay.classList.add('active');
             
-            // Allow processing cycles to finish before firing contextual state configuration synchronization requests
             setTimeout(synchronizeChildIframeTheme, 150);
         }
 
         function terminateFloatingTool() {
             globalAppOverlay.classList.remove('active');
-            // Flush running engine states inside subframe pipelines immediately to prevent ghost thread execution leaks
             globalAppIframe.src = 'about:blank';
         }
 
@@ -392,21 +437,18 @@
                 const currentSystemActiveTheme = rootElement.getAttribute('data-theme');
                 try {
                     globalAppIframe.contentWindow.document.documentElement.setAttribute('data-theme', currentSystemActiveTheme);
-                } catch (crossOriginSecurityException) {
-                    // Fail gracefully if sandbox headers or security matrices are strict during cross-domain executions
-                }
+                } catch (e) {}
             }
         }
 
-        // Initialize user preferences during page creation lifecycle boots
+        // Initialize theme setups smoothly
         window.addEventListener('DOMContentLoaded', () => {
             const preservedUserThemeSelection = localStorage.getItem('ayr-workspace-theme') || 'light';
             rootElement.setAttribute('data-theme', preservedUserThemeSelection);
         });
 
-        // Intercept ESC keyboard strokes to naturally clean up open active modal frames
-        window.addEventListener('keydown', (keyboardInputEvent) => {
-            if (keyboardInputEvent.key === 'Escape' && globalAppOverlay.classList.contains('active')) {
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && globalAppOverlay.classList.contains('active')) {
                 terminateFloatingTool();
             }
         });
