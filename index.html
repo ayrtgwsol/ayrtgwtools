@@ -52,8 +52,6 @@
             padding-right: var(--edge-gap);
         }
 
-        body.modal-lock { overflow: hidden !important; height: 100vh !important; }
-
         header {
             width: 100%;
             max-width: var(--max-bound);
@@ -87,7 +85,8 @@
         main { margin-top: calc(80px + (var(--edge-gap) * 2) + 2rem); flex: 1; padding: 2rem 0; display: flex; flex-direction: column; align-items: center; width: 100%; }
         .tools-column-pipeline { width: 100%; max-width: var(--max-bound); display: flex; flex-direction: column; gap: 5rem; }
         
-        .tool-row-node { display: flex; width: 100%; align-items: center; justify-content: center !important; box-sizing: border-box; }
+        /* Left-Side Alignment Logic */
+        .tool-row-node { display: flex; width: 100%; align-items: center; justify-content: flex-start; box-sizing: border-box; }
         
         .tool-card { background: var(--glass-card); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem 2.5rem; width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; gap: 2rem; box-shadow: 0 12px 35px var(--shadow-color); }
         .tool-name { font-size: 1.6rem; font-weight: 700; text-transform: uppercase; text-align: center; margin-bottom: 0.5rem; }
@@ -102,6 +101,7 @@
             .mobile-menu-trigger { display: flex; }
             .external-links { display: none; }
             .tool-card { width: 85%; }
+            .tool-row-node { justify-content: center !important; }
         }
     </style>
 </head>
