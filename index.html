@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AYR TGW Tools Hub</title>
+    <title>AYR TGW Tools</title>
     <style>
-        /* CSS Variables matching your exact corporate blue and JPEG background assets */
+        /* Exact asset binding directly to your repository's lowercase PNG files */
         :root {
             --brand-blue: #0052cc;
             --brand-blue-hover: #0041a3;
-            --bg-image: url('./light.jpg');
+            --bg-image: url('./light.png');
             --text-color: #1a1a1a;
             --card-bg: rgba(255, 255, 255, 0.85);
             --card-border: rgba(0, 82, 204, 0.15);
@@ -20,7 +20,7 @@
         }
 
         [data-theme="dark"] {
-            --bg-image: url('./dark.jpg');
+            --bg-image: url('./dark.png');
             --text-color: #ffffff;
             --card-bg: rgba(20, 20, 23, 0.85);
             --card-border: rgba(0, 82, 204, 0.35);
@@ -52,7 +52,7 @@
             overflow-x: hidden;
         }
 
-        /* Wix-Style Premium Fixed Navigation Header */
+        /* Fixed Navigation Header */
         header {
             display: flex;
             justify-content: space-between;
@@ -84,7 +84,7 @@
             align-items: center;
         }
 
-        /* Polished Menu Link Buttons */
+        /* Corporate Link Buttons */
         .form-btn {
             display: inline-flex;
             align-items: center;
@@ -96,9 +96,8 @@
             font-weight: 500;
             font-size: 0.88rem;
             letter-spacing: 0.2px;
-            border-radius: 4px; /* Clean Wix sharp UI aesthetics */
+            border-radius: 4px;
             box-shadow: 0 2px 8px rgba(0, 82, 204, 0.15);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .form-btn svg {
@@ -113,10 +112,10 @@
             box-shadow: 0 5px 15px rgba(0, 82, 204, 0.3);
         }
 
-        /* Main Section & Dashboard Layout */
+        /* Content Hub Area */
         main {
             flex: 1;
-            padding: 9rem 4rem 6rem 4rem; /* Balanced gap spacing beneath fixed header */
+            padding: 9rem 4rem 6rem 4rem;
             max-width: 1300px;
             width: 100%;
             margin: 0 auto;
@@ -142,14 +141,13 @@
             letter-spacing: 1.5px;
         }
 
-        /* Dynamic Deployment Grid System */
+        /* Tool Grid */
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2.5rem;
         }
 
-        /* Premium Application Dynamic Component Cards */
         .tool-card {
             background: var(--card-bg);
             backdrop-filter: blur(15px);
@@ -163,7 +161,6 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s;
         }
 
         .tool-card:hover {
@@ -213,7 +210,6 @@
             font-weight: 600;
             font-size: 0.9rem;
             border-radius: 4px;
-            transition: all 0.2s ease;
         }
 
         [data-theme="dark"] .launch-btn {
@@ -238,7 +234,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* Wix-Style Anchor Footer Layout */
+        /* Fixed Anchor Footer */
         footer {
             padding: 2.2rem 4rem;
             background: var(--footer-bg);
@@ -261,7 +257,7 @@
             text-align: center;
         }
 
-        /* Modern Toggle Switch Shell */
+        /* Floating Mode Switch Mechanism */
         .theme-toggle-container {
             position: fixed;
             bottom: 1.5rem;
@@ -287,7 +283,6 @@
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
             background-color: #e4e4e7;
-            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 30px;
             border: 1px solid rgba(0,0,0,0.05);
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
@@ -306,7 +301,6 @@
             left: 3px;
             bottom: 3px;
             background-color: #ffffff;
-            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 50%;
             box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
@@ -319,7 +313,7 @@
             transform: translateX(24px);
         }
 
-        /* High-Fidelity Mobile Responsive Scaling */
+        /* Mobile Viewport Management */
         @media (max-width: 900px) {
             header { padding: 0 2rem; }
             main { padding: 9rem 2rem 5rem 2rem; }
@@ -451,7 +445,7 @@
             }
         }
 
-        // --- Theme Engine Switcher ---
+        // --- Active Style Switching Routine ---
         const themeCheckbox = document.getElementById('themeCheckbox');
         const cachedPreference = localStorage.getItem('ayr-theme-preference');
         const defaultToDark = cachedPreference === 'dark' || (!cachedPreference && window.matchMedia('(prefers-color-scheme: dark)').matches);
