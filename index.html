@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AYR TGW Tools Workspace</title>
     <style>
-        /* BRAND IDENTITY MATRIX - PNG ROOT INFRASTRUCTURE */
         :root {
             --bg-image: url('./light.png');
             --brand-blue: #0052cc;
@@ -18,7 +17,6 @@
             --shadow-color: rgba(0, 82, 204, 0.06);
             --modal-overlay: rgba(0, 10, 30, 0.15);
         }
-
         [data-theme="dark"] {
             --bg-image: url('./dark.png');
             --glass-bg: rgba(15, 23, 42, 0.45);
@@ -28,132 +26,71 @@
             --shadow-color: rgba(0, 0, 0, 0.35);
             --modal-overlay: rgba(0, 0, 0, 0.55);
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Arial, sans-serif; color: var(--brand-blue) !important; transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; }
+        body { min-height: 100vh; display: flex; flex-direction: column; background: var(--bg-image) no-repeat center center fixed; background-size: cover; padding: 0 var(--edge-gap); }
+        body.modal-lock { overflow: hidden !important; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            color: var(--brand-blue) !important;
-            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-image: var(--bg-image);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            overflow-x: hidden;
-            padding-left: var(--edge-gap);
-            padding-right: var(--edge-gap);
-        }
-
-        header {
-            width: 100%;
-            max-width: var(--max-bound);
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 0 2.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: var(--edge-gap);
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            height: 80px;
-            box-shadow: 0 10px 30px var(--shadow-color);
-        }
-
-        .mobile-menu-trigger { display: none; background: transparent; border: none; cursor: pointer; padding: 0.5rem; flex-direction: column; gap: 6px; z-index: 110; }
-        .mobile-menu-trigger span { display: block; width: 26px; height: 2.5px; background-color: var(--brand-blue); border-radius: 2px; }
+        header { width: 100%; max-width: var(--max-bound); background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 0 2.5rem; display: flex; justify-content: space-between; align-items: center; position: fixed; top: var(--edge-gap); left: 50%; transform: translateX(-50%); z-index: 100; height: 80px; }
         
-        .logo-container img { height: 42px; cursor: pointer; }
-        .external-links { display: flex; gap: 1.2rem; }
-        .nav-btn { background: var(--glass-btn); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 0.6rem 1.4rem; border-radius: 10px; font-weight: 600; cursor: pointer; text-decoration: none; }
+        .floating-external-bar { position: fixed; top: var(--edge-gap); right: var(--edge-gap); z-index: 110; }
+        .nav-btn { background: var(--glass-btn); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 0.8rem 1.6rem; border-radius: 12px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }
 
-        .mobile-sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100vh; background: var(--glass-card); backdrop-filter: blur(35px); z-index: 95; padding: calc(80px + var(--edge-gap) + 2rem) 1.5rem 2rem 1.5rem; display: flex; flex-direction: column; gap: 1.2rem; transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .mobile-sidebar.open { left: 0; }
-
-        main { margin-top: calc(80px + (var(--edge-gap) * 2) + 2rem); flex: 1; padding: 2rem 0; display: flex; flex-direction: column; align-items: center; width: 100%; }
+        main { margin-top: 150px; flex: 1; padding: 2rem 0; display: flex; flex-direction: column; align-items: center; }
         .tools-column-pipeline { width: 100%; max-width: var(--max-bound); display: flex; flex-direction: column; gap: 5rem; }
-        
-        /* Left-Side Alignment Logic */
-        .tool-row-node { display: flex; width: 100%; align-items: center; justify-content: flex-start; box-sizing: border-box; }
-        
-        .tool-card { background: var(--glass-card); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem 2.5rem; width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; gap: 2rem; box-shadow: 0 12px 35px var(--shadow-color); }
-        .tool-name { font-size: 1.6rem; font-weight: 700; text-transform: uppercase; text-align: center; margin-bottom: 0.5rem; }
-        .launch-btn { width: 100%; background: var(--glass-btn); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; text-align: center; text-decoration: none; display: block; }
+        .tool-row-node { display: flex; width: 100%; align-items: center; justify-content: flex-start; }
+        .tool-card { background: var(--glass-card); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem 2.5rem; width: 100%; max-width: 440px; box-shadow: 0 12px 35px var(--shadow-color); }
+        .tool-name { font-size: 1.6rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1.5rem; }
+        .launch-btn { width: 100%; background: var(--glass-btn); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; text-align: center; text-decoration: none; display: block; margin-top: 10px; }
 
-        .floating-theme-panel { position: fixed; bottom: var(--edge-gap); right: var(--edge-gap); z-index: 999; }
-        .glass-toggle-circle { width: 56px; height: 56px; border-radius: 50%; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        footer { width: 100%; max-width: var(--max-bound); padding: 1.8rem; text-align: center; background: var(--glass-bg); border-radius: 20px; margin: auto auto 0 auto; position: relative; z-index: 90; }
-
-        @media (max-width: 768px) {
-            .mobile-menu-trigger { display: flex; }
-            .external-links { display: none; }
-            .tool-card { width: 85%; }
-            .tool-row-node { justify-content: center !important; }
-        }
+        .floating-window-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--modal-overlay); backdrop-filter: blur(12px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; }
+        .floating-window-overlay.active { opacity: 1; pointer-events: auto; }
+        .window-wrapper { width: 90%; max-width: 600px; max-height: 80vh; background: var(--glass-card); border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem; overflow-y: auto; }
     </style>
 </head>
 <body>
 
     <header>
-        <button class="mobile-menu-trigger" id="sidebarMenuToggle"><span></span><span></span><span></span></button>
-        <div class="logo-container"><img src="./Logo2.png" alt="Logo"></div>
-        <div class="external-links">
-            <a href="#" class="nav-btn">Clients Form</a>
-            <a href="#" class="nav-btn">Partners Form</a>
+        <div class="logo-container"><img src="./Logo2.png" alt="Logo" style="height:42px;"></div>
+        <div class="floating-external-bar">
+            <button class="nav-btn" onclick="document.getElementById('externalHubOverlay').classList.add('active'); document.body.classList.add('modal-lock');">External Links 🔗</button>
         </div>
     </header>
 
-    <nav class="mobile-sidebar" id="mobileSidebarMenu">
-        <a href="#" class="nav-btn">Clients Form</a>
-        <a href="#" class="nav-btn">Partners Form</a>
-    </nav>
-
     <main>
         <div class="tools-column-pipeline">
-            
             <div class="tool-row-node">
                 <div class="tool-card">
-                    <div class="tool-name">Financial Tools</div>
-                    <a href="https://financial-calculators.ca/#/" target="_blank" class="launch-btn">Open Calculator Portal</a>
+                    <div class="tool-name">Financial Tools Portal</div>
+                    <a href="https://financial-calculators.ca/#/" target="_blank" class="launch-btn">Open Calculator Suite</a>
                 </div>
             </div>
-
         </div>
     </main>
 
-    <footer>Trust • Growth • Wealth</footer>
-
-    <div class="floating-theme-panel">
-        <button class="glass-toggle-circle" id="themeEngineToggle"></button>
+    <div class="floating-window-overlay" id="externalHubOverlay">
+        <div class="window-wrapper">
+            <div style="display:flex; justify-content:space-between; margin-bottom:2rem;">
+                <h3 style="font-weight:700;">External Resources Hub</h3>
+                <button onclick="closeExternalHub()" style="background:none; border:none; cursor:pointer;">Close</button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div><h4 style="margin-bottom:0.5rem;">Analysis & Research</h4>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <a href="https://financial-calculators.ca/#/" target="_blank" class="launch-btn">Financial Calculator</a>
+                        <a href="https://ycharts.com" target="_blank" class="launch-btn">YCharts</a>
+                        <a href="https://koyfin.com" target="_blank" class="launch-btn">Koyfin</a>
+                        <a href="https://fred.stlouisfed.org" target="_blank" class="launch-btn">FRED</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        const themeEngineToggle = document.getElementById('themeEngineToggle');
-        const rootElement = document.documentElement;
-        const sidebarMenuToggle = document.getElementById('sidebarMenuToggle');
-        const mobileSidebarMenu = document.getElementById('mobileSidebarMenu');
-
-        sidebarMenuToggle.addEventListener('click', () => {
-            mobileSidebarMenu.classList.toggle('open');
-        });
-
-        themeEngineToggle.addEventListener('click', () => {
-            const nextTheme = rootElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            rootElement.setAttribute('data-theme', nextTheme);
-        });
+        function closeExternalHub() {
+            document.getElementById('externalHubOverlay').classList.remove('active');
+            document.body.classList.remove('modal-lock');
+        }
     </script>
 </body>
 </html>
