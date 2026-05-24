@@ -149,7 +149,7 @@
         .mobile-sidebar {
             position: fixed;
             top: 0;
-            left: -300px; /* Hidden completely outside layout canvas viewport */
+            left: -300px;
             width: 280px;
             height: 100vh;
             background: var(--glass-card);
@@ -169,7 +169,6 @@
             left: 0;
         }
 
-        /* Sidebar Action Links UI Rules */
         .mobile-sidebar .nav-btn {
             width: 100%;
             justify-content: center;
@@ -203,6 +202,7 @@
             align-items: center;
         }
 
+        /* Desktop Alternating Stagger Logic */
         .tool-row-node:nth-child(odd) { justify-content: flex-start; }
         .tool-row-node:nth-child(even) { justify-content: flex-end; }
 
@@ -405,6 +405,7 @@
             :root { --edge-gap: 16px; }
             header { padding: 0 1.5rem; }
             main { padding: 2rem 0; }
+            .tools-column-pipeline { gap: 3.5rem; }
         }
 
         @media (max-width: 768px) {
@@ -414,23 +415,22 @@
             header {
                 padding: 0 1.2rem;
                 display: grid;
-                grid-template-columns: 40px 1fr 40px; /* Split into perfectly balanced thirds */
+                grid-template-columns: 40px 1fr 40px;
                 align-items: center;
                 justify-content: stretch;
             }
 
             .mobile-menu-trigger {
-                display: flex; /* Activate three line menu trigger */
+                display: flex;
                 grid-column: 1;
                 justify-self: start;
             }
 
             .logo-container {
                 grid-column: 2;
-                justify-self: center; /* Absolute center positioning matrix for main logo */
+                justify-self: center;
             }
 
-            /* Dummy placeholder to maintain symmetrical centering constraints inside grid rows */
             header::after {
                 content: "";
                 grid-column: 3;
@@ -439,12 +439,42 @@
             }
 
             .external-links {
-                display: none; /* Strip away horizontal links block */
+                display: none;
             }
 
-            main { margin-top: 0; }
-            .tool-row-node, .tool-row-node:nth-child(even) { justify-content: center; }
-            footer { width: 100%; font-size: 0.8rem; letter-spacing: 3px; }
+            main { padding: 1.5rem 0; margin-top: 0; }
+
+            /* Mobile Asymmetric Zig-Zag Intercept System */
+            .tools-column-pipeline { gap: 2.5rem; }
+            
+            .tool-row-node:nth-child(odd) { 
+                justify-content: flex-start !important; 
+            }
+            .tool-row-node:nth-child(even) { 
+                justify-content: flex-end !important; 
+            }
+
+            /* Responsive Narrow Card Scaling Framework */
+            .tool-card {
+                width: 82%; /* Forces precise width constraints to preserve side margins */
+                max-width: none;
+                padding: 2.2rem 1.8rem;
+                gap: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .tool-name {
+                font-size: 1.25rem; /* Downscaled compact mobile text variables */
+                letter-spacing: -0.3px;
+            }
+
+            .launch-btn {
+                padding: 0.75rem;
+                font-size: 0.85rem;
+                border-radius: 10px;
+            }
+
+            footer { width: 100%; font-size: 0.8rem; letter-spacing: 3px; padding: 1.4rem; }
         }
     </style>
 </head>
