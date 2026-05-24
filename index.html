@@ -261,8 +261,8 @@
         /* --- Floating Detached Corner Theme Configuration Panel --- */
         .floating-theme-panel {
             position: fixed;
-            bottom: calc(var(--edge-gap) + 80px + 1.5rem); 
-            right: calc(var(--edge-gap) + 1rem);
+            bottom: var(--edge-gap); /* Perfect identical spacing from bottom screen boundary */
+            right: var(--edge-gap);  /* Perfect identical spacing from right side screen boundary */
             z-index: 999;
         }
 
@@ -456,7 +456,7 @@
 
             /* Responsive Narrow Card Scaling Framework */
             .tool-card {
-                width: 82%; /* Forces precise width constraints to preserve side margins */
+                width: 82%;
                 max-width: none;
                 padding: 2.2rem 1.8rem;
                 gap: 1.5rem;
@@ -464,7 +464,7 @@
             }
 
             .tool-name {
-                font-size: 1.25rem; /* Downscaled compact mobile text variables */
+                font-size: 1.25rem;
                 letter-spacing: -0.3px;
             }
 
@@ -593,7 +593,6 @@
             globalAppIframe.src = applicationPath;
             globalAppOverlay.classList.add('active');
             
-            // Auto close mobile drawer if open when triggering a tool card
             sidebarMenuToggle.classList.remove('active');
             mobileSidebarMenu.classList.remove('open');
             
