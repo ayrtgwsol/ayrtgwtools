@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AYR TGW Tools Workspace</title>
     <style>
-        /* Definitive Brand Controls & Adaptive Paths */
+        /* DEFINITIVE BRAND CONTROLS & EXACT ASSET PATH FIXES */
         :root {
-            --bg-image: url('./light.jpg');
+            --bg-image: url('./light.png');
             --text-color: #0052cc;
             --card-bg: rgba(255, 255, 255, 0.45);
             --card-border: rgba(255, 255, 255, 0.4);
@@ -19,7 +19,7 @@
         }
 
         [data-theme="dark"] {
-            --bg-image: url('./dark.jpg');
+            --bg-image: url('./dark.png');
             --text-color: #ffffff;
             --card-bg: rgba(15, 23, 42, 0.45);
             --card-border: rgba(255, 255, 255, 0.1);
@@ -39,7 +39,7 @@
             transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
-        /* Enforce raw styles to bypass global color overrides on buttons */
+        /* Enforce native styling variables for dynamic contrast buttons */
         .nav-btn, .launch-btn {
             color: var(--btn-text) !important;
         }
@@ -103,7 +103,7 @@
             box-shadow: 0 6px 16px rgba(0, 82, 204, 0.2);
         }
 
-        /* Main Workspace Hub Grid */
+        /* Main Workspace Hub Grid Layout */
         main {
             margin-top: 130px;
             flex: 1;
@@ -141,7 +141,7 @@
             gap: 2.5rem;
         }
 
-        /* Glassmorphism Interactive Cards */
+        /* Glassmorphism Presentation Cards */
         .tool-card {
             background: var(--card-bg);
             backdrop-filter: blur(16px);
@@ -181,10 +181,10 @@
             letter-spacing: 0.3px;
         }
 
-        /* --- Isolated Floating Theme Controls --- */
+        /* --- Isolated Floating Theme Panel Widget --- */
         .floating-theme-panel {
             position: fixed;
-            bottom: 7rem; /* Explicitly hovers safely over the footer level */
+            bottom: 7rem; 
             right: 2.5rem;
             z-index: 999;
         }
@@ -209,18 +209,17 @@
             transform: scale(1.05);
         }
 
-        /* Icon Graphic Layout Vectors */
         .icon-vector {
             width: 26px;
             height: 26px;
             fill: var(--text-color);
         }
 
-        /* Complex Moon with partially hidden shadow mask layer */
+        /* Swap View States Smoothly */
         [data-theme="light"] .moon-shadow-icon { display: none; }
         [data-theme="dark"] .sun-clear-icon { display: none; }
 
-        /* --- Floating Windows Overlay System --- */
+        /* --- Floating Windows Overlay Module --- */
         .floating-window-overlay {
             position: fixed;
             top: 0;
@@ -304,7 +303,7 @@
             background: transparent;
         }
 
-        /* Grounded Platform Footer Layout */
+        /* System Ground Footer */
         footer {
             width: 100%;
             padding: 2.2rem;
@@ -321,7 +320,7 @@
             z-index: 90;
         }
 
-        /* Responsive Breakpoints */
+        /* Breakpoint Adaptations */
         @media (max-width: 900px) {
             header { padding: 0 2rem; }
             main { padding: 3rem 2rem; }
@@ -394,8 +393,8 @@
     <div class="floating-window-overlay" id="globalAppOverlay">
         <div class="window-wrapper">
             <div class="window-header">
-                <span class="window-title" id="globalAppTitle">Tool Workspace</span>
-                <button class="close-window-btn" onclick="terminateFloatingTool()" aria-label="Close UI Window">×</button>
+                <span class="window-title" id="globalAppTitle">Tool Instance Frame</span>
+                <button class="close-window-btn" onclick="terminateFloatingTool()" aria-label="Dismiss Window Instance">×</button>
             </div>
             <iframe class="window-body-frame" id="globalAppIframe" src="about:blank"></iframe>
         </div>
@@ -408,7 +407,6 @@
         const globalAppIframe = document.getElementById('globalAppIframe');
         const globalAppTitle = document.getElementById('globalAppTitle');
 
-        // Dynamic State Intercept Controllers
         themeEngineToggle.addEventListener('click', () => {
             const activeTheme = rootElement.getAttribute('data-theme');
             const calculatedNextTheme = activeTheme === 'dark' ? 'light' : 'dark';
@@ -441,7 +439,6 @@
             }
         }
 
-        // Initialize theme setups smoothly
         window.addEventListener('DOMContentLoaded', () => {
             const preservedUserThemeSelection = localStorage.getItem('ayr-workspace-theme') || 'light';
             rootElement.setAttribute('data-theme', preservedUserThemeSelection);
