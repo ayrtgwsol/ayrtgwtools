@@ -10,7 +10,7 @@
             --bg-image: url('./light.png');
             --brand-blue: #0052cc;
             
-            /* Symmetrical Edge Spacing Constant */
+            /* Symmetrical Edge Spacing Constants */
             --edge-gap: 24px;
             --max-bound: 1400px;
             
@@ -55,14 +55,14 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
             overflow-x: hidden;
-            /* Side padding matches side borders of floating capsules exactly */
+            /* Outer framing pad dynamically links body bounds with component edges */
             padding-left: var(--edge-gap);
             padding-right: var(--edge-gap);
         }
 
         /* Symmetrically Proportioned Floating Top Navigation Bar Capsule */
         header {
-            width: calc(100% - (var(--edge-gap) * 2));
+            width: 100%;
             max-width: var(--max-bound);
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -74,7 +74,7 @@
             justify-content: space-between;
             align-items: center;
             position: fixed;
-            top: var(--edge-gap); /* Vertical offset exactly equal to horizontal offset */
+            top: var(--edge-gap); /* Vertical clearance equal to window margins */
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
@@ -122,7 +122,8 @@
 
         /* Core Workspace Section Framework */
         main {
-            margin-top: calc(80px + (var(--edge-gap) * 2) + 2rem); /* Dynamic header height clear */
+            /* Dynamic height balancing to offset the floating header container precisely */
+            margin-top: calc(80px + (var(--edge-gap) * 2) + 2rem); 
             flex: 1;
             padding: 2rem 0;
             display: flex;
@@ -131,10 +132,10 @@
             width: 100%;
         }
 
-        /* Wide Asymmetric Column Pipeline - Matches Header/Footer bounds */
+        /* Wide Asymmetric Column Pipeline - Perfect Structural Edge Locking */
         .tools-column-pipeline {
             width: 100%;
-            max-width: var(--max-bound);
+            max-width: var(--max-bound); /* Locked to absolute header and footer constraints */
             display: flex;
             flex-direction: column;
             gap: 5rem;
@@ -147,7 +148,7 @@
             align-items: center;
         }
 
-        /* Alternating Stagger Logic pushing items completely out to outer edge boundaries */
+        /* Alternating Stagger Logic snapping cards cleanly flush to the wrapper extremes */
         .tool-row-node:nth-child(odd) {
             justify-content: flex-start;
         }
@@ -346,7 +347,7 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            margin: auto auto var(--edge-gap) auto; /* Bottom offset perfectly equals gap variable */
+            margin: auto auto 0 auto; /* Vertical ground constraint drops cleanly into frame limit padding */
             position: relative;
             z-index: 90;
             box-shadow: 0 -10px 30px var(--shadow-color);
@@ -360,13 +361,14 @@
         }
 
         @media (max-width: 768px) {
-            body { padding-top: calc(80px + (var(--edge-gap) * 2)); }
+            body { padding-top: calc(80px + var(--edge-gap)); }
             header {
                 flex-direction: column;
                 height: auto;
                 padding: 1.5rem 1rem;
                 position: absolute;
                 gap: 1rem;
+                top: var(--edge-gap);
             }
             main { margin-top: 0; }
             .tool-row-node, .tool-row-node:nth-child(even) { justify-content: center; }
