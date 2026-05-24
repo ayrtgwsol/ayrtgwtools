@@ -3,21 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AYR TGW Workspace</title>
+    <title>AYR TGW Solutions Workspace</title>
     <style>
-        /* [Global CSS remains consistent with your design] */
-        :root { --glass-bg: rgba(255, 255, 255, 0.35); --glass-card: rgba(255, 255, 255, 0.23); --brand-blue: #0052cc; --glass-border: rgba(0, 82, 204, 0.15); }
-        body { background: #f0f4f8; min-height: 100vh; font-family: sans-serif; }
-        .header { display: flex; justify-content: space-between; padding: 2rem; align-items: center; }
-        .nav-btn { background: rgba(255,255,255,0.5); padding: 1rem 2rem; border-radius: 12px; border: 1px solid var(--glass-border); cursor: pointer; font-weight: bold; }
+        :root {
+            --bg-image: url('./light.png');
+            --brand-blue: #0052cc;
+            --glass-bg: rgba(255, 255, 255, 0.35);
+            --glass-card: rgba(255, 255, 255, 0.23);
+            --glass-border: rgba(0, 82, 204, 0.15);
+        }
+        [data-theme="dark"] {
+            --bg-image: url('./dark.png');
+            --glass-bg: rgba(15, 23, 42, 0.45);
+            --glass-card: rgba(15, 23, 42, 0.28);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Arial, sans-serif; color: var(--brand-blue); transition: 0.3s ease; }
+        body { background: var(--bg-image) no-repeat center center fixed; background-size: cover; min-height: 100vh; padding: 2rem; }
+
+        .header { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .nav-btn { background: var(--glass-card); backdrop-filter: blur(10px); padding: 1rem 2rem; border-radius: 12px; border: 1px solid var(--glass-border); cursor: pointer; font-weight: 700; }
         
-        .floating-window-overlay { position: fixed; top:0; left:0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        main { max-width: 1200px; margin: 4rem auto; }
+        .tool-row-node { display: flex; gap: 2rem; flex-wrap: wrap; }
+        
+        .floating-window-overlay { position: fixed; top:0; left:0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(15px); display: none; align-items: center; justify-content: center; z-index: 1000; }
         .floating-window-overlay.active { display: flex; }
-        .window-wrapper { width: 90%; max-width: 800px; background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .window-wrapper { width: 90%; max-width: 700px; background: var(--glass-card); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 2rem; border-radius: 20px; }
         
-        .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 1rem; }
-        .tool-link-btn { padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; text-decoration: none; color: #334155; text-align: center; font-weight: 600; display: block; }
-        .tool-link-btn:hover { background: #eff6ff; border-color: var(--brand-blue); }
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 1.5rem; }
+        .tool-link-btn { padding: 1rem; background: rgba(255,255,255,0.4); border: 1px solid var(--glass-border); border-radius: 10px; text-decoration: none; color: var(--brand-blue); text-align: center; font-weight: 600; display: block; }
+        .tool-link-btn:hover { background: var(--brand-blue); color: white !important; }
     </style>
 </head>
 <body>
@@ -27,11 +42,16 @@
         <button class="nav-btn" onclick="toggleExternalHub(true)">External Links</button>
     </header>
 
+    <main>
+        <div class="tool-row-node">
+            </div>
+    </main>
+
     <div class="floating-window-overlay" id="externalHubOverlay">
         <div class="window-wrapper">
-            <div style="display:flex; justify-content:space-between; margin-bottom:2rem;">
-                <h2>External Tools Hub</h2>
-                <button onclick="toggleExternalHub(false)">Close</button>
+            <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+                <h2 style="font-weight:700;">External Tools Hub</h2>
+                <button class="nav-btn" style="padding:0.5rem 1rem;" onclick="toggleExternalHub(false)">Close</button>
             </div>
             
             <div class="tool-grid">
