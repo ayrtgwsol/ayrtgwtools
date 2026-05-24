@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AYR TGW Tools Hub</title>
+    <style>
+        /* CSS Variables matching your precise corporate blue and assets */
+        :root {
+            --brand-blue: #0052cc;
+            --brand-blue-hover: #0041a3;
+            --bg-image: url('./light.png');
+            --text-color: #1a1a1a;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 82, 204, 0.15);
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --footer-bg: rgba(255, 255, 255, 0.95);
+            --shadow: rgba(0, 0, 0, 0.06);
+            --card-shadow: rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="dark"] {
+            --bg-image: url('./dark.png');
+            --text-color: #ffffff;
+            --card-bg: rgba(20, 20, 23, 0.85);
+            --card-border: rgba(0, 82, 204, 0.35);
+            --header-bg: rgba(16, 16, 18, 0.85);
+            --footer-bg: rgba(12, 12, 14, 0.95);
+            --shadow: rgba(0, 0, 0, 0.4);
+            --card-shadow: rgba(0, 0, 0, 0.25);
+        }
+
+        /* Wix-Style Global Layout Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            transition: background 0.4s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body {
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Wix-Style Premium Fixed Navigation Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 4rem;
+            background: var(--header-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            box-shadow: 0 4px 25px var(--shadow);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 85px;
+        }
+
+        .logo-container img {
+            height: 52px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Polished Menu Link Buttons */
+        .form-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.7rem 1.3rem;
+            background-color: var(--brand-blue);
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.88rem;
+            letter-spacing: 0.2px;
+            border-radius: 4px; /* Clean Wix sharp UI aesthetics */
+            box-shadow: 0 2px 8px rgba(0, 82, 204, 0.15);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .form-btn:hover {
+            background-color: var(--brand-blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0, 82, 204, 0.3);
+        }
+
+        /* Main Section & Dashboard Layout */
+        main {
+            flex: 1;
+            padding: 9rem 4rem 6rem 4rem; /* Balanced gap spacing beneath fixed header */
+            max-width: 1300px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .dashboard-title {
+            font-size: 2.4rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.6rem;
+        }
+
+        .dashboard-subtitle {
+            font-size: 1rem;
+            opacity: 0.65;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Dynamic Deployment Grid System */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        /* Premium Application Dynamic Component Cards */
+        .tool-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 12px 35px var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--brand-blue);
+            box-shadow: 0 18px 40px rgba(0, 82, 204, 0.18);
+        }
+
+        .tool-icon {
+            width: 58px;
+            height: 58px;
+            background: rgba(0, 82, 204, 0.08);
+            color: var(--brand-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        [data-theme="dark"] .tool-icon {
+            background: rgba(0, 82, 204, 0.25);
+            color: #ffffff;
+        }
+
+        .tool-icon svg {
+            width: 26px;
+            height: 26px;
+            fill: currentColor;
+        }
+
+        .tool-name {
+            font-size: 1.35rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            letter-spacing: -0.2px;
+            text-transform: capitalize;
+        }
+
+        .launch-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: transparent;
+            border: 1.5px solid var(--brand-blue);
+            color: var(--brand-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        [data-theme="dark"] .launch-btn {
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .launch-btn:hover {
+            background-color: var(--brand-blue) !important;
+            border-color: var(--brand-blue) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(0, 82, 204, 0.2);
+        }
+
+        .status-msg {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 1.1rem;
+            padding: 5rem;
+            opacity: 0.5;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        /* Wix-Style Anchor Footer Layout */
+        footer {
+            padding: 2.2rem 4rem;
+            background: var(--footer-bg);
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: auto;
