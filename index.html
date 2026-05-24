@@ -55,7 +55,6 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
             overflow-x: hidden;
-            /* Outer framing pad dynamically links body bounds with component edges */
             padding-left: var(--edge-gap);
             padding-right: var(--edge-gap);
         }
@@ -74,13 +73,39 @@
             justify-content: space-between;
             align-items: center;
             position: fixed;
-            top: var(--edge-gap); /* Vertical clearance equal to window margins */
+            top: var(--edge-gap);
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
             height: 80px;
             box-shadow: 0 10px 30px var(--shadow-color);
         }
+
+        /* Mobile Hamburger Icon - Hidden by Default on Desktop */
+        .mobile-menu-trigger {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 110;
+        }
+
+        .mobile-menu-trigger span {
+            display: block;
+            width: 26px;
+            height: 2.5px;
+            background-color: var(--brand-blue);
+            border-radius: 2px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        /* Hamburger Transform Actions to Cross Configuration */
+        .mobile-menu-trigger.active .line-1 { transform: translateY(8.5px) rotate(45deg); }
+        .mobile-menu-trigger.active .line-2 { opacity: 0; }
+        .mobile-menu-trigger.active .line-3 { transform: translateY(-8.5px) rotate(-45deg); }
 
         .logo-container img {
             height: 42px;
@@ -120,10 +145,41 @@
             border-color: var(--brand-blue);
         }
 
+        /* --- Translucent Glass Mobile Sidebar Menu --- */
+        .mobile-sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px; /* Hidden completely outside layout canvas viewport */
+            width: 280px;
+            height: 100vh;
+            background: var(--glass-card);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+            border-right: 1px solid var(--glass-border);
+            z-index: 95;
+            padding: calc(80px + var(--edge-gap) + 2rem) 1.5rem 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            box-shadow: 20px 0 50px rgba(0, 0, 0, 0.15);
+            transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mobile-sidebar.open {
+            left: 0;
+        }
+
+        /* Sidebar Action Links UI Rules */
+        .mobile-sidebar .nav-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 1rem;
+            font-size: 1rem;
+        }
+
         /* Core Workspace Section Framework */
         main {
-            /* Dynamic height balancing to offset the floating header container precisely */
-            margin-top: calc(80px + (var(--edge-gap) * 2) + 2rem); 
+            margin-top: calc(80px + (var(--edge-gap) * 2) + 2rem);
             flex: 1;
             padding: 2rem 0;
             display: flex;
@@ -132,30 +188,23 @@
             width: 100%;
         }
 
-        /* Wide Asymmetric Column Pipeline - Perfect Structural Edge Locking */
+        /* Wide Asymmetric Column Pipeline */
         .tools-column-pipeline {
             width: 100%;
-            max-width: var(--max-bound); /* Locked to absolute header and footer constraints */
+            max-width: var(--max-bound);
             display: flex;
             flex-direction: column;
             gap: 5rem;
         }
 
-        /* Wide Axis Row Layout Intercept Modules */
         .tool-row-node {
             display: flex;
             width: 100%;
             align-items: center;
         }
 
-        /* Alternating Stagger Logic snapping cards cleanly flush to the wrapper extremes */
-        .tool-row-node:nth-child(odd) {
-            justify-content: flex-start;
-        }
-
-        .tool-row-node:nth-child(even) {
-            justify-content: flex-end;
-        }
+        .tool-row-node:nth-child(odd) { justify-content: flex-start; }
+        .tool-row-node:nth-child(even) { justify-content: flex-end; }
 
         /* Premium Minimalist Semi-Transparent Glass Card */
         .tool-card {
@@ -180,7 +229,6 @@
             box-shadow: 0 20px 45px rgba(0, 82, 204, 0.1);
         }
 
-        /* Brand Text Header Style replacing icons */
         .tool-name {
             font-size: 1.6rem;
             font-weight: 700;
@@ -245,7 +293,6 @@
             fill: var(--brand-blue);
         }
 
-        /* Theme Vector Filtering Mechanics */
         [data-theme="light"] .moon-shadow-icon { display: none; }
         [data-theme="dark"] .sun-clear-icon { display: none; }
 
@@ -347,13 +394,13 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            margin: auto auto 0 auto; /* Vertical ground constraint drops cleanly into frame limit padding */
+            margin: auto auto 0 auto;
             position: relative;
             z-index: 90;
             box-shadow: 0 -10px 30px var(--shadow-color);
         }
 
-        /* Mobile Optimization and Breaking Adapters */
+        /* --- Responsive Media Viewport Breaks --- */
         @media (max-width: 900px) {
             :root { --edge-gap: 16px; }
             header { padding: 0 1.5rem; }
@@ -362,37 +409,70 @@
 
         @media (max-width: 768px) {
             body { padding-top: calc(80px + var(--edge-gap)); }
+            
+            /* Structural Changes for Mobile Header Layout Grid */
             header {
-                flex-direction: column;
-                height: auto;
-                padding: 1.5rem 1rem;
-                position: absolute;
-                gap: 1rem;
-                top: var(--edge-gap);
+                padding: 0 1.2rem;
+                display: grid;
+                grid-template-columns: 40px 1fr 40px; /* Split into perfectly balanced thirds */
+                align-items: center;
+                justify-content: stretch;
             }
+
+            .mobile-menu-trigger {
+                display: flex; /* Activate three line menu trigger */
+                grid-column: 1;
+                justify-self: start;
+            }
+
+            .logo-container {
+                grid-column: 2;
+                justify-self: center; /* Absolute center positioning matrix for main logo */
+            }
+
+            /* Dummy placeholder to maintain symmetrical centering constraints inside grid rows */
+            header::after {
+                content: "";
+                grid-column: 3;
+                width: 40px;
+                display: block;
+            }
+
+            .external-links {
+                display: none; /* Strip away horizontal links block */
+            }
+
             main { margin-top: 0; }
             .tool-row-node, .tool-row-node:nth-child(even) { justify-content: center; }
-            .external-links {
-                flex-direction: column;
-                width: 100%;
-                gap: 0.5rem;
-            }
-            .nav-btn { width: 100%; justify-content: center; }
+            footer { width: 100%; font-size: 0.8rem; letter-spacing: 3px; }
         }
     </style>
 </head>
 <body>
 
     <header>
+        <button class="mobile-menu-trigger" id="sidebarMenuToggle" aria-label="Toggle Navigation Sidebar Menu">
+            <span class="line-1"></span>
+            <span class="line-2"></span>
+            <span class="line-3"></span>
+        </button>
+        
         <div class="logo-container" onclick="launchFloatingTool('./tool/rotate-tool.html', 'Rotation Vector Framework')" title="Click Logo to Launch Principal System Framework">
             <img src="./Logo2.png" alt="AYR TGW Solutions Logo">
         </div>
+        
         <div class="external-links">
             <a href="https://forms.gle/qD4b8aAvsNsw3R8x6" target="_blank" class="nav-btn">Clients Form</a>
             <a href="https://forms.gle/iZ4bZfq4rwQCZMQm7" target="_blank" class="nav-btn">Partners Form</a>
             <a href="https://forms.gle/8qiENB9tPN7QneCD6" target="_blank" class="nav-btn">Inquiry Form</a>
         </div>
     </header>
+
+    <nav class="mobile-sidebar" id="mobileSidebarMenu">
+        <a href="https://forms.gle/qD4b8aAvsNsw3R8x6" target="_blank" class="nav-btn">Clients Form</a>
+        <a href="https://forms.gle/iZ4bZfq4rwQCZMQm7" target="_blank" class="nav-btn">Partners Form</a>
+        <a href="https://forms.gle/8qiENB9tPN7QneCD6" target="_blank" class="nav-btn">Inquiry Form</a>
+    </nav>
 
     <main>
         <div class="tools-column-pipeline" id="staggeredPipelineMatrix">
@@ -446,6 +526,25 @@
         const globalAppOverlay = document.getElementById('globalAppOverlay');
         const globalAppIframe = document.getElementById('globalAppIframe');
         const globalAppTitle = document.getElementById('globalAppTitle');
+        
+        // Mobile Sidebar Selectors
+        const sidebarMenuToggle = document.getElementById('sidebarMenuToggle');
+        const mobileSidebarMenu = document.getElementById('mobileSidebarMenu');
+
+        // Mobile Sidebar Trigger Intercept Pipeline
+        sidebarMenuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebarMenuToggle.classList.toggle('active');
+            mobileSidebarMenu.classList.toggle('open');
+        });
+
+        // Close Sidebar when clicking outside of it
+        document.addEventListener('click', (e) => {
+            if (mobileSidebarMenu.classList.contains('open') && !mobileSidebarMenu.contains(e.target) && e.target !== sidebarMenuToggle) {
+                sidebarMenuToggle.classList.remove('active');
+                mobileSidebarMenu.classList.remove('open');
+            }
+        });
 
         // Theme Toggle Intercept Pipeline
         themeEngineToggle.addEventListener('click', () => {
@@ -463,6 +562,10 @@
             globalAppTitle.textContent = applicationLabel;
             globalAppIframe.src = applicationPath;
             globalAppOverlay.classList.add('active');
+            
+            // Auto close mobile drawer if open when triggering a tool card
+            sidebarMenuToggle.classList.remove('active');
+            mobileSidebarMenu.classList.remove('open');
             
             setTimeout(synchronizeChildIframeTheme, 150);
         }
@@ -489,8 +592,12 @@
 
         // Native Escape key interface cancellation action hooks
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && globalAppOverlay.classList.contains('active')) {
-                terminateFloatingTool();
+            if (e.key === 'Escape') {
+                if (globalAppOverlay.classList.contains('active')) terminateFloatingTool();
+                if (mobileSidebarMenu.classList.contains('open')) {
+                    sidebarMenuToggle.classList.remove('active');
+                    mobileSidebarMenu.classList.remove('open');
+                }
             }
         });
     </script>
