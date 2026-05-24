@@ -1,109 +1,943 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AYR TGW Tools Workspace</title>
-    <style>
-        :root {
-            --bg-image: url('./light.png');
-            --brand-blue: #0052cc;
-            --glass-bg: rgba(255, 255, 255, 0.35);
-            --glass-card: rgba(255, 255, 255, 0.23);
-            --glass-btn: rgba(255, 255, 255, 0.45);
-            --glass-border: rgba(0, 82, 204, 0.15);
-            --shadow-color: rgba(0, 82, 204, 0.06);
-            --modal-overlay: rgba(0, 10, 30, 0.15);
-        }
-        [data-theme="dark"] {
-            --bg-image: url('./dark.png');
-            --glass-bg: rgba(15, 23, 42, 0.45);
-            --glass-card: rgba(15, 23, 42, 0.28);
-            --glass-btn: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Arial, sans-serif; color: var(--brand-blue) !important; transition: 0.3s ease; }
-        body { min-height: 100vh; display: flex; flex-direction: column; background: var(--bg-image) no-repeat center center fixed; background-size: cover; padding: 0 24px; }
-        body.modal-lock { overflow: hidden !important; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AYR TGW Tools Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        header { width: 100%; max-width: 1400px; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 0 2.5rem; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 100; height: 80px; }
-        .nav-btn { background: var(--glass-btn); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 0.6rem 1.4rem; border-radius: 10px; font-weight: 600; cursor: pointer; text-decoration: none; }
-        .external-links { display: flex; gap: 0.8rem; }
+  <style>
+    /* ═══════════════════════════════════════════════
+       DESIGN TOKENS
+    ═══════════════════════════════════════════════ */
+    :root {
+      --brand:       #0052cc;
+      --brand-glow:  rgba(0, 82, 204, 0.25);
+      --brand-dim:   rgba(0, 82, 204, 0.08);
 
-        main { margin-top: 150px; flex: 1; display: flex; flex-direction: column; align-items: center; }
-        .tools-column-pipeline { width: 100%; max-width: 1400px; display: flex; flex-direction: column; gap: 5rem; }
-        .tool-row-node { display: flex; width: 100%; justify-content: flex-start; }
-        .tool-card { background: var(--glass-card); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem 2.5rem; width: 100%; max-width: 440px; box-shadow: 0 12px 35px var(--shadow-color); }
-        .tool-name { font-size: 1.6rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1.5rem; text-align: center; }
-        .launch-btn { width: 100%; background: var(--glass-btn); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; text-align: center; text-decoration: none; display: block; }
+      /* Light theme glass */
+      --glass-bg:     rgba(255, 255, 255, 0.38);
+      --glass-card:   rgba(255, 255, 255, 0.26);
+      --glass-btn:    rgba(255, 255, 255, 0.55);
+      --glass-border: rgba(0, 82, 204, 0.18);
+      --shadow:       rgba(0, 82, 204, 0.10);
+      --text:         #0052cc;
+      --text-dim:     rgba(0, 82, 204, 0.55);
 
-        footer { width: 100%; max-width: 1400px; padding: 1.8rem; text-align: center; background: var(--glass-bg); border-radius: 20px; margin: 4rem auto 24px auto; z-index: 90; }
-        .floating-theme-panel { position: fixed; bottom: 24px; right: 24px; z-index: 999; }
-        .glass-toggle-circle { width: 56px; height: 56px; border-radius: 50%; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); cursor: pointer; }
+      /* 3D perspective — simulates 50mm focal length at 1x screen scale */
+      --focal:        900px;
 
-        .floating-window-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.3); backdrop-filter: blur(12px); z-index: 1000; display: none; align-items: center; justify-content: center; }
-        .floating-window-overlay.active { display: flex; }
-        .window-wrapper { width: 90%; max-width: 700px; background: var(--glass-card); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem; }
-        .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 1.5rem; }
-        .tool-link-btn { padding: 1rem; background: var(--glass-btn); border: 1px solid var(--glass-border); border-radius: 10px; text-decoration: none; color: var(--brand-blue); text-align: center; font-weight: 600; display: block; }
-    </style>
+      /* Parallax depth multipliers per layer */
+      --depth-bg:     0.015;
+      --depth-header: 0.030;
+      --depth-card:   0.055;
+      --depth-btn:    0.080;
+    }
+
+    [data-theme="dark"] {
+      --brand:       #00c6ff;
+      --brand-glow:  rgba(0, 198, 255, 0.22);
+      --brand-dim:   rgba(0, 198, 255, 0.06);
+      --glass-bg:    rgba(8, 16, 36, 0.52);
+      --glass-card:  rgba(8, 16, 36, 0.34);
+      --glass-btn:   rgba(255, 255, 255, 0.09);
+      --glass-border:rgba(0, 198, 255, 0.22);
+      --shadow:      rgba(0, 198, 255, 0.10);
+      --text:        #00c6ff;
+      --text-dim:    rgba(0, 198, 255, 0.50);
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════ */
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    html { height: 100%; }
+
+    body {
+      min-height: 100vh;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+      /* Perspective origin locked to screen center — the vanishing point */
+      perspective: var(--focal);
+      perspective-origin: 50% 50%;
+    }
+    body.modal-lock { overflow: hidden !important; }
+
+    * { color: var(--text); transition: color 0.35s ease, background 0.35s ease, border-color 0.35s ease; }
+
+    /* ═══════════════════════════════════════════════
+       BACKGROUND STAGE
+    ═══════════════════════════════════════════════ */
+    #bg-stage {
+      position: fixed; inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+    /* The actual media element is injected here by the BG Engine */
+    #bg-stage .bg-asset {
+      position: absolute; inset: -8%; /* oversized for parallax travel */
+      width: 116%; height: 116%;
+      object-fit: cover;
+      transform-origin: center center;
+      will-change: transform;
+      transition: opacity 0.7s ease;
+    }
+    /* Subtle vignette overlay */
+    #bg-stage::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 50%,
+        transparent 40%,
+        rgba(0,0,0,0.18) 100%
+      );
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════
+       PARALLAX LAYERS
+    ═══════════════════════════════════════════════ */
+    .parallax-layer {
+      will-change: transform;
+      transform-style: preserve-3d;
+      /* JS writes --tx / --ty CSS vars per-element for smooth rAF updates */
+      transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0px);
+    }
+    /* Cards get the full tilt treatment */
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: box-shadow 0.4s ease;
+    }
+
+    /* ═══════════════════════════════════════════════
+       LAYOUT SHELL
+    ═══════════════════════════════════════════════ */
+    #viewport-shell {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 24px;
+      /* scale is driven by Screen Awareness module */
+      transform-origin: top center;
+    }
+
+    /* ═══════════════════════════════════════════════
+       HEADER
+    ═══════════════════════════════════════════════ */
+    header {
+      width: 100%;
+      max-width: 1400px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(28px) saturate(1.4);
+      -webkit-backdrop-filter: blur(28px) saturate(1.4);
+      border: 1px solid var(--glass-border);
+      border-radius: 22px;
+      padding: 0 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      height: 80px;
+      box-shadow: 0 8px 40px var(--shadow);
+    }
+    .logo-container img {
+      height: 44px;
+      filter: drop-shadow(0 0 8px var(--brand-glow));
+      transition: filter 0.3s ease;
+    }
+    .logo-container img:hover {
+      filter: drop-shadow(0 0 16px var(--brand-glow));
+    }
+    .external-links { display: flex; gap: 0.75rem; }
+
+    /* ═══════════════════════════════════════════════
+       NAV BUTTONS
+    ═══════════════════════════════════════════════ */
+    .nav-btn {
+      background: var(--glass-btn);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      padding: 0.55rem 1.3rem;
+      border-radius: 11px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      letter-spacing: 0.03em;
+      box-shadow: 0 2px 14px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.3);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+    }
+    .nav-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .nav-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 28px var(--brand-glow), inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+    .nav-btn:active {
+      transform: translateY(0px) scale(0.98);
+    }
+
+    /* ═══════════════════════════════════════════════
+       MAIN CONTENT
+    ═══════════════════════════════════════════════ */
+    main {
+      margin-top: 148px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding-bottom: 60px;
+    }
+    .tools-column-pipeline {
+      width: 100%;
+      max-width: 1400px;
+      display: flex;
+      flex-direction: column;
+      gap: 4.5rem;
+    }
+    .tool-row-node {
+      display: flex;
+      width: 100%;
+      justify-content: flex-start;
+    }
+    .tool-row-node:nth-child(even) { justify-content: flex-end; }
+    .tool-row-node:nth-child(3n)   { justify-content: center; }
+
+    /* ═══════════════════════════════════════════════
+       TOOL CARDS — 3D PRESERVED
+    ═══════════════════════════════════════════════ */
+    .tool-card {
+      background: var(--glass-card);
+      backdrop-filter: blur(30px) saturate(1.5);
+      -webkit-backdrop-filter: blur(30px) saturate(1.5);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 2.8rem 2.4rem;
+      width: 100%;
+      max-width: 460px;
+      box-shadow:
+        0 16px 48px var(--shadow),
+        0 1px 0 rgba(255,255,255,0.25) inset,
+        0 -1px 0 rgba(0,0,0,0.05) inset;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      cursor: default;
+    }
+    /* Top gloss stripe */
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    }
+    /* Ambient accent glow */
+    .tool-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 20% 10%, var(--brand-dim) 0%, transparent 65%);
+      pointer-events: none;
+      border-radius: 24px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .tool-card:hover::after { opacity: 1; }
+
+    .card-inner {
+      transform-style: preserve-3d;
+      position: relative;
+    }
+    .tool-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.6rem;
+      text-align: center;
+      text-shadow: 0 0 20px var(--brand-glow);
+      /* Slight 3D extrusion feel */
+      transform: translateZ(12px);
+    }
+    .card-desc {
+      font-size: 0.83rem;
+      font-weight: 400;
+      opacity: 0.6;
+      text-align: center;
+      margin-bottom: 1.6rem;
+      line-height: 1.6;
+      transform: translateZ(8px);
+    }
+
+    /* ═══════════════════════════════════════════════
+       LAUNCH BUTTON
+    ═══════════════════════════════════════════════ */
+    .launch-btn {
+      width: 100%;
+      background: var(--glass-btn);
+      border: 1px solid var(--glass-border);
+      padding: 1rem 1.5rem;
+      border-radius: 14px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      text-transform: uppercase;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      transform: translateZ(20px); /* pops out toward viewer */
+      box-shadow: 0 4px 20px var(--shadow), 0 1px 0 rgba(255,255,255,0.3) inset;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .launch-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .launch-btn:hover {
+      transform: translateZ(28px) scale(1.025);
+      box-shadow: 0 8px 32px var(--brand-glow), 0 1px 0 rgba(255,255,255,0.45) inset;
+    }
+    .launch-btn:active {
+      transform: translateZ(16px) scale(0.975);
+    }
+
+    /* ═══════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════ */
+    footer {
+      width: 100%;
+      max-width: 1400px;
+      padding: 1.6rem 2rem;
+      text-align: center;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      margin: 2rem auto 24px auto;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.25em;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    /* ═══════════════════════════════════════════════
+       FLOATING THEME TOGGLE
+    ═══════════════════════════════════════════════ */
+    .floating-theme-panel {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      z-index: 999;
+    }
+    .glass-toggle-circle {
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      box-shadow: 0 4px 24px var(--shadow);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .glass-toggle-circle:hover {
+      transform: scale(1.12) rotate(20deg);
+      box-shadow: 0 8px 36px var(--brand-glow);
+    }
+
+    /* ═══════════════════════════════════════════════
+       MODAL OVERLAY
+    ═══════════════════════════════════════════════ */
+    .floating-window-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(18px) saturate(1.2);
+      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .floating-window-overlay.active { display: flex; }
+
+    .window-wrapper {
+      width: 100%;
+      max-width: 740px;
+      background: var(--glass-card);
+      backdrop-filter: blur(30px) saturate(1.5);
+      -webkit-backdrop-filter: blur(30px) saturate(1.5);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      padding: 2.4rem;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+      position: relative;
+      transform-style: preserve-3d;
+      animation: modalReveal 0.35s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    @keyframes modalReveal {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to   { opacity: 1; transform: scale(1)    translateY(0px); }
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.7rem;
+      letter-spacing: 0.1em;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+    }
+    .tool-link-btn {
+      padding: 1rem;
+      background: var(--glass-btn);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      text-decoration: none;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 12px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .tool-link-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .tool-link-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 28px var(--brand-glow), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    /* ═══════════════════════════════════════════════
+       LOADING SHIMMER (initial fade)
+    ═══════════════════════════════════════════════ */
+    .shimmer-load {
+      animation: shimmerIn 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+    @keyframes shimmerIn {
+      from { opacity: 0; transform: translateY(18px) translateZ(-20px); }
+      to   { opacity: 1; transform: translateY(0)    translateZ(0); }
+    }
+    .shimmer-load:nth-child(1) { animation-delay: 0.05s; }
+    .shimmer-load:nth-child(2) { animation-delay: 0.15s; }
+    .shimmer-load:nth-child(3) { animation-delay: 0.25s; }
+    .shimmer-load:nth-child(4) { animation-delay: 0.35s; }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE DEVICE OVERRIDES
+       (Screen Awareness module writes a data-device
+        attribute; these rules snap layout accordingly)
+    ═══════════════════════════════════════════════ */
+    [data-device="mobile"] #viewport-shell   { padding: 0 14px; }
+    [data-device="mobile"] header            { padding: 0 1.2rem; border-radius: 16px; height: 66px; top: 14px; }
+    [data-device="mobile"] .external-links   { gap: 0.4rem; }
+    [data-device="mobile"] .nav-btn          { padding: 0.45rem 0.85rem; font-size: 0.72rem; }
+    [data-device="mobile"] .tool-card        { max-width: 100%; padding: 2rem 1.6rem; }
+    [data-device="mobile"] .tool-name        { font-size: 1.5rem; }
+    [data-device="mobile"] main              { margin-top: 120px; }
+    [data-device="mobile"] .tools-column-pipeline { gap: 2.8rem; }
+    [data-device="mobile"] .tool-row-node,
+    [data-device="mobile"] .tool-row-node:nth-child(even),
+    [data-device="mobile"] .tool-row-node:nth-child(3n) { justify-content: center; }
+
+    [data-device="tablet"] .tool-card        { max-width: 380px; }
+    [data-device="tablet"] .tools-column-pipeline { gap: 3.5rem; }
+
+    /* ═══════════════════════════════════════════════
+       PRINT / REDUCED MOTION
+    ═══════════════════════════════════════════════ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-container"><img src="./Logo2.png" style="height:42px;" alt="Logo"></div>
-        <div class="external-links">
-            <a href="https://forms.gle/qD4b8aAvsNsw3R8x6" target="_blank" class="nav-btn">Clients Form</a>
-            <a href="https://forms.gle/iZ4bZfq4rwQCZMQm7" target="_blank" class="nav-btn">Partners Form</a>
-            <a href="https://forms.gle/8qiENB9tPN7QneCD6" target="_blank" class="nav-btn">Inquiry Form</a>
-        </div>
+  <!-- ── BACKGROUND STAGE ── injected by BGEngine ── -->
+  <div id="bg-stage" aria-hidden="true"></div>
+
+  <!-- ── MAIN VIEWPORT SHELL ── scaled by ScreenAwareness ── -->
+  <div id="viewport-shell">
+
+    <!-- HEADER -->
+    <header class="parallax-layer" data-depth="header">
+      <div class="logo-container">
+        <img src="./Logo2.png" alt="AYR TGW Logo">
+      </div>
+      <nav class="external-links">
+        <a href="https://forms.gle/qD4b8aAvsNsw3R8x6" target="_blank" rel="noopener" class="nav-btn">Clients Form</a>
+        <a href="https://forms.gle/iZ4bZfq4rwQCZMQm7" target="_blank" rel="noopener" class="nav-btn">Partners Form</a>
+        <a href="https://forms.gle/8qiENB9tPN7QneCD6" target="_blank" rel="noopener" class="nav-btn">Inquiry Form</a>
+      </nav>
     </header>
 
     <main>
-        <div class="tools-column-pipeline">
-            <div class="tool-row-node">
-                <div class="tool-card">
-                    <div class="tool-name">External Tools</div>
-                    <button class="launch-btn" onclick="toggleHub(true)">Open Resource Hub</button>
-                </div>
+      <div class="tools-column-pipeline">
+
+        <!-- CARD 1 — External Tools -->
+        <div class="tool-row-node shimmer-load">
+          <div class="tool-card tilt-card parallax-layer" data-depth="card">
+            <div class="card-inner">
+              <div class="tool-name">External Tools</div>
+              <p class="card-desc">Financial calculators, market data, CRA, and productivity resources.</p>
+              <button class="launch-btn" onclick="toggleHub(true)">Open Resource Hub</button>
             </div>
+          </div>
         </div>
+
+        <!-- CARD 2 — Placeholder for future tool -->
+        <div class="tool-row-node shimmer-load">
+          <div class="tool-card tilt-card parallax-layer" data-depth="card">
+            <div class="card-inner">
+              <div class="tool-name">Client Portal</div>
+              <p class="card-desc">Onboarding, document review, and account management workflows.</p>
+              <button class="launch-btn" style="opacity:0.45; cursor:not-allowed;">Coming Soon</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3 — Placeholder -->
+        <div class="tool-row-node shimmer-load">
+          <div class="tool-card tilt-card parallax-layer" data-depth="card">
+            <div class="card-inner">
+              <div class="tool-name">AI Advisor</div>
+              <p class="card-desc">Automated wealth profiling, scenario modeling, and plan generation.</p>
+              <button class="launch-btn" style="opacity:0.45; cursor:not-allowed;">Coming Soon</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 4 — Placeholder -->
+        <div class="tool-row-node shimmer-load">
+          <div class="tool-card tilt-card parallax-layer" data-depth="card">
+            <div class="card-inner">
+              <div class="tool-name">Analytics Hub</div>
+              <p class="card-desc">Live pipeline metrics, conversion tracking, and performance dashboards.</p>
+              <button class="launch-btn" style="opacity:0.45; cursor:not-allowed;">Coming Soon</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </main>
 
-    <footer>Trust • Growth • Wealth</footer>
+    <footer class="parallax-layer" data-depth="header">Trust &bull; Growth &bull; Wealth</footer>
 
-    <div class="floating-theme-panel">
-        <button class="glass-toggle-circle" id="themeEngineToggle"></button>
+  </div><!-- /viewport-shell -->
+
+  <!-- ── THEME TOGGLE ── -->
+  <div class="floating-theme-panel">
+    <button class="glass-toggle-circle" id="themeToggleBtn" title="Toggle theme" aria-label="Toggle light/dark theme">
+      <span id="themeIcon">🌙</span>
+    </button>
+  </div>
+
+  <!-- ── EXTERNAL HUB MODAL ── -->
+  <div class="floating-window-overlay" id="externalHubOverlay" role="dialog" aria-modal="true" aria-label="External Resources">
+    <div class="window-wrapper">
+      <div class="modal-header">
+        <h2 class="modal-title">External Resources</h2>
+        <button class="nav-btn" onclick="toggleHub(false)" aria-label="Close modal">✕ Close</button>
+      </div>
+      <div class="tool-grid">
+        <a href="https://financial-calculators.ca/#/" target="_blank" rel="noopener" class="tool-link-btn">Financial Calculator</a>
+        <a href="https://ycharts.com"                  target="_blank" rel="noopener" class="tool-link-btn">YCharts</a>
+        <a href="https://koyfin.com"                   target="_blank" rel="noopener" class="tool-link-btn">Koyfin</a>
+        <a href="https://fred.stlouisfed.org"           target="_blank" rel="noopener" class="tool-link-btn">FRED Data</a>
+        <a href="https://www.taxtips.ca"               target="_blank" rel="noopener" class="tool-link-btn">TaxTips.ca</a>
+        <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener" class="tool-link-btn">CRA Portal</a>
+        <a href="https://calendly.com"                 target="_blank" rel="noopener" class="tool-link-btn">Calendly</a>
+        <a href="https://www.docusign.com"             target="_blank" rel="noopener" class="tool-link-btn">DocuSign</a>
+      </div>
     </div>
+  </div>
 
-    <div class="floating-window-overlay" id="externalHubOverlay">
-        <div class="window-wrapper">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-                <h2 style="font-weight:700;">External Resources</h2>
-                <button class="nav-btn" onclick="toggleHub(false)">Close</button>
-            </div>
-            <div class="tool-grid">
-                <a href="https://financial-calculators.ca/#/" target="_blank" class="tool-link-btn">Financial Calculator</a>
-                <a href="https://ycharts.com" target="_blank" class="tool-link-btn">YCharts</a>
-                <a href="https://koyfin.com" target="_blank" class="tool-link-btn">Koyfin</a>
-                <a href="https://fred.stlouisfed.org" target="_blank" class="tool-link-btn">FRED Data</a>
-                <a href="https://www.taxtips.ca" target="_blank" class="tool-link-btn">TaxTips.ca</a>
-                <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" class="tool-link-btn">CRA Portal</a>
-                <a href="https://calendly.com" target="_blank" class="tool-link-btn">Calendly</a>
-                <a href="https://www.docusign.com" target="_blank" class="tool-link-btn">DocuSign</a>
-            </div>
-        </div>
-    </div>
+<!-- ════════════════════════════════════════════════════════════════
+     JAVASCRIPT ENGINE — four modular systems
+════════════════════════════════════════════════════════════════ -->
+<script>
+'use strict';
 
-    <script>
-        function toggleHub(show) {
-            document.getElementById('externalHubOverlay').classList.toggle('active', show);
-            document.body.classList.toggle('modal-lock', show);
+/* ─────────────────────────────────────────────────────────────
+   MODULE 1 · SCREEN AWARENESS
+   Detects device class, writes data-device on <body>,
+   and applies a viewport scale so nothing clips on any screen.
+───────────────────────────────────────────────────────────── */
+const ScreenAwareness = (() => {
+
+  const BREAKPOINTS = { mobile: 640, tablet: 1024 };
+
+  function classify(w) {
+    if (w <= BREAKPOINTS.mobile) return 'mobile';
+    if (w <= BREAKPOINTS.tablet) return 'tablet';
+    return 'desktop';
+  }
+
+  // Compute a uniform scale that keeps the 1400px layout fitting
+  // the real viewport without horizontal scroll, respecting AR.
+  function computeScale(device, vw, vh) {
+    if (device === 'desktop') return 1;
+    const BASE_W = device === 'tablet' ? 768 : 390;
+    // Allow a small padding band
+    const scale = Math.min(1, (vw - 0) / BASE_W);
+    return Math.max(0.55, scale);
+  }
+
+  function apply() {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const device = classify(vw);
+    document.body.setAttribute('data-device', device);
+
+    const shell = document.getElementById('viewport-shell');
+    const scale = computeScale(device, vw, vh);
+    shell.style.transform = `scale(${scale})`;
+    shell.style.transformOrigin = 'top center';
+    // Compensate body height for scaled shell
+    if (scale < 1) {
+      shell.style.marginBottom = `-${(1 - scale) * vh}px`;
+    } else {
+      shell.style.marginBottom = '';
+    }
+  }
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(apply, 80);
+  });
+
+  apply(); // run immediately
+
+  return { apply };
+})();
+
+
+/* ─────────────────────────────────────────────────────────────
+   MODULE 2 · BACKGROUND ENGINE
+   Scans /background/ for recognized assets, injects the
+   correct HTML element, and hot-swaps on theme change.
+───────────────────────────────────────────────────────────── */
+const BGEngine = (() => {
+
+  // Priority-ordered extensions per type
+  const VIDEO_EXT  = ['mp4', 'webm', 'mkv', 'ogv'];
+  const GIF_EXT    = ['gif'];
+  const IMAGE_EXT  = ['jpg', 'jpeg', 'png', 'webp', 'avif', 'svg'];
+
+  // The file scanner: tries each extension for the given base name.
+  // Returns { type, src } or null.  Fetches are HEAD requests so
+  // no bandwidth is wasted.
+  async function probe(base) {
+    const allExt = [...VIDEO_EXT, ...GIF_EXT, ...IMAGE_EXT];
+    for (const ext of allExt) {
+      const src = `./background/${base}.${ext}`;
+      try {
+        const res = await fetch(src, { method: 'HEAD', cache: 'force-cache' });
+        if (res.ok) {
+          if (VIDEO_EXT.includes(ext))      return { type: 'video', src, ext };
+          if (GIF_EXT.includes(ext))        return { type: 'gif',   src, ext };
+          if (IMAGE_EXT.includes(ext))      return { type: 'image', src, ext };
         }
-        document.getElementById('themeEngineToggle').addEventListener('click', () => {
-            const root = document.documentElement;
-            root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-        });
-    </script>
+      } catch (_) { /* file does not exist — try next */ }
+    }
+    return null;
+  }
+
+  // Build the correct DOM element from a probe result
+  function buildElement(probe) {
+    let el;
+    if (probe.type === 'video') {
+      el = document.createElement('video');
+      el.src        = probe.src;
+      el.autoplay   = true;
+      el.loop       = true;
+      el.muted      = true;
+      el.playsinline= true;
+      el.setAttribute('aria-hidden', 'true');
+    } else {
+      // gif or image — both use <img>
+      el = document.createElement('img');
+      el.src = probe.src;
+      el.setAttribute('aria-hidden', 'true');
+      el.alt = '';
+    }
+    el.className = 'bg-asset parallax-layer';
+    el.setAttribute('data-depth', 'bg');
+    return el;
+  }
+
+  const stage = document.getElementById('bg-stage');
+  let   activeTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+  // Cache so we don't re-fetch on every theme toggle
+  const cache = {};
+
+  async function loadTheme(theme) {
+    if (cache[theme]) {
+      swap(cache[theme]);
+      return;
+    }
+    const result = await probe(theme); // tries ./background/light.mp4, light.gif, etc.
+    cache[theme] = result;
+    swap(result);
+  }
+
+  function swap(result) {
+    // Fade out existing
+    const existing = stage.querySelector('.bg-asset');
+    if (existing) {
+      existing.style.opacity = '0';
+      setTimeout(() => existing.remove(), 700);
+    }
+
+    if (!result) {
+      // Fallback: CSS gradient fills in via body background set below
+      document.body.style.background =
+        activeTheme === 'dark'
+          ? 'linear-gradient(135deg, #060e20 0%, #0a1628 100%)'
+          : 'linear-gradient(135deg, #dce8ff 0%, #f0f4ff 100%)';
+      return;
+    }
+
+    document.body.style.background = '';
+    const el = buildElement(result);
+    el.style.opacity = '0';
+    stage.prepend(el);
+    // Trigger reflow before fade-in
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => { el.style.opacity = '1'; });
+    });
+  }
+
+  // Called by ThemeEngine on toggle
+  function setTheme(theme) {
+    activeTheme = theme;
+    loadTheme(theme);
+  }
+
+  // Kick off with current theme
+  loadTheme(activeTheme);
+
+  return { setTheme };
+})();
+
+
+/* ─────────────────────────────────────────────────────────────
+   MODULE 3 · PARALLAX + TILT PHYSICS
+   Reads mouse / gyro position and drives layered 3D motion
+   based on a simulated 50mm focal length perspective.
+   "50mm" maps to ~53° FOV on full-frame; we approximate by
+   letting perspective = 0.866 × screen-diagonal in px.
+───────────────────────────────────────────────────────────── */
+const ParallaxEngine = (() => {
+
+  // Focal parameters
+  const FOCAL_RATIO   = 0.866;   // perspective / diagonal ≈ 50mm
+  const MAX_TILT_DEG  = 12;      // maximum card tilt in degrees
+  const EASE          = 0.072;   // lerp factor — spring smoothness
+
+  // Depth map (unitless multiplier per layer type)
+  const DEPTH = {
+    bg:     0.014,
+    header: 0.028,
+    card:   0.055,
+    btn:    0.09,
+  };
+
+  // State
+  let mouseX = 0, mouseY = 0;  // normalised -1…+1 from screen center
+  let currX  = 0, currY  = 0;  // lerped values
+  let rafID  = null;
+
+  // All parallax elements (queried once, re-queried after DOM changes)
+  let layers = [];
+
+  function gather() {
+    layers = Array.from(document.querySelectorAll('.parallax-layer'));
+  }
+
+  // Update perspective based on screen diagonal
+  function updateFocal() {
+    const diag = Math.hypot(window.innerWidth, window.innerHeight);
+    const focal = Math.round(diag * FOCAL_RATIO);
+    document.documentElement.style.setProperty('--focal', focal + 'px');
+    document.body.style.perspective = focal + 'px';
+  }
+
+  // Pointer → normalised coords
+  function onPointerMove(e) {
+    const cx = window.innerWidth  / 2;
+    const cy = window.innerHeight / 2;
+    mouseX = (e.clientX - cx) / cx;   // -1 to +1
+    mouseY = (e.clientY - cy) / cy;
+  }
+
+  // Gyroscope for mobile
+  function onDeviceOrientation(e) {
+    // gamma = left-right tilt, beta = fwd-back tilt
+    if (e.gamma !== null) mouseX =  e.gamma / 45;
+    if (e.beta  !== null) mouseY = (e.beta  - 30) / 45; // 30° is neutral hold angle
+    mouseX = Math.max(-1, Math.min(1, mouseX));
+    mouseY = Math.max(-1, Math.min(1, mouseY));
+  }
+
+  function tick() {
+    // Smooth lerp
+    currX += (mouseX - currX) * EASE;
+    currY += (mouseY - currY) * EASE;
+
+    layers.forEach(el => {
+      const depthKey  = el.getAttribute('data-depth') || 'card';
+      const d         = DEPTH[depthKey] ?? DEPTH.card;
+      const tx        = currX * d * window.innerWidth  * 0.5;
+      const ty        = currY * d * window.innerHeight * 0.5;
+
+      if (el.classList.contains('tilt-card')) {
+        // Full 3D tilt for cards
+        const rotY =  currX * MAX_TILT_DEG;
+        const rotX = -currY * MAX_TILT_DEG;
+        el.style.transform = `
+          translate3d(${tx}px, ${ty}px, 0px)
+          rotateY(${rotY}deg)
+          rotateX(${rotX}deg)
+        `;
+        // Dynamic shadow to reinforce the tilt
+        const sx = currX * 14;
+        const sy = currY * 14;
+        el.style.boxShadow = `
+          ${sx}px ${sy + 16}px 48px var(--shadow),
+          0 1px 0 rgba(255,255,255,0.25) inset
+        `;
+      } else {
+        el.style.transform = `translate3d(${tx}px, ${ty}px, 0px)`;
+      }
+    });
+
+    rafID = requestAnimationFrame(tick);
+  }
+
+  function init() {
+    gather();
+    updateFocal();
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('mousemove',   onPointerMove, { passive: true });
+    window.addEventListener('deviceorientation', onDeviceOrientation, { passive: true });
+    window.addEventListener('resize', () => { updateFocal(); gather(); });
+    tick();
+  }
+
+  return { init, gather };
+})();
+
+
+/* ─────────────────────────────────────────────────────────────
+   MODULE 4 · THEME ENGINE
+   Handles light/dark toggle and notifies BGEngine.
+───────────────────────────────────────────────────────────── */
+const ThemeEngine = (() => {
+
+  const root       = document.documentElement;
+  const btn        = document.getElementById('themeToggleBtn');
+  const iconEl     = document.getElementById('themeIcon');
+  const ICONS      = { light: '🌙', dark: '☀️' };
+  const STORAGE_KEY = 'ayr-theme';
+
+  let current = localStorage.getItem(STORAGE_KEY) ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+  function apply(theme, save = true) {
+    current = theme;
+    root.setAttribute('data-theme', theme);
+    iconEl.textContent = ICONS[theme];
+    if (save) localStorage.setItem(STORAGE_KEY, theme);
+    BGEngine.setTheme(theme);
+  }
+
+  btn.addEventListener('click', () => {
+    apply(current === 'light' ? 'dark' : 'light');
+  });
+
+  // Honour OS-level changes
+  window.matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', e => apply(e.matches ? 'dark' : 'light'));
+
+  // Boot with saved / detected preference
+  apply(current, false);
+
+  return { apply };
+})();
+
+
+/* ─────────────────────────────────────────────────────────────
+   MODAL CONTROLLER
+───────────────────────────────────────────────────────────── */
+function toggleHub(show) {
+  const overlay = document.getElementById('externalHubOverlay');
+  overlay.classList.toggle('active', show);
+  document.body.classList.toggle('modal-lock', show);
+}
+// Close on overlay click (not wrapper click)
+document.getElementById('externalHubOverlay').addEventListener('click', function(e) {
+  if (e.target === this) toggleHub(false);
+});
+// Close on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') toggleHub(false);
+});
+
+
+/* ─────────────────────────────────────────────────────────────
+   BOOT SEQUENCE
+───────────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  ParallaxEngine.init();
+  ScreenAwareness.apply();
+});
+
+</script>
 </body>
 </html>
