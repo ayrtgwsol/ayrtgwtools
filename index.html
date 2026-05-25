@@ -5,104 +5,136 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AYR TGW Tools Workspace</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
   <style>
-    /* ═══════════════════════════════════════════════════════════
-       § 1  DESIGN TOKENS
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 1  DESIGN TOKENS                                         ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     :root {
-      /* Light palette */
-      --brand:        #0052cc;
-      --brand-glow:   rgba(0, 82, 204, 0.25);
-      --brand-dim:    rgba(0, 82, 204, 0.08);
-      --glass-bg:     rgba(255, 255, 255, 0.38);
-      --glass-card:   rgba(255, 255, 255, 0.26);
-      --glass-btn:    rgba(255, 255, 255, 0.55);
-      --glass-border: rgba(0, 82, 204, 0.18);
-      --shadow:       rgba(0, 82, 204, 0.10);
-      --text:         #0052cc;
-      --text-dim:     rgba(0, 82, 204, 0.55);
+      --brand:         #0052cc;
+      --brand-glow:    rgba(0, 82, 204, 0.25);
+      --brand-dim:     rgba(0, 82, 204, 0.08);
+      --glass-bg:      rgba(255, 255, 255, 0.38);
+      --glass-card:    rgba(255, 255, 255, 0.26);
+      --glass-btn:     rgba(255, 255, 255, 0.55);
+      --glass-border:  rgba(0, 82, 204, 0.18);
+      --shadow:        rgba(0, 82, 204, 0.10);
+      --text:          #0052cc;
+      --text-dim:      rgba(0, 82, 204, 0.55);
 
-      /* 50mm focal length is computed by JS on resize;
-         this is the initial fallback value only.        */
+      /*
+        --focal is the JS-computed perspective depth (50mm model).
+        Set here as a safe initial value only; JS overwrites it on boot.
+      */
       --focal: 900px;
+
+      /*
+        Fixed chrome heights — used by main's top/bottom margins so
+        scrollable content never hides under the pinned header/footer.
+      */
+      --header-h:   80px;
+      --header-top: 24px;
+      --footer-h:   52px;
     }
 
     [data-theme="dark"] {
-      --brand:        #00c6ff;
-      --brand-glow:   rgba(0, 198, 255, 0.22);
-      --brand-dim:    rgba(0, 198, 255, 0.06);
-      --glass-bg:     rgba(8, 16, 36, 0.52);
-      --glass-card:   rgba(8, 16, 36, 0.34);
-      --glass-btn:    rgba(255, 255, 255, 0.09);
-      --glass-border: rgba(0, 198, 255, 0.22);
-      --shadow:       rgba(0, 198, 255, 0.10);
-      --text:         #00c6ff;
-      --text-dim:     rgba(0, 198, 255, 0.50);
+      --brand:         #00c6ff;
+      --brand-glow:    rgba(0, 198, 255, 0.22);
+      --brand-dim:     rgba(0, 198, 255, 0.06);
+      --glass-bg:      rgba(8, 16, 36, 0.52);
+      --glass-card:    rgba(8, 16, 36, 0.34);
+      --glass-btn:     rgba(255, 255, 255, 0.09);
+      --glass-border:  rgba(0, 198, 255, 0.22);
+      --shadow:        rgba(0, 198, 255, 0.10);
+      --text:          #00c6ff;
+      --text-dim:      rgba(0, 198, 255, 0.50);
     }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 2  RESET & BASE
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 2  RESET & BASE                                          ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     *, *::before, *::after {
       margin: 0; padding: 0; box-sizing: border-box;
       color: var(--text);
-      transition: color 0.35s ease, background 0.35s ease, border-color 0.35s ease;
+      transition: color 0.35s ease, background 0.35s ease,
+                  border-color 0.35s ease;
     }
     html { height: 100%; }
 
     body {
-      min-height: 100vh;
+      min-height: 100%;
       font-family: 'DM Sans', sans-serif;
-      overflow-x: hidden;
       /*
-        Vanishing point: screen center, always.
-        perspective-origin is expressed in viewport units so it
-        never drifts on wide monitors.
+        overflow-y: scroll keeps the layout stable (prevents reflow
+        when modal opens and removes the scrollbar).
+        overflow-x is always hidden.
       */
-      perspective: var(--focal);
-      perspective-origin: 50vw 50vh;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      /*
+        No perspective on body — 3D context lives exclusively inside
+        #parallax-scene so header and footer are outside all 3D planes.
+      */
     }
     body.modal-lock { overflow: hidden !important; }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 3  BACKGROUND STAGE
-       The media asset is injected by BGEngine.
-       The layer is oversized by 8% on all sides to give the
-       parallax room to travel without exposing edges.
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 3  BACKGROUND STAGE — '1080p / Viewport-Lock' Strategy   ║
+       ╠══════════════════════════════════════════════════════════════╣
+       ║  position: fixed  → stage covers exactly 100vw × 100vh      ║
+       ║  regardless of document height or scroll position.          ║
+       ║                                                              ║
+       ║  The asset (.bg-asset) is sized to 116vw × 116vh and        ║
+       ║  positioned at -8vw / -8vh. This 8% bleed on every side    ║
+       ║  is the parallax travel budget — the asset can shift ±8%   ║
+       ║  of the viewport before any edge becomes visible.           ║
+       ║                                                              ║
+       ║  object-fit: cover — fills the oversized box without        ║
+       ║  distortion at any aspect ratio (16:9, 4:3, portrait, etc.) ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     #bg-stage {
-      position: fixed; inset: 0;
+      position: fixed;          /* viewport-locked, NOT document-sized */
+      top: 0; left: 0;
+      width:  100vw;            /* explicit viewport units             */
+      height: 100vh;
       z-index: -1;
       overflow: hidden;
+      pointer-events: none;
     }
+
     #bg-stage .bg-asset {
       position: absolute;
-      inset: -8%;
-      width: 116%; height: 116%;
-      object-fit: cover;
+      top:    -8vh;             /* bleed = parallax travel budget      */
+      left:   -8vw;
+      width:  116vw;
+      height: 116vh;
+      object-fit: cover;        /* fills without distortion            */
       transform-origin: center center;
       will-change: transform;
       transition: opacity 0.7s ease;
+      /* No max-width / max-height — must fill the oversized box fully */
     }
-    /* Vignette */
+
+    /* Radial vignette painted over the asset */
     #bg-stage::after {
       content: '';
       position: absolute; inset: 0;
       background: radial-gradient(ellipse at 50% 50%,
-        transparent 40%, rgba(0,0,0,0.18) 100%);
+                    transparent 36%, rgba(0,0,0,0.22) 100%);
       pointer-events: none;
     }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 4  LAYOUT SHELL
-       #viewport-shell is the single element scaled by
-       ScreenAwareness. It never has a parallax transform applied.
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 4  VIEWPORT SHELL                                        ║
+       ║  Outer wrapper for ScreenAwareness scale transform.         ║
+       ║  transform-origin: top center so scaling anchors to the     ║
+       ║  top of the page, not the geometric centre.                 ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     #viewport-shell {
       width: 100%;
       min-height: 100vh;
@@ -111,16 +143,18 @@
       align-items: center;
       padding: 0 24px;
       transform-origin: top center;
-      /* Scale is written inline by ScreenAwareness */
+      /* JS writes scale() inline on mobile/tablet; desktop: no transform */
     }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 5  PARALLAX CLASSES
-       Only elements with .parallax-layer AND .tilt-card receive
-       mouse-reactive transforms.
-       Header / Footer are intentionally excluded from this class.
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 5  PARALLAX PRIMITIVES                                   ║
+       ║  .parallax-layer  — enrolled in the JS rAF loop             ║
+       ║  .tilt-card       — also receives rotateX / rotateY         ║
+       ║                                                              ║
+       ║  NEITHER class is applied to <header>, <footer>, the theme  ║
+       ║  toggle, or any modal element. Those are fully excluded.     ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     .parallax-layer {
       will-change: transform;
       transform-style: preserve-3d;
@@ -130,9 +164,14 @@
     }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 6  HEADER  — fixed, pointer-events on, NO parallax
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 6  HEADER — VIEWPORT-FIXED, ZERO PARALLAX               ║
+       ╠══════════════════════════════════════════════════════════════╣
+       ║  position: fixed pins this to the browser chrome, not the   ║
+       ║  document. It never participates in scroll, never receives  ║
+       ║  a JS transform write. The only transform present is the    ║
+       ║  CSS-only translateX(-50%) for horizontal centering.        ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     header {
       width: 100%;
       max-width: 1400px;
@@ -145,13 +184,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: fixed;
-      top: 24px;
+      position: fixed;                   /* viewport-locked            */
+      top: var(--header-top);
       left: 50%;
-      /* Static: only centring translateX — JS never touches this */
-      transform: translateX(-50%);
+      transform: translateX(-50%);       /* CSS-only — JS never touches */
       z-index: 200;
-      height: 80px;
+      height: var(--header-h);
       box-shadow: 0 8px 40px var(--shadow);
       pointer-events: auto;
     }
@@ -160,15 +198,13 @@
       filter: drop-shadow(0 0 8px var(--brand-glow));
       transition: filter 0.3s ease;
     }
-    .logo-container img:hover {
-      filter: drop-shadow(0 0 18px var(--brand-glow));
-    }
+    .logo-container img:hover { filter: drop-shadow(0 0 18px var(--brand-glow)); }
     .external-links { display: flex; gap: 0.75rem; }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 7  NAV BUTTONS
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 7  NAV BUTTONS                                           ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     .nav-btn {
       background: var(--glass-btn);
       backdrop-filter: blur(12px);
@@ -198,45 +234,65 @@
       transform: translateY(-2px) scale(1.03);
       box-shadow: 0 6px 28px var(--brand-glow), inset 0 1px 0 rgba(255,255,255,0.4);
     }
-    .nav-btn:active { transform: translateY(0px) scale(0.98); }
+    .nav-btn:active { transform: translateY(0) scale(0.98); }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 8  MAIN  — the only reactive zone
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 8  MAIN — EXCLUSIVE PARALLAX ZONE                        ║
+       ╠══════════════════════════════════════════════════════════════╣
+       ║  The 3D perspective context is scoped HERE, not on body.    ║
+       ║  perspective-origin: 50% 50% places the vanishing point at  ║
+       ║  the geometric centre of <main>, which aligns visually with  ║
+       ║  the viewport centre on standard aspect ratios.             ║
+       ║                                                              ║
+       ║  Top margin = header height + header top gap.               ║
+       ║  Bottom padding = footer height so last card is never       ║
+       ║  occluded by the pinned footer bar.                         ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     main {
-      margin-top: 148px;
+      /*
+        Push content below the fixed header.
+        calc() keeps this in sync with the --header-* tokens.
+      */
+      margin-top: calc(var(--header-h) + var(--header-top) + 20px);
+
+      /*
+        Push content above the fixed footer.
+        Extra 8px breathing room above footer.
+      */
+      padding-bottom: calc(var(--footer-h) + 8px);
+
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
-      padding-bottom: 60px;
-      /*
-        The perspective for cards is established HERE, not on body.
-        This keeps header/footer completely outside the 3D scene.
-        perspective-origin matches the body token (screen center).
-      */
+
+      /* 3D scene root — exclusively contains parallax elements */
       perspective: var(--focal);
       perspective-origin: 50% 50%;
       transform-style: preserve-3d;
     }
+
     .tools-column-pipeline {
       width: 100%;
       max-width: 1400px;
       display: flex;
       flex-direction: column;
       gap: 4.5rem;
+      padding: 2rem 0;           /* visual breathing room top & bottom */
       transform-style: preserve-3d;
     }
-    .tool-row-node            { display: flex; width: 100%; justify-content: flex-start; }
-    .tool-row-node:nth-child(even) { justify-content: flex-end; }
-    .tool-row-node:nth-child(3n)   { justify-content: center; }
+
+    /* Staggered alignment: L / R / C */
+    .tool-row-node                  { display: flex; width: 100%; justify-content: flex-start; }
+    .tool-row-node:nth-child(even)  { justify-content: flex-end; }
+    .tool-row-node:nth-child(3n)    { justify-content: center; }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 9  TOOL CARDS — full 3D depth
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 9  TOOL CARDS — full 3D depth preserved                  ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     .tool-card {
       background: var(--glass-card);
       backdrop-filter: blur(30px) saturate(1.5);
@@ -261,7 +317,7 @@
       position: absolute; top: 0; left: 0; right: 0; height: 1px;
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
     }
-    /* Ambient glow on hover */
+    /* Hover ambient glow */
     .tool-card::after {
       content: '';
       position: absolute; inset: 0;
@@ -273,10 +329,8 @@
     }
     .tool-card:hover::after { opacity: 1; }
 
-    .card-inner {
-      transform-style: preserve-3d;
-      position: relative;
-    }
+    .card-inner { transform-style: preserve-3d; position: relative; }
+
     .tool-name {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.85rem;
@@ -297,9 +351,9 @@
     }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 10 LAUNCH BUTTON
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 10  LAUNCH BUTTON                                        ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     .launch-btn {
       width: 100%;
       background: var(--glass-btn);
@@ -316,7 +370,7 @@
       display: block;
       position: relative;
       overflow: hidden;
-      transform: translateZ(20px);
+      transform: translateZ(20px);   /* pops out toward the viewer */
       box-shadow: 0 4px 20px var(--shadow), 0 1px 0 rgba(255,255,255,0.3) inset;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
@@ -338,35 +392,50 @@
     }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 11 FOOTER — pointer-events on, NO parallax (steady)
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 11  FOOTER — VIEWPORT-FIXED, ZERO PARALLAX              ║
+       ╠══════════════════════════════════════════════════════════════╣
+       ║  Mirrors the header strategy: position: fixed anchors it   ║
+       ║  to the bottom of the viewport — not the document end.     ║
+       ║  It never scrolls and JS never writes a transform to it.   ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     footer {
+      position: fixed;                   /* viewport-locked             */
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);       /* CSS-only — JS never touches */
       width: 100%;
       max-width: 1400px;
-      padding: 1.6rem 2rem;
-      text-align: center;
+      height: var(--footer-h);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(22px) saturate(1.3);
+      -webkit-backdrop-filter: blur(22px) saturate(1.3);
       border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      margin: 2rem auto 24px auto;
+      border-bottom: none;
+      border-radius: 18px 18px 0 0;
       font-family: 'Bebas Neue', sans-serif;
-      letter-spacing: 0.25em;
-      font-size: 0.9rem;
-      opacity: 0.7;
+      letter-spacing: 0.26em;
+      font-size: 0.85rem;
+      opacity: 0.78;
+      z-index: 200;
       pointer-events: auto;
-      /* NO parallax-layer class — transform is never touched by JS */
     }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 12 FLOATING THEME TOGGLE
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 12  THEME TOGGLE — VIEWPORT-FIXED, CORNER-LOCKED        ║
+       ╠══════════════════════════════════════════════════════════════╣
+       ║  position: fixed with bottom/right in px — this is always  ║
+       ║  24px from the viewport corner, regardless of page length  ║
+       ║  or scroll position. It never drifts.                      ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     .floating-theme-panel {
-      position: fixed;
-      bottom: 28px; right: 28px;
+      position: fixed;          /* corner of the VIEWPORT, not document */
+      bottom: 24px;
+      right:  24px;
       z-index: 999;
     }
     .glass-toggle-circle {
@@ -388,36 +457,68 @@
     }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 13 MODAL OVERLAY
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 13  MODAL OVERLAY — VIEWPORT-CENTRED                    ║
+       ╠══════════════════════════════════════════════════════════════╣
+       ║  Three geometric properties work together:                  ║
+       ║                                                              ║
+       ║  1. Overlay: position:fixed + inset:0                       ║
+       ║     → covers exactly 100vw × 100vh, unaffected by scroll.  ║
+       ║                                                              ║
+       ║  2. Overlay: display:flex + align/justify: center           ║
+       ║     → centres the .window-wrapper inside the fixed overlay. ║
+       ║                                                              ║
+       ║  3. .window-wrapper has NO position:absolute / top / left  ║
+       ║     → it sits in the flex flow of the overlay naturally,   ║
+       ║       which is always viewport-centred.                     ║
+       ║                                                              ║
+       ║  This is preferable to top:50%/left:50%/translate(-50%)    ║
+       ║  because flexbox handles the math without transform         ║
+       ║  stacking side-effects.                                     ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     .floating-window-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.35);
+      position: fixed;          /* never scrolls with the page         */
+      inset: 0;                 /* top:0 right:0 bottom:0 left:0       */
+      width:  100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.38);
       backdrop-filter: blur(18px) saturate(1.2);
       -webkit-backdrop-filter: blur(18px) saturate(1.2);
       z-index: 1000;
       display: none;
-      align-items: center;
-      justify-content: center;
+      align-items: center;     /* vertical centre                      */
+      justify-content: center; /* horizontal centre                    */
       padding: 24px;
+      /* No overflow manipulation — the overlay IS the viewport          */
     }
     .floating-window-overlay.active { display: flex; }
+
     .window-wrapper {
-      width: 100%;
+      /*
+        Sits in flex flow of overlay → always centred in viewport.
+        max-height prevents overflow on short screens; overflow-y
+        scrolls content inside the dialog if needed.
+      */
+      width: 90%;
       max-width: 740px;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
       background: var(--glass-card);
-      backdrop-filter: blur(30px) saturate(1.5);
-      -webkit-backdrop-filter: blur(30px) saturate(1.5);
+      backdrop-filter: blur(32px) saturate(1.6);
+      -webkit-backdrop-filter: blur(32px) saturate(1.6);
       border: 1px solid var(--glass-border);
       border-radius: 28px;
       padding: 2.4rem;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.30);
       animation: modalReveal 0.35s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      /*
+        No position:absolute, no top/left/transform centering here —
+        the parent flex container handles placement.
+      */
     }
     @keyframes modalReveal {
-      from { opacity: 0; transform: scale(0.92) translateY(20px); }
-      to   { opacity: 1; transform: scale(1)    translateY(0); }
+      from { opacity: 0; transform: scale(0.93) translateY(16px); }
+      to   { opacity: 1; transform: scale(1)    translateY(0);    }
     }
     .modal-header {
       display: flex;
@@ -463,9 +564,9 @@
     }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 14 ENTRY ANIMATION
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 14  ENTRY ANIMATION                                      ║
+       ╚══════════════════════════════════════════════════════════════╝ */
     .shimmer-load {
       animation: shimmerIn 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
     }
@@ -479,51 +580,57 @@
     .shimmer-load:nth-child(4) { animation-delay: 0.35s; }
 
 
-    /* ═══════════════════════════════════════════════════════════
-       § 15 RESPONSIVE OVERRIDES
-       CSS Media Queries — work in tandem with JS ScreenAwareness.
-       data-device is set by JS; media queries are the CSS layer.
-    ═══════════════════════════════════════════════════════════ */
+    /* ╔══════════════════════════════════════════════════════════════╗
+       ║  § 15  RESPONSIVE OVERRIDES                                 ║
+       ╠══════════════════════════════════════════════════════════════╣
+       ║  CSS media queries are the primary responsive layer.        ║
+       ║  JS data-device / data-orientation attributes mirror them   ║
+       ║  for cases where JS-driven logic needs a hook.             ║
+       ╚══════════════════════════════════════════════════════════════╝ */
 
-    /* ── Portrait / narrow viewports (≤ 640px) ── */
+    /* ── Mobile portrait ≤ 640px ── */
     @media (max-width: 640px) {
-      #viewport-shell                    { padding: 0 14px; }
-      header                             { padding: 0 1.2rem; border-radius: 16px; height: 66px; top: 14px; }
-      .external-links                    { gap: 0.4rem; }
-      .nav-btn                           { padding: 0.4rem 0.8rem; font-size: 0.72rem; }
-      main                               { margin-top: 108px; }
-      .tools-column-pipeline             { gap: 2.8rem; }
-      .tool-card                         { max-width: 100%; padding: 2rem 1.5rem; }
-      .tool-name                         { font-size: 1.5rem; }
+      :root {
+        --header-h:   66px;
+        --header-top: 14px;
+        --footer-h:   46px;
+      }
+      #viewport-shell            { padding: 0 14px; }
+      header                     { padding: 0 1.2rem; border-radius: 16px; }
+      .external-links            { gap: 0.35rem; }
+      .nav-btn                   { padding: 0.4rem 0.75rem; font-size: 0.7rem; }
+      .tools-column-pipeline     { gap: 2.6rem; }
+      .tool-card                 { max-width: 100%; padding: 2rem 1.5rem; }
+      .tool-name                 { font-size: 1.5rem; }
+      /* Collapse stagger — all cards centred in portrait */
       .tool-row-node,
       .tool-row-node:nth-child(even),
-      .tool-row-node:nth-child(3n)       { justify-content: center; }
+      .tool-row-node:nth-child(3n) { justify-content: center; }
     }
 
-    /* ── Tablet (641px – 1024px) ── */
+    /* ── Tablet 641px – 1024px ── */
     @media (min-width: 641px) and (max-width: 1024px) {
-      .tool-card                         { max-width: 380px; }
-      .tools-column-pipeline             { gap: 3.5rem; }
+      .tool-card             { max-width: 380px; }
+      .tools-column-pipeline { gap: 3.5rem; }
     }
 
-    /* ── Explicit portrait-orientation override (any width) ── */
+    /* ── Portrait orientation on sub-tablet ── */
     @media (orientation: portrait) and (max-width: 1024px) {
       main { perspective-origin: 50% 30%; }
       .tool-row-node,
       .tool-row-node:nth-child(even),
-      .tool-row-node:nth-child(3n)       { justify-content: center; }
+      .tool-row-node:nth-child(3n) { justify-content: center; }
     }
 
-    /* ── JS-written data-device reinforces same rules ── */
-    [data-device="mobile"]  #viewport-shell  { padding: 0 14px; }
-    [data-device="mobile"]  header           { padding: 0 1.2rem; border-radius: 16px; height: 66px; top: 14px; }
-    [data-device="mobile"]  main             { margin-top: 108px; }
-    [data-device="mobile"]  .tools-column-pipeline { gap: 2.8rem; }
-    [data-device="mobile"]  .tool-card       { max-width: 100%; padding: 2rem 1.5rem; }
-    [data-device="tablet"]  .tool-card       { max-width: 380px; }
-    [data-device="tablet"]  .tools-column-pipeline { gap: 3.5rem; }
+    /* ── JS data-device mirrors ── */
+    [data-device="mobile"] #viewport-shell         { padding: 0 14px; }
+    [data-device="mobile"] header                  { padding: 0 1.2rem; border-radius: 16px; }
+    [data-device="mobile"] .tools-column-pipeline  { gap: 2.6rem; }
+    [data-device="mobile"] .tool-card              { max-width: 100%; padding: 2rem 1.5rem; }
+    [data-device="tablet"] .tool-card              { max-width: 380px; }
+    [data-device="tablet"] .tools-column-pipeline  { gap: 3.5rem; }
 
-    /* ── Reduced motion ── */
+    /* ── Honour OS reduced-motion preference ── */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
@@ -531,17 +638,26 @@
 </head>
 <body>
 
-  <!-- ════ BACKGROUND STAGE ════ injected by BGEngine ════ -->
+  <!-- ══════════════════════════════════════════════════════════════
+       BACKGROUND STAGE
+       Fixed to 100vw × 100vh. Asset injected by BGEngine.
+       Parallax translation applied by ParallaxEngine.
+  ════════════════════════════════════════════════════════════════ -->
   <div id="bg-stage" aria-hidden="true"></div>
 
-  <!-- ════ VIEWPORT SHELL ════ scaled by ScreenAwareness ════ -->
+
+  <!-- ══════════════════════════════════════════════════════════════
+       VIEWPORT SHELL
+       Scaled on mobile/tablet by ScreenAwareness.
+       Never receives a parallax transform.
+  ════════════════════════════════════════════════════════════════ -->
   <div id="viewport-shell">
 
-    <!--
-      HEADER — pointer-events: auto (default), no .parallax-layer class.
-      The ONLY transform on this element is the centring translateX(-50%)
-      written in CSS. JS never touches it.
-    -->
+    <!-- ─────────────────────────────────────────────────────
+         HEADER
+         position:fixed (§ 6) — viewport-locked, steady.
+         CSS-only transform. JS never writes to this element.
+    ───────────────────────────────────────────────────────── -->
     <header>
       <div class="logo-container">
         <img src="./Logo2.png" alt="AYR TGW Logo">
@@ -553,14 +669,15 @@
       </nav>
     </header>
 
-    <!--
-      MAIN — the parallax-reactive zone.
-      Only elements inside here receive mouse-driven transforms.
-    -->
+    <!-- ─────────────────────────────────────────────────────
+         MAIN — #parallax-scene
+         The sole 3D perspective root (§ 8).
+         Only .parallax-layer elements inside here move.
+    ───────────────────────────────────────────────────────── -->
     <main id="parallax-scene">
       <div class="tools-column-pipeline">
 
-        <!-- Card 1 — External Tools (LIVE) -->
+        <!-- Card 1 · External Tools (LIVE) -->
         <div class="tool-row-node shimmer-load">
           <div class="tool-card tilt-card parallax-layer" data-depth="card">
             <div class="card-inner">
@@ -571,7 +688,7 @@
           </div>
         </div>
 
-        <!-- Card 2 — Client Portal -->
+        <!-- Card 2 · Client Portal -->
         <div class="tool-row-node shimmer-load">
           <div class="tool-card tilt-card parallax-layer" data-depth="card">
             <div class="card-inner">
@@ -582,7 +699,7 @@
           </div>
         </div>
 
-        <!-- Card 3 — AI Advisor -->
+        <!-- Card 3 · AI Advisor -->
         <div class="tool-row-node shimmer-load">
           <div class="tool-card tilt-card parallax-layer" data-depth="card">
             <div class="card-inner">
@@ -593,7 +710,7 @@
           </div>
         </div>
 
-        <!-- Card 4 — Analytics Hub -->
+        <!-- Card 4 · Analytics Hub -->
         <div class="tool-row-node shimmer-load">
           <div class="tool-card tilt-card parallax-layer" data-depth="card">
             <div class="card-inner">
@@ -607,100 +724,114 @@
       </div>
     </main>
 
-    <!--
-      FOOTER — pointer-events: auto (default), no .parallax-layer class.
-      Steady anchor — never moves.
-    -->
+    <!-- ─────────────────────────────────────────────────────
+         FOOTER
+         position:fixed (§ 11) — viewport-locked, steady.
+         CSS-only transform. JS never writes to this element.
+    ───────────────────────────────────────────────────────── -->
     <footer>Trust &bull; Growth &bull; Wealth</footer>
 
   </div><!-- /viewport-shell -->
 
 
-  <!-- ════ THEME TOGGLE ════ -->
+  <!-- ══════════════════════════════════════════════════════════════
+       THEME TOGGLE
+       position:fixed (§ 12) — always 24px from viewport corner.
+       Icon shows TARGET action: 🌙 = "go dark", ☀️ = "go light".
+  ════════════════════════════════════════════════════════════════ -->
   <div class="floating-theme-panel">
-    <!--
-      Icon semantics:
-        Light mode active  → show 🌙  (click to enter Dark)
-        Dark mode active   → show ☀️  (click to enter Light)
-      ThemeEngine keeps this in sync on every toggle.
-    -->
-    <button class="glass-toggle-circle" id="themeToggleBtn"
-            title="Toggle theme" aria-label="Toggle light/dark theme">
+    <button class="glass-toggle-circle"
+            id="themeToggleBtn"
+            aria-label="Switch to dark mode"
+            title="Switch to dark mode">
       <span id="themeIcon" aria-hidden="true">🌙</span>
     </button>
   </div>
 
 
-  <!-- ════ EXTERNAL HUB MODAL ════ -->
-  <div class="floating-window-overlay" id="externalHubOverlay"
-       role="dialog" aria-modal="true" aria-label="External Resources">
+  <!-- ══════════════════════════════════════════════════════════════
+       EXTERNAL HUB MODAL
+       Overlay: position:fixed + inset:0 — viewport-locked (§ 13).
+       Window: centred by flex align/justify on the overlay —
+               always in the viewport centre, scroll-independent.
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="floating-window-overlay"
+       id="externalHubOverlay"
+       role="dialog"
+       aria-modal="true"
+       aria-label="External Resources">
     <div class="window-wrapper">
       <div class="modal-header">
         <h2 class="modal-title">External Resources</h2>
-        <button class="nav-btn" onclick="toggleHub(false)" aria-label="Close">✕ Close</button>
+        <button class="nav-btn" onclick="toggleHub(false)" aria-label="Close dialog">✕ Close</button>
       </div>
       <div class="tool-grid">
         <a href="https://financial-calculators.ca/#/"             target="_blank" rel="noopener" class="tool-link-btn">Financial Calculator</a>
         <a href="https://ycharts.com"                             target="_blank" rel="noopener" class="tool-link-btn">YCharts</a>
-        <a href="https://koyfin.com"                             target="_blank" rel="noopener" class="tool-link-btn">Koyfin</a>
+        <a href="https://koyfin.com"                              target="_blank" rel="noopener" class="tool-link-btn">Koyfin</a>
         <a href="https://fred.stlouisfed.org"                     target="_blank" rel="noopener" class="tool-link-btn">FRED Data</a>
-        <a href="https://www.taxtips.ca"                         target="_blank" rel="noopener" class="tool-link-btn">TaxTips.ca</a>
+        <a href="https://www.taxtips.ca"                          target="_blank" rel="noopener" class="tool-link-btn">TaxTips.ca</a>
         <a href="https://www.canada.ca/en/revenue-agency.html"   target="_blank" rel="noopener" class="tool-link-btn">CRA Portal</a>
-        <a href="https://calendly.com"                           target="_blank" rel="noopener" class="tool-link-btn">Calendly</a>
-        <a href="https://www.docusign.com"                       target="_blank" rel="noopener" class="tool-link-btn">DocuSign</a>
+        <a href="https://calendly.com"                            target="_blank" rel="noopener" class="tool-link-btn">Calendly</a>
+        <a href="https://www.docusign.com"                        target="_blank" rel="noopener" class="tool-link-btn">DocuSign</a>
       </div>
     </div>
   </div>
 
 
-<!-- ════════════════════════════════════════════════════════════════════
-     JAVASCRIPT — Four modular, self-contained engines
-     Execution order: BGEngine → ThemeEngine → ScreenAwareness → ParallaxEngine
-═════════════════════════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════════════════════════
+     JAVASCRIPT — Four self-contained engine modules
+     Boot order (DOMContentLoaded):
+       BGEngine    → probes /background/, injects viewport-locked asset
+       ThemeEngine → applies saved/OS theme, syncs icon
+       ScreenAwareness → classifies device, scales shell
+       ParallaxEngine  → starts rAF loop scoped to #parallax-scene
+════════════════════════════════════════════════════════════════ -->
 <script>
 'use strict';
 
-/* ──────────────────────────────────────────────────────────────────
+/* ════════════════════════════════════════════════════════════════
    MODULE 1  ·  BACKGROUND ENGINE
-   Probes /background/ with HEAD requests (no wasted bandwidth).
+   ────────────────────────────────────────────────────────────────
+   Probes ./background/{theme}.{ext} with HEAD requests.
    Priority: mp4 > webm > mkv > ogv > gif > jpg > jpeg > png > webp > avif > svg
-   Injects <video> for video files, <img> for everything else.
-   Hot-swaps assets with a 700ms cross-fade on theme change.
-────────────────────────────────────────────────────────────────── */
+   Video  → <video autoplay loop muted playsinline>
+   Other  → <img alt="">
+   Both are given class="bg-asset" and sized by CSS (116vw × 116vh,
+   object-fit:cover) — they fill the viewport-locked #bg-stage
+   without distortion at any aspect ratio.
+   Assets are cached per theme key; no re-fetch on toggle.
+════════════════════════════════════════════════════════════════ */
 const BGEngine = (() => {
+  const VIDEO = ['mp4', 'webm', 'mkv', 'ogv'];
+  const ALL   = [...VIDEO, 'gif', 'jpg', 'jpeg', 'png', 'webp', 'avif', 'svg'];
 
-  const VIDEO_EXT = ['mp4', 'webm', 'mkv', 'ogv'];
-  const STILL_EXT = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'avif', 'svg'];
-  const ALL_EXT   = [...VIDEO_EXT, ...STILL_EXT];
+  const stage   = document.getElementById('bg-stage');
+  const cache   = {};
+  let   current = 'light';
 
-  const stage     = document.getElementById('bg-stage');
-  const cache     = {};           // { 'light': { type, src } | null, 'dark': … }
-  let   current   = 'light';     // overwritten by ThemeEngine on boot
-
-  /* Probe a single base name (e.g. 'light') for any known extension */
   async function probe(base) {
-    for (const ext of ALL_EXT) {
+    for (const ext of ALL) {
       const src = `./background/${base}.${ext}`;
       try {
         const r = await fetch(src, { method: 'HEAD', cache: 'force-cache' });
-        if (r.ok) return { type: VIDEO_EXT.includes(ext) ? 'video' : 'image', src, ext };
-      } catch (_) { /* not found — try next */ }
+        if (r.ok) return { type: VIDEO.includes(ext) ? 'video' : 'image', src };
+      } catch (_) { /* extension not present — try next */ }
     }
-    return null; // nothing found → CSS gradient fallback
+    return null;
   }
 
-  /* Build the correct DOM element */
   function buildAsset(result) {
     let el;
     if (result.type === 'video') {
-      el = document.createElement('video');
-      el.src         = result.src;
-      el.autoplay    = true;
-      el.loop        = true;
-      el.muted       = true;
+      el            = document.createElement('video');
+      el.src        = result.src;
+      el.autoplay   = true;
+      el.loop       = true;
+      el.muted      = true;
       el.playsinline = true;
     } else {
-      el = document.createElement('img');
+      el     = document.createElement('img');
       el.src = result.src;
       el.alt = '';
     }
@@ -709,7 +840,6 @@ const BGEngine = (() => {
     return el;
   }
 
-  /* Swap the displayed background asset */
   function swap(result) {
     const old = stage.querySelector('.bg-asset');
     if (old) {
@@ -717,17 +847,18 @@ const BGEngine = (() => {
       setTimeout(() => old.remove(), 720);
     }
     if (!result) {
+      /* Gradient fallback — prevents blank flash when no asset found */
       document.body.style.background =
         current === 'dark'
-          ? 'linear-gradient(135deg, #060e20 0%, #0a1628 100%)'
-          : 'linear-gradient(135deg, #dce8ff 0%, #f0f4ff 100%)';
+          ? 'linear-gradient(135deg,#060e20 0%,#0a1628 100%)'
+          : 'linear-gradient(135deg,#dce8ff 0%,#f0f4ff 100%)';
       return;
     }
     document.body.style.background = '';
     const el = buildAsset(result);
     el.style.opacity = '0';
     stage.prepend(el);
-    /* Double rAF ensures the element is in the paint tree before fading in */
+    /* Double rAF guarantees the element is in the paint tree before fade-in */
     requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity = '1'; }));
   }
 
@@ -736,87 +867,80 @@ const BGEngine = (() => {
     swap(cache[theme]);
   }
 
-  /* Called by ThemeEngine */
-  function setTheme(theme) {
-    current = theme;
-    loadTheme(theme);
-  }
-
-  /* Expose a reference to the current bg-asset for ParallaxEngine */
-  function getAsset() { return stage.querySelector('.bg-asset'); }
+  function setTheme(theme) { current = theme; loadTheme(theme); }
+  function getAsset()      { return stage.querySelector('.bg-asset'); }
 
   return { setTheme, getAsset };
 })();
 
 
-/* ──────────────────────────────────────────────────────────────────
+/* ════════════════════════════════════════════════════════════════
    MODULE 2  ·  THEME ENGINE
-   Manages light/dark state, persists to localStorage, drives icons.
-
-   Icon contract:
-     • Light mode is ACTIVE  → display 🌙  (action = "go dark")
-     • Dark mode  is ACTIVE  → display ☀️  (action = "go light")
-   This is the correct UX: the icon represents the TARGET action,
-   not the current state.
-────────────────────────────────────────────────────────────────── */
+   ────────────────────────────────────────────────────────────────
+   Icon contract — icon represents the TARGET action, not current state:
+     Light mode ACTIVE → 🌙  aria: "Switch to dark mode"
+     Dark  mode ACTIVE → ☀️  aria: "Switch to light mode"
+   Persists via localStorage. Honours OS prefers-color-scheme.
+   Notifies BGEngine on every change.
+════════════════════════════════════════════════════════════════ */
 const ThemeEngine = (() => {
+  const ROOT  = document.documentElement;
+  const BTN   = document.getElementById('themeToggleBtn');
+  const ICON  = document.getElementById('themeIcon');
+  const KEY   = 'ayr-theme';
 
-  const ROOT        = document.documentElement;
-  const BTN         = document.getElementById('themeToggleBtn');
-  const ICON_EL     = document.getElementById('themeIcon');
-  const KEY         = 'ayr-theme';
-
-  /*
-    ACTION_ICON[currentTheme] = the icon that represents
-    "click me to switch away from this theme".
-  */
-  const ACTION_ICON = {
-    light: '🌙',   // currently light  → click to go dark
-    dark:  '☀️',   // currently dark   → click to go light
+  /* TARGET_ICON[activetheme] = icon to display (= "click to switch away") */
+  const TARGET_ICON  = { light: '🌙', dark: '☀️' };
+  const TARGET_LABEL = {
+    light: 'Switch to dark mode',
+    dark:  'Switch to light mode',
   };
 
-  let current = localStorage.getItem(KEY) ||
+  let current =
+    localStorage.getItem(KEY) ||
     (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
   function apply(theme, persist = true) {
     current = theme;
     ROOT.setAttribute('data-theme', theme);
-    ICON_EL.textContent = ACTION_ICON[theme];
-    BTN.setAttribute('aria-label',
-      theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+    ICON.textContent = TARGET_ICON[theme];
+    BTN.setAttribute('aria-label', TARGET_LABEL[theme]);
+    BTN.setAttribute('title',      TARGET_LABEL[theme]);
     if (persist) localStorage.setItem(KEY, theme);
     BGEngine.setTheme(theme);
   }
 
   BTN.addEventListener('click', () => apply(current === 'light' ? 'dark' : 'light'));
-
-  /* Honour OS-level preference changes */
   window.matchMedia('(prefers-color-scheme: dark)')
-    .addEventListener('change', e => apply(e.matches ? 'dark' : 'light'));
+        .addEventListener('change', e => apply(e.matches ? 'dark' : 'light'));
 
-  /* Boot */
-  apply(current, false);
+  apply(current, false); /* boot with persisted / detected preference */
 
   return { apply, getCurrent: () => current };
 })();
 
 
-/* ──────────────────────────────────────────────────────────────────
+/* ════════════════════════════════════════════════════════════════
    MODULE 3  ·  SCREEN AWARENESS
-   Uses ResizeObserver (with a requestAnimationFrame throttle) to
-   track viewport dimensions at all times. Computes:
-     • Device class (mobile / tablet / desktop) → data-device on body
-     • Aspect ratio class (portrait / landscape) → data-orientation on body
-     • Scale transform for #viewport-shell in portrait/narrow viewports
+   ────────────────────────────────────────────────────────────────
+   Uses ResizeObserver (rAF-throttled) + window resize fallback.
+   Writes:
+     body[data-device]      = 'mobile' | 'tablet' | 'desktop'
+     body[data-orientation] = 'portrait' | 'landscape'
 
-   Scale logic:
-     The design baseline is 390px wide (iPhone 14) for mobile and
-     768px for tablet. Scale = clamp(0.55, vw / baseline, 1.0).
-     On desktop, scale is always 1 — no transform applied.
-────────────────────────────────────────────────────────────────── */
+   Scale logic for narrow devices:
+     Design baseline: 390px (mobile), 768px (tablet).
+     scale = clamp(0.55, viewport-width / baseline, 1.0)
+     Applied as CSS scale() to #viewport-shell.
+     Height loss is compensated via a negative marginBottom so
+     the document doesn't underflow and cut off the last card.
+
+   Updates --header-h and --header-top CSS vars on mobile so
+   main's margin-top (which uses those vars) stays in sync.
+════════════════════════════════════════════════════════════════ */
 const ScreenAwareness = (() => {
-
   const SHELL = document.getElementById('viewport-shell');
+  const ROOT  = document.documentElement;
   const BP    = { mobile: 640, tablet: 1024 };
 
   function classify(vw) {
@@ -825,31 +949,19 @@ const ScreenAwareness = (() => {
     return 'desktop';
   }
 
-  function applyScale(device, vw, vh) {
+  function applyScale(device, vw) {
     if (device === 'desktop') {
-      SHELL.style.transform      = '';
+      SHELL.style.transform       = '';
       SHELL.style.transformOrigin = '';
-      SHELL.style.marginBottom   = '';
+      SHELL.style.marginBottom    = '';
       return;
     }
-
     const baseline = device === 'tablet' ? 768 : 390;
-    const ratio    = vw / baseline;
-    const scale    = Math.min(1, Math.max(0.55, ratio));
-
+    const scale    = Math.min(1, Math.max(0.55, vw / baseline));
     SHELL.style.transform       = `scale(${scale.toFixed(4)})`;
     SHELL.style.transformOrigin = 'top center';
-
-    /*
-      When scale < 1, the shell is physically smaller than its CSS height.
-      To prevent the body from underflowing and cutting content,
-      we compensate the bottom margin:
-        actual rendered height  = naturalHeight * scale
-        missing space           = naturalHeight * (1 - scale)
-      We can't know naturalHeight precisely without measuring, so we
-      approximate with vh (close enough for bottom-of-page content).
-    */
     if (scale < 1) {
+      /* Compensate for the height the scale transform loses */
       const loss = SHELL.scrollHeight * (1 - scale);
       SHELL.style.marginBottom = `-${loss.toFixed(0)}px`;
     } else {
@@ -858,147 +970,164 @@ const ScreenAwareness = (() => {
   }
 
   function run() {
-    const vw      = window.innerWidth;
-    const vh      = window.innerHeight;
-    const device  = classify(vw);
-    const orient  = vw < vh ? 'portrait' : 'landscape';
+    const vw     = window.innerWidth;
+    const vh     = window.innerHeight;
+    const device = classify(vw);
+    const orient = vw < vh ? 'portrait' : 'landscape';
 
     document.body.setAttribute('data-device',      device);
     document.body.setAttribute('data-orientation', orient);
 
-    applyScale(device, vw, vh);
+    /* Sync CSS token --header-h so main's margin-top stays correct */
+    if (device === 'mobile') {
+      ROOT.style.setProperty('--header-h',   '66px');
+      ROOT.style.setProperty('--header-top', '14px');
+      ROOT.style.setProperty('--footer-h',   '46px');
+    } else {
+      ROOT.style.setProperty('--header-h',   '80px');
+      ROOT.style.setProperty('--header-top', '24px');
+      ROOT.style.setProperty('--footer-h',   '52px');
+    }
+
+    applyScale(device, vw);
   }
 
-  /* ResizeObserver fires on element size changes — more reliable than resize event */
-  let rafPending = false;
+  let pending = false;
   const ro = new ResizeObserver(() => {
-    if (!rafPending) {
-      rafPending = true;
-      requestAnimationFrame(() => { run(); rafPending = false; });
+    if (!pending) {
+      pending = true;
+      requestAnimationFrame(() => { run(); pending = false; });
     }
   });
   ro.observe(document.documentElement);
-
-  /* Also run on window resize as a belt-and-suspenders fallback */
   window.addEventListener('resize', run, { passive: true });
-
-  run(); // immediate first pass
+  run(); /* immediate first pass */
 
   return { run };
 })();
 
 
-/* ──────────────────────────────────────────────────────────────────
+/* ════════════════════════════════════════════════════════════════
    MODULE 4  ·  PARALLAX + TILT PHYSICS
-   Scope: ONLY elements inside #parallax-scene (<main>).
-   Header and footer are structurally outside this scope and receive
-   zero transform input from this module.
+   ────────────────────────────────────────────────────────────────
+   SCOPE: exclusively #parallax-scene (<main>) and #bg-stage.
+   Header, footer, theme toggle, modal: structurally outside —
+   ZERO transform writes from this module to those elements.
 
-   50mm focal length approximation:
-     Real 50mm on full-frame (36mm sensor) → FOV ≈ 46°.
-     For a screen, perspective (px) ≈ 0.866 × diagonal.
-     This value is updated on every resize.
+   50mm focal length model:
+     perspective(px) ≈ 0.866 × screen diagonal (recalculated on resize).
+     perspective-origin: 50% 50% on <main> — vanishing point is the
+     geometric centre of the card zone, visually the viewport centre.
 
-   Architecture:
-     1. Mouse / gyro position is normalised to [-1, +1] from screen center.
-     2. A LERP smooths the raw position into currX/currY (spring feel).
-     3. Each rAF tick writes a new transform to every .parallax-layer
-        inside #parallax-scene.
-     4. .tilt-card elements additionally receive rotateX/rotateY.
-     5. The background asset (in #bg-stage) is moved separately at a
-        very low depth to create the deepest parallax layer.
-────────────────────────────────────────────────────────────────── */
+   Background '1080p' movement:
+     bg-asset is in #bg-stage (fixed, 100vw×100vh).
+     It translates by ±DEPTH.bg fraction of the viewport dimensions —
+     always moving within its 8% bleed budget (never exposes an edge).
+
+   Card movement:
+     Cards translate + rotate. The translate carries the card on the
+     same parallax plane. The rotate produces the tilt-toward-cursor
+     effect (50mm "rack focus" feel).
+
+   Physics:
+     rawX/rawY   ← pointermove (desktop) or deviceorientation (mobile)
+     curX/curY   ← LERP-smoothed (ease = 0.068 → spring inertia)
+     Per-frame:  tx = curX × depth × half-viewport-width
+════════════════════════════════════════════════════════════════ */
 const ParallaxEngine = (() => {
 
-  /* ── Config ── */
-  const FOCAL_RATIO  = 0.866;   // perspective ÷ screen-diagonal ≈ 50mm
-  const MAX_TILT_DEG = 11;      // max rotateX/Y for tilt-cards
-  const EASE         = 0.068;   // lerp factor — lower = more inertia
+  /* ── Config ─────────────────────────────────────────────────── */
+  const FOCAL_RATIO = 0.866;   /* perspective / diagonal ≈ 50mm     */
+  const MAX_TILT    = 11;      /* degrees of rotateX / rotateY       */
+  const EASE        = 0.068;   /* LERP spring constant               */
 
-  /* Depth multipliers: fraction of half-viewport width/height to travel */
+  /*
+    Depth = fraction of half-viewport the layer travels
+    at maximum deflection (mouse/gyro at edge).
+    bg is kept below 1/8 of the bleed budget to prevent edge reveal.
+  */
   const DEPTH = {
-    bg:   0.012,
-    card: 0.050,
-    btn:  0.085,
+    bg:   0.010,   /* background asset — slowest, deepest           */
+    card: 0.048,   /* tool cards — mid-speed, full tilt             */
   };
 
-  /* ── State ── */
-  let rawX = 0, rawY = 0;   // live mouse/gyro in [-1,+1]
-  let curX = 0, curY = 0;   // smoothed values
+  /* ── State ───────────────────────────────────────────────────── */
+  let rawX = 0, rawY = 0;   /* live normalised input, range –1…+1   */
+  let curX = 0, curY = 0;   /* LERP-smoothed output                  */
 
-  /* Cached element lists — gathered once, refreshed on resize */
   const scene = document.getElementById('parallax-scene');
   let   cards = [];
   let   bgEl  = null;
 
+  /* Collect .parallax-layer nodes strictly within #parallax-scene */
   function gather() {
     cards = Array.from(scene.querySelectorAll('.parallax-layer'));
     bgEl  = BGEngine.getAsset();
   }
 
-  /* Recompute perspective value and push to CSS + body */
+  /* Push updated focal length to CSS var and scene perspective */
   function updateFocal() {
     const diag  = Math.hypot(window.innerWidth, window.innerHeight);
     const focal = Math.round(diag * FOCAL_RATIO);
     document.documentElement.style.setProperty('--focal', focal + 'px');
-    scene.style.perspective = focal + 'px';
-    /* Vanishing point = center of <main>, always */
+    scene.style.perspective       = focal + 'px';
     scene.style.perspectiveOrigin = '50% 50%';
   }
 
-  /* ── Input handlers ── */
+  /* ── Input handlers ─────────────────────────────────────────── */
   function onPointer(e) {
-    rawX = (e.clientX - window.innerWidth  / 2) / (window.innerWidth  / 2);
-    rawY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+    const hw = window.innerWidth  / 2;
+    const hh = window.innerHeight / 2;
+    rawX = (e.clientX - hw) / hw;
+    rawY = (e.clientY - hh) / hh;
   }
+
   function onGyro(e) {
+    /* gamma = left/right tilt; beta = forward/back (30° = natural hold) */
     if (e.gamma !== null) rawX = Math.max(-1, Math.min(1,  e.gamma       / 45));
     if (e.beta  !== null) rawY = Math.max(-1, Math.min(1, (e.beta - 30)  / 45));
   }
 
-  /* ── Main loop ── */
+  /* ── Main rAF loop ──────────────────────────────────────────── */
   function tick() {
-    /* Smooth lerp */
+    /* Spring-smooth the raw input */
     curX += (rawX - curX) * EASE;
     curY += (rawY - curY) * EASE;
 
     const hw = window.innerWidth  / 2;
     const hh = window.innerHeight / 2;
 
-    /* Background layer — slowest, creates depth separation */
+    /* ── Background: translate only, no tilt ── */
     const freshBg = BGEngine.getAsset();
-    if (freshBg !== bgEl) bgEl = freshBg; // asset was swapped
+    if (freshBg !== bgEl) bgEl = freshBg; /* handle asset hot-swap */
     if (bgEl) {
-      const d  = DEPTH.bg;
-      const tx = curX * d * hw;
-      const ty = curY * d * hh;
-      bgEl.style.transform = `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0)`;
+      const tx = (curX * DEPTH.bg * hw).toFixed(2);
+      const ty = (curY * DEPTH.bg * hh).toFixed(2);
+      bgEl.style.transform = `translate3d(${tx}px,${ty}px,0)`;
     }
 
-    /* Card / button layers */
-    cards.forEach(el => {
-      const dk = el.getAttribute('data-depth') || 'card';
-      const d  = DEPTH[dk] ?? DEPTH.card;
-      const tx = curX * d * hw;
-      const ty = curY * d * hh;
+    /* ── Cards: translate + tilt ── */
+    for (const el of cards) {
+      const depth = DEPTH[el.getAttribute('data-depth')] ?? DEPTH.card;
+      const tx    = (curX * depth * hw).toFixed(2);
+      const ty    = (curY * depth * hh).toFixed(2);
 
       if (el.classList.contains('tilt-card')) {
-        const rotY =  curX * MAX_TILT_DEG;
-        const rotX = -curY * MAX_TILT_DEG;
+        const rY = ( curX * MAX_TILT).toFixed(3);
+        const rX = (-curY * MAX_TILT).toFixed(3);
         el.style.transform =
-          `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0) ` +
-          `rotateY(${rotY.toFixed(3)}deg) rotateX(${rotX.toFixed(3)}deg)`;
-        /* Shadow tracks the light source implied by tilt direction */
+          `translate3d(${tx}px,${ty}px,0) ` +
+          `rotateY(${rY}deg) rotateX(${rX}deg)`;
+        /* Shadow direction tracks the implied light source angle */
         const sx = (curX * 16).toFixed(1);
         const sy = ((curY * 10) + 16).toFixed(1);
         el.style.boxShadow =
-          `${sx}px ${sy}px 48px var(--shadow), ` +
+          `${sx}px ${sy}px 48px var(--shadow),` +
           `0 1px 0 rgba(255,255,255,0.25) inset`;
       } else {
-        el.style.transform =
-          `translate3d(${tx.toFixed(2)}px, ${ty.toFixed(2)}px, 0)`;
+        el.style.transform = `translate3d(${tx}px,${ty}px,0)`;
       }
-    });
+    }
 
     requestAnimationFrame(tick);
   }
@@ -1006,47 +1135,38 @@ const ParallaxEngine = (() => {
   function init() {
     gather();
     updateFocal();
-    window.addEventListener('mousemove',        onPointer,  { passive: true });
-    window.addEventListener('pointermove',      onPointer,  { passive: true });
-    window.addEventListener('deviceorientation', onGyro,    { passive: true });
-    window.addEventListener('resize', () => {
-      updateFocal();
-      gather();
-    }, { passive: true });
+    window.addEventListener('pointermove',        onPointer, { passive: true });
+    window.addEventListener('mousemove',          onPointer, { passive: true });
+    window.addEventListener('deviceorientation',  onGyro,    { passive: true });
+    window.addEventListener('resize', () => { updateFocal(); gather(); }, { passive: true });
     requestAnimationFrame(tick);
   }
 
-  /* Re-gather after BGEngine swaps an asset */
   return { init, gather };
 })();
 
 
-/* ──────────────────────────────────────────────────────────────────
+/* ════════════════════════════════════════════════════════════════
    MODAL CONTROLLER
-────────────────────────────────────────────────────────────────── */
+════════════════════════════════════════════════════════════════ */
 function toggleHub(show) {
-  const overlay = document.getElementById('externalHubOverlay');
-  overlay.classList.toggle('active', !!show);
+  document.getElementById('externalHubOverlay').classList.toggle('active', !!show);
   document.body.classList.toggle('modal-lock', !!show);
 }
-document.getElementById('externalHubOverlay').addEventListener('click', function(e) {
-  if (e.target === this) toggleHub(false);
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') toggleHub(false);
-});
+/* Close on scrim click */
+document.getElementById('externalHubOverlay')
+  .addEventListener('click', function (e) { if (e.target === this) toggleHub(false); });
+/* Close on Escape */
+document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleHub(false); });
 
 
-/* ──────────────────────────────────────────────────────────────────
+/* ════════════════════════════════════════════════════════════════
    BOOT SEQUENCE
-   Order matters: BGEngine / ThemeEngine boot at parse time (above).
-   ParallaxEngine waits for DOM to be fully painted.
-────────────────────────────────────────────────────────────────── */
+════════════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   ScreenAwareness.run();
   ParallaxEngine.init();
 });
-
 </script>
 </body>
 </html>
