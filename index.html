@@ -63,11 +63,22 @@
     width: 100vw; height: 100vh;
     z-index: -1; overflow: hidden; pointer-events: none;
   }
+  /* fit = contain so nothing is cropped; centered */
   #bg-stage .bg-asset {
-    position: absolute; top: -8vh; left: -8vw;
-    width: 116vw; height: 116vh;
-    object-fit: cover; transform-origin: center center;
-    will-change: transform; transition: opacity 0.7s ease;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    object-position: center center;
+    transform-origin: center center;
+    will-change: transform;
+    transition: opacity 0.0s linear; /* opacity managed by JS for seamless video swap */
+  }
+  /* video assets get same treatment */
+  #bg-stage video.bg-asset {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    object-position: center center;
   }
   #bg-stage::after {
     content: ''; position: absolute; inset: 0;
@@ -276,26 +287,7 @@
   .side-nav-item.concern { color: var(--blue); }
   .side-nav-item svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; color: var(--blue); }
 
-  /* Divider inside drawer */
   .side-nav-div { height: 1px; background: var(--blue-border-s); margin: 0.4rem 0; }
-
-  /* Theme + device row in drawer */
-  .side-nav-controls {
-    display: flex; gap: 0.6rem; margin-top: auto; padding-top: 1rem;
-    border-top: 1px solid var(--blue-border-s);
-  }
-  .side-ctrl-btn {
-    flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.4rem;
-    padding: 0.6rem 0.5rem;
-    background: rgba(0,170,255,0.07);
-    border: 1px solid var(--blue-border-s);
-    border-radius: 10px; cursor: pointer;
-    font-size: 0.72rem; font-weight: 600;
-    color: var(--blue); letter-spacing: 0.03em;
-    transition: background 0.18s;
-  }
-  .side-ctrl-btn:hover { background: rgba(0,170,255,0.18); }
-  .side-ctrl-btn svg { width: 14px; height: 14px; fill: currentColor; }
 
   /* ╔══════════════════════════════════════════════════════════════════════╗
      ║  § 10 MAIN / PARALLAX SCENE                                         ║
@@ -596,45 +588,46 @@
       align-items: stretch;
     }
 
-    /* § C  HEADER — 3-column mobile layout: hamburger | logo (centered) | theme */
+    /* § C  HEADER — mobile: [theme] | [logo centered] | [hamburger]
+       Strategy: header becomes a 3-col grid. header-left (logo) occupies the
+       center col. header-right (theme + hamburger) items are split via order
+       and position into left/right cols using a negative-margin trick.
+       Simpler: use the grid with header as the container and both child divs
+       explicitly placed. */
     header {
       padding: 0 1rem;
       border-radius: 14px;
-      /* Switch to 3-col grid so logo is truly centered regardless of sibling widths */
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
     }
-    /* Left slot: hamburger */
+    /* Col 2 (center): logo */
     .header-left {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-    }
-    /* Center slot: logo */
-    .logo-container {
+      grid-column: 2;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 0;
     }
-    /* Right slot: theme btn only — hamburger lives here too but pushed right */
+    /* Cols 1 + 3: theme (left) and hamburger (right) — header-right spans both end cols */
     .header-right {
+      grid-column: 1 / 4;  /* span all 3 cols, sit behind header-left */
+      grid-row: 1;
       display: flex;
       align-items: center;
-      justify-content: flex-end;
-      gap: 0.5rem;
+      justify-content: space-between;
+      padding: 0;
+      pointer-events: none; /* pass through to center logo */
     }
-    /* Move hamburger out of header-right into header-left on mobile */
-    .hamburger-btn {
-      display: flex !important;
-      order: -1; /* ensure it's the leftmost item if needed */
-    }
-    /* Hide all desktop nav items except theme toggle and hamburger */
+    /* Each child in header-right is re-enabled */
+    .header-right > * { pointer-events: auto; }
+    /* Hide all desktop nav items */
     .header-right .nav-btn,
-    .header-right .nav-btn-concern,
-    .header-right .view-toggle-wrap { display: none !important; }
-    /* Keep theme toggle visible on mobile */
+    .header-right .nav-btn-concern { display: none !important; }
+    /* Show theme toggle (appears left because it's first in flex) */
     .header-right .header-theme-btn { display: flex !important; }
+    /* Show hamburger (appears right because it's last in flex) */
+    .hamburger-btn { display: flex !important; }
     .logo-container img { height: 30px; }
 
     /* § D  MAIN — compensate for fixed header + footer */
@@ -812,13 +805,6 @@
       Privacy Policy
     </a>
 
-    <!-- Controls row: theme only -->
-    <div class="side-nav-controls">
-      <button class="side-ctrl-btn" id="drawerThemeBtn" onclick="ThemeEngine && ThemeEngine.apply(ThemeEngine.getCurrent()==='dark'?'light':'dark');" aria-label="Toggle theme">
-        <svg id="drawerThemeIcon" viewBox="0 0 24 24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>
-        <span id="drawerThemeLabel">Light</span>
-      </button>
-    </div>
   </nav>
 
   <!-- ════ VIEWPORT SHELL ════ -->
@@ -827,10 +813,6 @@
     <!-- ━━━━━━━━━━━━━━━━━━━━ HEADER ━━━━━━━━━━━━━━━━━━━━ -->
     <header>
       <div class="header-left">
-        <!-- Mobile hamburger lives here so the 3-col grid renders: [☰] [logo] [theme] -->
-        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" onclick="openSideNav()">
-          <span></span><span></span><span></span>
-        </button>
         <div class="logo-container">
           <img src="./Logo2.png" alt="AYR TGW Solutions">
         </div>
@@ -847,11 +829,16 @@
         <a href="https://forms.gle/Ly9V2jWRsGnoyrjc7" target="_blank" rel="noopener" class="nav-btn">Partners</a>
         <a href="https://forms.gle/LTqD7BCzGvJSpHvq7" target="_blank" rel="noopener" class="nav-btn">Inquiry</a>
 
-        <!-- Theme toggle — visible on both desktop and mobile -->
+        <!-- Theme toggle — always present; on mobile becomes the LEFT slot via CSS order -->
         <button class="header-theme-btn" id="themeToggleBtn" aria-label="Switch theme" title="Toggle theme">
           <svg id="themeIcon" viewBox="0 0 24 24">
             <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
           </svg>
+        </button>
+
+        <!-- Hamburger — hidden on desktop, right slot on mobile -->
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" onclick="openSideNav()">
+          <span></span><span></span><span></span>
         </button>
       </div>
     </header>
@@ -1058,56 +1045,202 @@ const THEME_ICONS = {
 };
 
 /* ════════════════════════════════════════════════════════
-   MODULE 1  ·  BACKGROUND ENGINE
+   MODULE 1  ·  BACKGROUND ENGINE  v2
+   ─────────────────────────────────────────────────────────
+   Background slot naming convention (place files in ./background/):
+     dark-desktop.{ext}   — dark theme, desktop/tablet
+     light-desktop.{ext}  — light theme, desktop/tablet
+     dark-mobile.{ext}    — dark theme, mobile (≤768px)
+     light-mobile.{ext}   — light theme, mobile (≤768px)
+
+   Falls back to the non-mobile variant if a mobile-specific
+   file is not found (e.g. dark-desktop if dark-mobile absent).
+   Falls back to the legacy bare names (dark / light) last.
+
+   File format priority (first hit wins):
+     mp4 › webm › mkv › ogv › gif › jpg › jpeg › png › webp › avif › svg
+
+   VIDEO TRANSITION — seamless frame-matching:
+     When switching between two video assets (e.g. dark↔light),
+     the incoming video seeks to the same playback position as the
+     outgoing video before crossfading, so the scene appears to
+     continue uninterrupted.
+
+   CONTAIN FIT — no cropping:
+     Assets use object-fit: contain so the full frame is always
+     visible, centred on the stage. Background colour fills any
+     letterbox/pillarbox area.
 ════════════════════════════════════════════════════════ */
 const BGEngine = (() => {
-  const VIDEO = ['mp4','webm','mkv','ogv'];
-  const ALL   = [...VIDEO,'gif','jpg','jpeg','png','webp','avif','svg'];
+  const VIDEO_EXTS = ['mp4','webm','mkv','ogv'];
+  const ALL_EXTS   = [...VIDEO_EXTS,'gif','jpg','jpeg','png','webp','avif','svg'];
   const stage = document.getElementById('bg-stage');
-  const cache = {};
-  let current = 'dark';
 
-  async function probe(base) {
-    for (const ext of ALL) {
-      const src = `./background/${base}.${ext}`;
+  /* probe cache: slot-name → { type, src } | null */
+  const cache = {};
+
+  let currentTheme  = 'dark';
+  let currentSlot   = null;   /* active slot name e.g. "dark-desktop" */
+
+  /* ── Determine which viewport class we're on ── */
+  function isMobile() { return window.innerWidth <= 768; }
+
+  /* ── Build ordered list of slot names to try for theme + viewport ── */
+  function slotCandidates(theme) {
+    const vp = isMobile() ? 'mobile' : 'desktop';
+    return [
+      `${theme}-${vp}`,           /* preferred: theme-viewport  */
+      `${theme}-desktop`,          /* fallback 1: always desktop */
+      theme,                       /* fallback 2: legacy bare name */
+    ];
+  }
+
+  /* ── HEAD-probe a single slot name, return result or null ── */
+  async function probeSlot(name) {
+    if (name in cache) return cache[name];
+    for (const ext of ALL_EXTS) {
+      const src = `./background/${name}.${ext}`;
       try {
-        const r = await fetch(src, { method:'HEAD', cache:'force-cache' });
-        if (r.ok) return { type: VIDEO.includes(ext) ? 'video' : 'image', src };
+        const r = await fetch(src, { method: 'HEAD', cache: 'force-cache' });
+        if (r.ok) {
+          const result = { type: VIDEO_EXTS.includes(ext) ? 'video' : 'image', src };
+          cache[name] = result;
+          return result;
+        }
       } catch (_) {}
     }
+    cache[name] = null;
     return null;
   }
+
+  /* ── Probe all candidates in order, return first hit ── */
+  async function resolveTheme(theme) {
+    for (const name of slotCandidates(theme)) {
+      const r = await probeSlot(name);
+      if (r) return { result: r, slot: name };
+    }
+    return { result: null, slot: null };
+  }
+
+  /* ── Build a DOM element for an asset ── */
   function buildAsset(result) {
     let el;
     if (result.type === 'video') {
       el = document.createElement('video');
-      el.src = result.src; el.autoplay = true; el.loop = true; el.muted = true; el.playsinline = true;
+      el.src        = result.src;
+      el.loop       = true;
+      el.muted      = true;
+      el.playsInline = true;
+      el.setAttribute('playsinline', '');
+      el.preload    = 'auto';
     } else {
-      el = document.createElement('img'); el.src = result.src; el.alt = '';
+      el = document.createElement('img');
+      el.src = result.src;
+      el.alt = '';
     }
-    el.className = 'bg-asset'; el.setAttribute('aria-hidden','true');
+    el.className = 'bg-asset';
+    el.setAttribute('aria-hidden', 'true');
+    /* CSS handles contain fit — ensure inline style doesn't override */
+    el.style.opacity = '0';
     return el;
   }
-  function swap(result) {
-    const old = stage.querySelector('.bg-asset');
-    if (old) { old.style.opacity = '0'; setTimeout(() => old.remove(), 720); }
+
+  /* ── Get current playback time of the active video (if any) ── */
+  function activeVideoTime() {
+    const active = stage.querySelector('.bg-asset.active-bg');
+    if (active && active.tagName === 'VIDEO') return active.currentTime;
+    /* fallback: any video in stage */
+    const any = stage.querySelector('video.bg-asset');
+    if (any) return any.currentTime;
+    return 0;
+  }
+
+  /* ── Crossfade: fade out old, fade in new ── */
+  function crossfade(incoming, outgoing) {
+    /* Mark incoming as the new active BEFORE fading so activeVideoTime() returns it next time */
+    incoming.classList.add('active-bg');
+
+    /* Fade in */
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      incoming.style.transition = 'opacity 0.65s ease';
+      incoming.style.opacity    = '1';
+    }));
+
+    /* Fade out old */
+    if (outgoing) {
+      outgoing.style.transition = 'opacity 0.65s ease';
+      outgoing.style.opacity    = '0';
+      outgoing.classList.remove('active-bg');
+      setTimeout(() => { if (outgoing.parentNode) outgoing.remove(); }, 750);
+    }
+  }
+
+  /* ── Main swap routine ── */
+  async function swap(result, newSlot) {
+    currentSlot = newSlot;
+
+    const outgoing = stage.querySelector('.bg-asset');
+
     if (!result) {
-      document.body.style.background = current === 'dark'
+      /* No asset found — use CSS gradient fallback */
+      document.body.style.background = currentTheme === 'dark'
         ? 'linear-gradient(135deg,#02081a 0%,#050d1a 100%)'
         : 'linear-gradient(135deg,#c8e6ff 0%,#e8f4ff 100%)';
+      if (outgoing) {
+        outgoing.style.transition = 'opacity 0.65s ease';
+        outgoing.style.opacity    = '0';
+        setTimeout(() => { if (outgoing.parentNode) outgoing.remove(); }, 750);
+      }
       return;
     }
     document.body.style.background = '';
-    const el = buildAsset(result);
-    el.style.opacity = '0'; stage.prepend(el);
-    requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity = '1'; }));
+
+    /* If same src is already playing, do nothing */
+    if (outgoing && outgoing.src && outgoing.src.endsWith(result.src.replace(/^\.\//, ''))) return;
+    if (outgoing && outgoing.getAttribute('src') === result.src) return;
+
+    const incoming = buildAsset(result);
+    stage.prepend(incoming);
+
+    if (incoming.tagName === 'VIDEO') {
+      /* Frame-match: seek incoming to outgoing's playback position */
+      const t = activeVideoTime();
+      incoming.addEventListener('loadedmetadata', () => {
+        if (t > 0 && t < incoming.duration) incoming.currentTime = t;
+        incoming.play().catch(() => {});
+        crossfade(incoming, outgoing);
+      }, { once: true });
+      /* If metadata fires before listener in fast cache, trigger manually */
+      if (incoming.readyState >= 1) {
+        if (t > 0 && incoming.duration && t < incoming.duration) incoming.currentTime = t;
+        incoming.play().catch(() => {});
+        crossfade(incoming, outgoing);
+      }
+    } else {
+      incoming.onload = () => crossfade(incoming, outgoing);
+      if (incoming.complete) crossfade(incoming, outgoing);
+    }
   }
-  async function loadTheme(theme) {
-    if (!(theme in cache)) cache[theme] = await probe(theme);
-    swap(cache[theme]);
+
+  /* ── Public: set theme + viewport, resolve and swap ── */
+  async function setTheme(theme) {
+    currentTheme = theme;
+    const { result, slot } = await resolveTheme(theme);
+    await swap(result, slot);
   }
-  function setTheme(t) { current = t; loadTheme(t); }
-  function getAsset()  { return stage.querySelector('.bg-asset'); }
+
+  /* ── On resize: if viewport class changed, reload background ── */
+  let lastMobile = isMobile();
+  window.addEventListener('resize', () => {
+    const nowMobile = isMobile();
+    if (nowMobile !== lastMobile) {
+      lastMobile = nowMobile;
+      setTheme(currentTheme);
+    }
+  }, { passive: true });
+
+  function getAsset() { return stage.querySelector('.bg-asset'); }
+
   return { setTheme, getAsset };
 })();
 
@@ -1132,7 +1265,6 @@ const ThemeEngine = (() => {
     BTN.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
     if (persist) localStorage.setItem(KEY, theme);
     BGEngine.setTheme(theme);
-    if (typeof updateDrawerBtns === 'function') updateDrawerBtns();
   }
 
   BTN.addEventListener('click', () => apply(current === 'dark' ? 'light' : 'dark'));
@@ -1298,18 +1430,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-/* Update drawer button labels/icons to reflect current theme state */
-function updateDrawerBtns() {
-  const themeLabel  = document.getElementById('drawerThemeLabel');
-  const themeIconEl = document.querySelector('#drawerThemeIcon path');
-  if (themeLabel && themeIconEl) {
-    const t = ThemeEngine.getCurrent();
-    themeLabel.textContent = t === 'dark' ? 'Light' : 'Dark';
-    themeIconEl.setAttribute('d', THEME_ICONS[t]);
-  }
-}
-
-
 /* ════════════════════════════════════════════════════════
    MODAL CONTROLLER
 ════════════════════════════════════════════════════════ */
@@ -1338,12 +1458,10 @@ function updateSubmit(btnId, checkId) {
   const chk = document.getElementById(checkId);
   if (btn && chk) btn.disabled = !chk.checked;
 }
-
 function submitForm(modalId, formName) {
   alert(`✓ Your ${formName} has been received. A licensed AYR TGW advisor will contact you shortly.`);
   closeModal(modalId);
 }
-
 
 /* ════════════════════════════════════════════════════════
    BOOT
@@ -1351,7 +1469,6 @@ function submitForm(modalId, formName) {
 document.addEventListener('DOMContentLoaded', () => {
   ScreenAwareness.run();
   ParallaxEngine.init();
-  updateDrawerBtns();
 });
 </script>
 </body>
