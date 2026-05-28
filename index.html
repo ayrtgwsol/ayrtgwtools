@@ -8,9 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 1  DESIGN TOKENS — SINGLE BLUE RULE                             ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
   :root {
     --blue:          #00AAFF;
     --blue-glow:     rgba(0, 170, 255, 0.30);
@@ -19,18 +16,15 @@
     --blue-border:   rgba(0, 170, 255, 0.28);
     --blue-border-s: rgba(0, 170, 255, 0.14);
     --blue-shadow:   rgba(0, 170, 255, 0.12);
-
     --bg-fallback:   #050d1a;
     --glass-base:    rgba(4, 14, 32, 0.60);
     --glass-card:    rgba(4, 14, 32, 0.46);
     --glass-btn:     rgba(0, 170, 255, 0.10);
     --glass-scrim:   rgba(0, 5, 18, 0.70);
-
     --text-primary:  #FFFFFF;
     --text-secondary:rgba(255, 255, 255, 0.65);
     --text-muted:    rgba(255, 255, 255, 0.38);
     --text-accent:   var(--blue);
-
     --header-h:       76px;
     --header-top:     20px;
     --footer-h:       60px;
@@ -38,9 +32,6 @@
     --focal:          900px;
   }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 2  RESET & BASE                                                  ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html { height: 100%; scroll-behavior: smooth; }
   body {
@@ -55,42 +46,37 @@
   }
   body.modal-lock { overflow: hidden !important; }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 3  BACKGROUND STAGE                                              ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* ── BACKGROUND STAGE ── */
   #bg-stage {
     position: fixed; top: 0; left: 0;
     width: 100vw; height: 100vh;
     z-index: -1; overflow: hidden; pointer-events: none;
   }
-  /* fit = contain so nothing is cropped; centered */
   #bg-stage .bg-asset {
-    position: absolute;
-    top: 0; left: 0;
+    position: absolute; top: 0; left: 0;
     width: 100%; height: 100%;
-    object-fit: contain;
-    object-position: center center;
-    transform-origin: center center;
-    will-change: transform;
-    transition: opacity 0.0s linear; /* opacity managed by JS for seamless video swap */
+    object-fit: contain; object-position: center center;
+    transform-origin: center center; will-change: transform;
   }
-  /* video assets get same treatment */
   #bg-stage video.bg-asset {
     width: 100%; height: 100%;
-    object-fit: contain;
-    object-position: center center;
+    object-fit: contain; object-position: center center;
+  }
+  #bg-stage .bg-overlay {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: contain; object-position: center center;
+    pointer-events: none;
   }
   #bg-stage::after {
     content: ''; position: absolute; inset: 0;
     background:
       radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0,5,18,0.55) 100%),
       linear-gradient(180deg, rgba(0,170,255,0.04) 0%, rgba(0,5,18,0.20) 100%);
-    pointer-events: none;
+    pointer-events: none; z-index: 1;
   }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 4  VIEWPORT SHELL                                                ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* ── VIEWPORT SHELL ── */
   #viewport-shell {
     width: 100%; min-height: 100vh;
     display: flex; flex-direction: column; align-items: center;
@@ -98,15 +84,12 @@
     transform-origin: top center;
   }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 5  PARALLAX PRIMITIVES                                           ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
   .parallax-layer { will-change: transform; transform-style: preserve-3d; }
   .tilt-card      { transform-style: preserve-3d; }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 6  HEADER                                                        ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* ══════════════════════════════════════════════
+     HEADER — DESKTOP (flex, normal flow)
+  ══════════════════════════════════════════════ */
   header {
     position: fixed;
     top: var(--header-top);
@@ -126,10 +109,7 @@
     box-shadow: 0 8px 40px var(--blue-shadow), inset 0 1px 0 rgba(0,170,255,0.12);
     pointer-events: auto;
   }
-
-  .header-left  {
-    display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
-  }
+  .header-left { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
   .header-right { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: flex-end; }
 
   .logo-container img {
@@ -139,9 +119,9 @@
   }
   .logo-container img:hover { filter: drop-shadow(0 0 20px var(--blue-glow)); }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 7  NAV BUTTONS                                                   ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* The standalone mobile theme btn — hidden on desktop via JS + media query */
+  .mobile-theme-btn { display: none; }
+
   .nav-btn {
     background: var(--glass-btn);
     border: 1px solid var(--blue-border-s);
@@ -167,46 +147,28 @@
     transform: translateY(-1px);
   }
   .nav-btn:active { transform: translateY(0); }
+  .nav-btn-concern { border-color: rgba(0,170,255,0.40); color: var(--blue); font-size: 0.74rem; }
+  .nav-btn-concern:hover { background: rgba(0,170,255,0.22); box-shadow: 0 4px 24px rgba(0,170,255,0.35); }
 
-  .nav-btn-concern {
-    border-color: rgba(0,170,255,0.40);
-    color: var(--blue); font-size: 0.74rem;
-  }
-  .nav-btn-concern:hover {
-    background: rgba(0,170,255,0.22);
-    box-shadow: 0 4px 24px rgba(0,170,255,0.35);
-  }
-
-
-
-  /* Theme toggle — monotone blue */
   .header-theme-btn {
     background: var(--glass-btn);
     border: 1px solid var(--blue-border-s);
     border-radius: 10px; width: 38px; height: 38px;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; transition: background 0.18s, box-shadow 0.18s;
-    color: var(--blue); /* monotone blue */
-    flex-shrink: 0;
+    color: var(--blue); flex-shrink: 0;
   }
-  .header-theme-btn:hover {
-    background: rgba(0,170,255,0.18);
-    box-shadow: 0 4px 20px var(--blue-glow);
-  }
+  .header-theme-btn:hover { background: rgba(0,170,255,0.18); box-shadow: 0 4px 20px var(--blue-glow); }
   .header-theme-btn svg { width: 16px; height: 16px; fill: currentColor; }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 8  MOBILE HAMBURGER BUTTON (visible ≤680px)                     ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* ── HAMBURGER (mobile only) ── */
   .hamburger-btn {
-    display: none; /* shown via media query */
+    display: none;
     flex-direction: column; justify-content: center; align-items: center; gap: 5px;
     background: var(--glass-btn);
     border: 1px solid var(--blue-border-s);
     border-radius: 10px; width: 38px; height: 38px;
-    cursor: pointer;
-    transition: background 0.18s;
-    flex-shrink: 0;
+    cursor: pointer; transition: background 0.18s; flex-shrink: 0;
   }
   .hamburger-btn span {
     display: block; width: 18px; height: 2px;
@@ -218,80 +180,56 @@
   .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
   .hamburger-btn:hover { background: rgba(0,170,255,0.18); }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 9  SIDE NAV DRAWER (mobile)                                      ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* ── SIDE NAV ── */
   .side-nav-overlay {
     position: fixed; inset: 0;
     background: rgba(0,5,18,0.55);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    z-index: 500;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s ease;
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    z-index: 500; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
   }
   .side-nav-overlay.open { opacity: 1; pointer-events: auto; }
-
   .side-nav {
-    position: fixed;
-    top: 0; right: 0;
-    width: 280px; max-width: 85vw;
-    height: 100vh;
+    position: fixed; top: 0; right: 0;
+    width: 280px; max-width: 85vw; height: 100vh;
     background: rgba(4, 14, 32, 0.95);
-    backdrop-filter: blur(36px) saturate(1.6);
-    -webkit-backdrop-filter: blur(36px) saturate(1.6);
-    border-left: 1px solid var(--blue-border);
-    z-index: 600;
+    backdrop-filter: blur(36px) saturate(1.6); -webkit-backdrop-filter: blur(36px) saturate(1.6);
+    border-left: 1px solid var(--blue-border); z-index: 600;
     display: flex; flex-direction: column;
-    padding: 5rem 1.4rem 2rem;
-    gap: 0.5rem;
+    padding: 5rem 1.4rem 2rem; gap: 0.5rem;
     transform: translateX(100%);
     transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
     box-shadow: -8px 0 48px rgba(0,0,0,0.5);
   }
   .side-nav.open { transform: translateX(0); }
-
   .side-nav-close {
     position: absolute; top: 1.2rem; right: 1.2rem;
     background: var(--glass-btn); border: 1px solid var(--blue-border-s);
     border-radius: 8px; width: 34px; height: 34px;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer; color: var(--blue);
-    font-size: 1rem; transition: background 0.18s;
+    cursor: pointer; color: var(--blue); font-size: 1rem; transition: background 0.18s;
   }
   .side-nav-close:hover { background: rgba(0,170,255,0.22); }
-
   .side-nav-label {
-    font-size: 0.62rem; font-weight: 700;
-    color: var(--text-muted); letter-spacing: 0.12em;
-    text-transform: uppercase; padding: 0.6rem 0 0.3rem;
-    border-top: 1px solid var(--blue-border-s);
-    margin-top: 0.3rem;
+    font-size: 0.62rem; font-weight: 700; color: var(--text-muted);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 0.6rem 0 0.3rem; border-top: 1px solid var(--blue-border-s); margin-top: 0.3rem;
   }
   .side-nav-label:first-child { border-top: none; margin-top: 0; }
-
   .side-nav-item {
     display: flex; align-items: center; gap: 0.8rem;
-    padding: 0.75rem 1rem;
-    border-radius: 12px;
+    padding: 0.75rem 1rem; border-radius: 12px;
     text-decoration: none; cursor: pointer;
     background: transparent; border: none;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.88rem; font-weight: 600;
-    color: var(--text-primary);
-    letter-spacing: 0.02em;
-    width: 100%; text-align: left;
-    transition: background 0.18s ease;
+    font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 600;
+    color: var(--text-primary); letter-spacing: 0.02em;
+    width: 100%; text-align: left; transition: background 0.18s ease;
   }
   .side-nav-item:hover { background: rgba(0,170,255,0.12); }
   .side-nav-item.concern { color: var(--blue); }
   .side-nav-item svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; color: var(--blue); }
-
   .side-nav-div { height: 1px; background: var(--blue-border-s); margin: 0.4rem 0; }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 10 MAIN / PARALLAX SCENE                                         ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* ── MAIN ── */
   main {
     margin-top: calc(var(--header-h) + var(--header-top) + 24px);
     padding-bottom: calc(var(--footer-h) + 16px);
@@ -301,9 +239,7 @@
     transform-style: preserve-3d;
   }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 11 ZIGZAG CARD PIPELINE                                          ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* ── PIPELINE ── */
   .pipeline {
     width: 100%; max-width: 1400px;
     display: flex; flex-direction: column; gap: 3.5rem;
@@ -314,17 +250,11 @@
 
   .tool-card {
     background: var(--glass-card);
-    backdrop-filter: blur(32px) saturate(1.6);
-    -webkit-backdrop-filter: blur(32px) saturate(1.6);
-    border: 1px solid var(--blue-border);
-    border-radius: 22px; padding: 2.4rem 2.2rem;
+    backdrop-filter: blur(32px) saturate(1.6); -webkit-backdrop-filter: blur(32px) saturate(1.6);
+    border: 1px solid var(--blue-border); border-radius: 22px; padding: 2.4rem 2.2rem;
     width: 100%; max-width: 440px;
-    box-shadow:
-      0 16px 48px var(--blue-shadow),
-      0  1px  0 rgba(0,170,255,0.12) inset,
-      0 -1px  0 rgba(0,5,18,0.25) inset;
-    position: relative; overflow: hidden; transform-style: preserve-3d;
-    cursor: default;
+    box-shadow: 0 16px 48px var(--blue-shadow), 0 1px 0 rgba(0,170,255,0.12) inset, 0 -1px 0 rgba(0,5,18,0.25) inset;
+    position: relative; overflow: hidden; transform-style: preserve-3d; cursor: default;
   }
   .tool-card::before {
     content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
@@ -333,8 +263,7 @@
   .tool-card::after {
     content: ''; position: absolute; inset: 0;
     background: radial-gradient(ellipse at 25% 20%, rgba(0,170,255,0.07) 0%, transparent 65%);
-    pointer-events: none; border-radius: 22px;
-    opacity: 0; transition: opacity 0.4s ease;
+    pointer-events: none; border-radius: 22px; opacity: 0; transition: opacity 0.4s ease;
   }
   .tool-card:hover::after { opacity: 1; }
   .card-inner { transform-style: preserve-3d; position: relative; }
@@ -343,41 +272,32 @@
     display: inline-flex; align-items: center; gap: 0.3rem;
     background: rgba(0,170,255,0.12); border: 1px solid var(--blue-border-s);
     border-radius: 6px; padding: 0.22rem 0.65rem;
-    font-size: 0.68rem; font-weight: 700;
-    color: var(--blue); text-transform: uppercase; letter-spacing: 0.06em;
+    font-size: 0.68rem; font-weight: 700; color: var(--blue);
+    text-transform: uppercase; letter-spacing: 0.06em;
     margin-bottom: 1rem; transform: translateZ(8px);
   }
   .card-badge.live { background: rgba(0,170,255,0.20); border-color: rgba(0,170,255,0.40); }
-  .card-badge::before {
-    content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--blue);
-  }
+  .card-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--blue); }
   .card-badge.live::before { animation: pulse 1.8s ease-in-out infinite; }
   @keyframes pulse {
     0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--blue-glow); }
     50%       { opacity: 0.6; box-shadow: 0 0 0 5px transparent; }
   }
-
   .tool-name {
     font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem;
     letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.8rem;
-    color: var(--text-primary); text-shadow: 0 0 24px var(--blue-glow);
-    transform: translateZ(12px);
+    color: var(--text-primary); text-shadow: 0 0 24px var(--blue-glow); transform: translateZ(12px);
   }
   .card-desc {
     font-size: 0.82rem; font-weight: 400; color: var(--text-secondary);
     margin-bottom: 1.6rem; line-height: 1.7; transform: translateZ(8px);
   }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 12 LAUNCH BUTTON                                                 ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
   .launch-btn {
     width: 100%; background: rgba(0,170,255,0.12);
-    border: 1px solid var(--blue-border);
-    padding: 0.9rem 1.5rem; border-radius: 13px;
-    font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
-    letter-spacing: 0.14em; cursor: pointer;
-    text-transform: uppercase; text-align: center;
+    border: 1px solid var(--blue-border); padding: 0.9rem 1.5rem; border-radius: 13px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.14em;
+    cursor: pointer; text-transform: uppercase; text-align: center;
     text-decoration: none; display: block; color: var(--text-primary);
     position: relative; overflow: hidden; transform: translateZ(20px);
     box-shadow: 0 4px 20px var(--blue-shadow), 0 1px 0 rgba(0,170,255,0.15) inset;
@@ -385,8 +305,7 @@
   }
   .launch-btn::before {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,170,255,0.14) 0%, transparent 55%);
-    pointer-events: none;
+    background: linear-gradient(135deg, rgba(0,170,255,0.14) 0%, transparent 55%); pointer-events: none;
   }
   .launch-btn:hover {
     background: rgba(0,170,255,0.22);
@@ -396,9 +315,7 @@
   .launch-btn:active { transform: translateZ(16px) scale(0.975); }
   .launch-btn.disabled, .launch-btn[disabled] { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 13 FOOTER                                                        ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* ── FOOTER ── */
   footer {
     position: fixed; bottom: 0;
     left: var(--page-gutter);
@@ -407,86 +324,53 @@
     margin-left: max(0px, calc((100vw - 1400px) / 2));
     height: var(--footer-h);
     background: var(--glass-base);
-    backdrop-filter: blur(28px) saturate(1.4);
-    -webkit-backdrop-filter: blur(28px) saturate(1.4);
+    backdrop-filter: blur(28px) saturate(1.4); -webkit-backdrop-filter: blur(28px) saturate(1.4);
     border: 1px solid var(--blue-border); border-bottom: none;
-    border-radius: 14px 14px 0 0;
-    padding: 0 1.8rem;
+    border-radius: 14px 14px 0 0; padding: 0 1.8rem;
     display: flex; align-items: center; justify-content: space-between; gap: 1rem;
     z-index: 300;
     box-shadow: 0 -4px 30px var(--blue-shadow), inset 0 1px 0 rgba(0,170,255,0.10);
     pointer-events: auto; flex-wrap: wrap;
   }
-  .footer-entity {
-    font-size: 0.72rem; font-weight: 600;
-    color: var(--text-secondary); letter-spacing: 0.04em;
-    text-transform: uppercase; white-space: nowrap;
-  }
-  .footer-center {
-    font-size: 0.64rem; color: var(--text-muted);
-    line-height: 1.45; text-align: center; flex: 1; min-width: 0;
-  }
+  .footer-entity { font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+  .footer-center { font-size: 0.64rem; color: var(--text-muted); line-height: 1.45; text-align: center; flex: 1; min-width: 0; }
   .footer-links { display: flex; gap: 1rem; align-items: center; flex-shrink: 0; }
-  .footer-link {
-    font-size: 0.70rem; font-weight: 600;
-    color: var(--blue); text-decoration: none;
-    letter-spacing: 0.03em; white-space: nowrap;
-    transition: opacity 0.2s ease;
-  }
+  .footer-link { font-size: 0.70rem; font-weight: 600; color: var(--blue); text-decoration: none; letter-spacing: 0.03em; white-space: nowrap; transition: opacity 0.2s ease; }
   .footer-link:hover { opacity: 0.75; text-decoration: underline; }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 14 MODALS                                                        ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* ── MODALS ── */
   .modal-overlay {
     position: fixed; inset: 0; width: 100vw; height: 100vh;
     background: var(--glass-scrim);
-    backdrop-filter: blur(20px) saturate(1.2);
-    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    backdrop-filter: blur(20px) saturate(1.2); -webkit-backdrop-filter: blur(20px) saturate(1.2);
     z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
   }
   .modal-overlay.active { display: flex; }
   .modal-box {
-    width: 100%; max-width: 700px;
-    max-height: calc(100vh - 40px); overflow-y: auto;
+    width: 100%; max-width: 700px; max-height: calc(100vh - 40px); overflow-y: auto;
     background: rgba(4, 14, 32, 0.92);
-    backdrop-filter: blur(36px) saturate(1.8);
-    -webkit-backdrop-filter: blur(36px) saturate(1.8);
-    border: 1px solid var(--blue-border); border-radius: 24px;
-    padding: 2.2rem;
+    backdrop-filter: blur(36px) saturate(1.8); -webkit-backdrop-filter: blur(36px) saturate(1.8);
+    border: 1px solid var(--blue-border); border-radius: 24px; padding: 2.2rem;
     box-shadow: 0 24px 80px rgba(0,0,0,0.50), 0 0 0 1px rgba(0,170,255,0.08);
     animation: modalReveal 0.32s cubic-bezier(0.23, 1, 0.32, 1) forwards;
   }
   @keyframes modalReveal {
     from { opacity: 0; transform: scale(0.94) translateY(14px); }
-    to   { opacity: 1; transform: scale(1)    translateY(0); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
   }
   .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; }
-  .modal-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.65rem; letter-spacing: 0.09em; color: var(--text-primary);
-  }
-
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.65rem; letter-spacing: 0.09em; color: var(--text-primary); }
   .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px; }
   .tool-link-btn {
-    padding: 0.9rem; background: rgba(0,170,255,0.08);
-    border: 1px solid var(--blue-border-s); border-radius: 11px;
-    text-decoration: none; text-align: center;
+    padding: 0.9rem; background: rgba(0,170,255,0.08); border: 1px solid var(--blue-border-s);
+    border-radius: 11px; text-decoration: none; text-align: center;
     font-weight: 600; font-size: 0.82rem; color: var(--text-primary);
     letter-spacing: 0.02em; display: block; position: relative; overflow: hidden;
     box-shadow: 0 2px 12px var(--blue-shadow);
     transition: background 0.18s, box-shadow 0.18s, transform 0.15s;
   }
-  .tool-link-btn::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,170,255,0.08) 0%, transparent 60%);
-    pointer-events: none;
-  }
-  .tool-link-btn:hover {
-    background: rgba(0,170,255,0.18);
-    box-shadow: 0 6px 24px var(--blue-glow); transform: translateY(-2px);
-  }
-
+  .tool-link-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,170,255,0.08) 0%, transparent 60%); pointer-events: none; }
+  .tool-link-btn:hover { background: rgba(0,170,255,0.18); box-shadow: 0 6px 24px var(--blue-glow); transform: translateY(-2px); }
   .compliance-form { display: flex; flex-direction: column; gap: 1.2rem; }
   .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
   .form-label { font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.03em; }
@@ -497,34 +381,9 @@
     color: var(--text-primary); outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease; width: 100%;
   }
-  .form-input:focus, .form-select:focus, .form-textarea:focus {
-    border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,170,255,0.15);
-  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,170,255,0.15); }
   .form-textarea { resize: vertical; min-height: 90px; }
   .form-select option { background: #050d1a; }
-
-  .compliance-check {
-    display: flex; align-items: flex-start; gap: 0.75rem;
-    padding: 1rem 1.1rem; background: rgba(0,170,255,0.06);
-    border: 1px solid var(--blue-border); border-radius: 12px; cursor: pointer;
-  }
-  .compliance-check input[type="checkbox"] {
-    appearance: none; -webkit-appearance: none;
-    width: 18px; height: 18px; min-width: 18px;
-    border: 2px solid var(--blue-border); border-radius: 4px;
-    background: transparent; cursor: pointer; position: relative;
-    margin-top: 1px; transition: background 0.2s, border-color 0.2s; flex-shrink: 0;
-  }
-  .compliance-check input[type="checkbox"]:checked { background: var(--blue); border-color: var(--blue); }
-  .compliance-check input[type="checkbox"]:checked::after {
-    content: ''; position: absolute; top: 2px; left: 5px;
-    width: 5px; height: 9px;
-    border: 2px solid #050d1a; border-top: none; border-left: none;
-    transform: rotate(45deg);
-  }
-  .compliance-text { font-size: 0.75rem; line-height: 1.6; color: var(--text-secondary); }
-  .compliance-text strong { color: var(--text-primary); }
-
   .form-submit-btn {
     width: 100%;
     background: linear-gradient(135deg, rgba(0,170,255,0.25), rgba(0,170,255,0.12));
@@ -534,53 +393,49 @@
     transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
     box-shadow: 0 4px 20px var(--blue-shadow);
   }
-  .form-submit-btn:hover:not(:disabled) {
-    background: linear-gradient(135deg, rgba(0,170,255,0.40), rgba(0,170,255,0.22));
-    box-shadow: 0 8px 32px rgba(0,170,255,0.35);
-  }
+  .form-submit-btn:hover:not(:disabled) { background: linear-gradient(135deg, rgba(0,170,255,0.40), rgba(0,170,255,0.22)); box-shadow: 0 8px 32px rgba(0,170,255,0.35); }
   .form-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 15 ENTRY ANIMATIONS                                              ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* ── ENTRY ANIMATIONS ── */
   .shimmer-load { animation: shimmerIn 0.85s cubic-bezier(0.23, 1, 0.32, 1) both; }
   @keyframes shimmerIn {
     from { opacity: 0; transform: translateY(16px) translateZ(-16px); }
-    to   { opacity: 1; transform: translateY(0)    translateZ(0); }
+    to   { opacity: 1; transform: translateY(0) translateZ(0); }
   }
   .shimmer-load:nth-child(1) { animation-delay: 0.05s; }
   .shimmer-load:nth-child(2) { animation-delay: 0.14s; }
   .shimmer-load:nth-child(3) { animation-delay: 0.23s; }
   .shimmer-load:nth-child(4) { animation-delay: 0.32s; }
 
-  /* ╔══════════════════════════════════════════════════════════════════════╗
-     ║  § 16 RESPONSIVE — comprehensive mobile-first fixes                 ║
-     ║                                                                      ║
-     ║  KEY DESIGN DECISION: NO scale() transform on #viewport-shell.      ║
-     ║  CSS scale() shrinks visuals but keeps hit-boxes at original size,  ║
-     ║  making all interactive elements (toggles, buttons) untappable on   ║
-     ║  mobile. All sizing is done with real CSS instead.                  ║
-     ╚══════════════════════════════════════════════════════════════════════╝ */
+  /* ══════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════ */
 
-  /* ── Tablet 681–1024px ── */
+  /* Tablet */
   @media (min-width: 681px) and (max-width: 1024px) {
     .tool-card { max-width: 380px; }
     .pipeline  { gap: 3rem; }
     .footer-center { font-size: 0.60rem; }
   }
 
-  /* ── Mobile ≤768px ── */
+  /* ── MOBILE ≤768px ──────────────────────────────────────────────────────
+     Header 3-column grid:
+       [38px theme-btn] [1fr logo] [38px hamburger]
+     
+     The .mobile-theme-btn is a sibling of .header-left and .header-right,
+     placed first in the DOM so it naturally lands in col 1.
+     .header-left  → col 2, centred.
+     .header-right → col 3, shows only hamburger (nav-btns hidden).
+     Desktop .header-theme-btn inside .header-right → hidden on mobile.
+  ────────────────────────────────────────────────────────────────────── */
   @media (max-width: 768px) {
-
-    /* § A  LAYOUT TOKENS */
     :root {
       --header-h:    60px;
       --header-top:  10px;
-      --footer-h:    auto;   /* footer height is content-driven on mobile */
+      --footer-h:    auto;
       --page-gutter: 14px;
     }
 
-    /* § B  SHELL — no transform/scale, just normal flow */
     #viewport-shell {
       transform: none !important;
       margin-bottom: 0 !important;
@@ -588,149 +443,94 @@
       align-items: stretch;
     }
 
-    /* § C  HEADER — mobile: [theme] | [logo centered] | [hamburger]
-       Strategy: header becomes a 3-col grid. header-left (logo) occupies the
-       center col. header-right (theme + hamburger) items are split via order
-       and position into left/right cols using a negative-margin trick.
-       Simpler: use the grid with header as the container and both child divs
-       explicitly placed. */
+    /* 3-col grid header */
     header {
-      padding: 0 1rem;
+      padding: 0 0.9rem;
       border-radius: 14px;
+      height: var(--header-h);
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      grid-template-columns: 38px 1fr 38px;
+      grid-template-rows: var(--header-h);
       align-items: center;
+      gap: 0;
     }
-    /* Col 2 (center): logo */
+
+    /* Mobile theme toggle — col 1 */
+    .mobile-theme-btn {
+      display: flex !important;
+      grid-column: 1;
+      grid-row: 1;
+      align-self: center;
+      justify-self: center;
+    }
+
+    /* Logo — col 2, centred */
     .header-left {
       grid-column: 2;
+      grid-row: 1;
+      justify-self: center;
+      align-self: center;
+      gap: 0;
+    }
+
+    /* header-right — col 3, only hamburger visible */
+    .header-right {
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: center;
+      align-self: center;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0;
+      flex-wrap: nowrap;
     }
-    /* Cols 1 + 3: theme (left) and hamburger (right) — header-right spans both end cols */
-    .header-right {
-      grid-column: 1 / 4;  /* span all 3 cols, sit behind header-left */
-      grid-row: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0;
-      pointer-events: none; /* pass through to center logo */
-    }
-    /* Each child in header-right is re-enabled */
-    .header-right > * { pointer-events: auto; }
-    /* Hide all desktop nav items */
+
+    /* Hide desktop nav links and the desktop theme btn */
     .header-right .nav-btn,
-    .header-right .nav-btn-concern { display: none !important; }
-    /* Show theme toggle (appears left because it's first in flex) */
-    .header-right .header-theme-btn { display: flex !important; }
-    /* Show hamburger (appears right because it's last in flex) */
+    .header-right .nav-btn-concern,
+    .header-right .header-theme-btn { display: none !important; }
+
+    /* Show hamburger */
     .hamburger-btn { display: flex !important; }
+
     .logo-container img { height: 30px; }
 
-    /* § D  MAIN — compensate for fixed header + footer */
     main {
       margin-top: calc(var(--header-h) + var(--header-top) + 16px);
-      padding-bottom: 160px; /* enough room above the stacked footer */
+      padding-bottom: 160px;
     }
 
-    /* § E  PIPELINE — centered, full-width cards */
-    .pipeline {
-      gap: 1.8rem;
-      padding: 0.75rem 0 1rem;
-      width: 100%;
-    }
-    .pipeline-row,
-    .pipeline-row.row-right { justify-content: center; }
+    .pipeline { gap: 1.8rem; padding: 0.75rem 0 1rem; width: 100%; }
+    .pipeline-row, .pipeline-row.row-right { justify-content: center; }
 
-    /* § F  CARDS — full-width, scaled-down text */
-    .tool-card {
-      max-width: 100%;
-      padding: 1.6rem 1.4rem;
-      border-radius: 16px;
-    }
-    .tool-name {
-      font-size: clamp(1.35rem, 5vw, 1.75rem);
-      margin-bottom: 0.55rem;
-    }
-    .card-desc {
-      font-size: 0.78rem;
-      margin-bottom: 1.2rem;
-      line-height: 1.6;
-    }
-    .card-badge {
-      font-size: 0.62rem;
-      padding: 0.18rem 0.55rem;
-      margin-bottom: 0.75rem;
-    }
-    .launch-btn {
-      font-size: 0.88rem;
-      padding: 0.75rem 1rem;
-      letter-spacing: 0.10em;
-    }
+    .tool-card { max-width: 100%; padding: 1.6rem 1.4rem; border-radius: 16px; }
+    .tool-name { font-size: clamp(1.35rem, 5vw, 1.75rem); margin-bottom: 0.55rem; }
+    .card-desc { font-size: 0.78rem; margin-bottom: 1.2rem; line-height: 1.6; }
+    .card-badge { font-size: 0.62rem; padding: 0.18rem 0.55rem; margin-bottom: 0.75rem; }
+    .launch-btn { font-size: 0.88rem; padding: 0.75rem 1rem; letter-spacing: 0.10em; }
 
-    /* § G  FOOTER — stacked vertical layout, no overflow */
     footer {
-      position: fixed;
-      bottom: 0;
+      position: fixed; bottom: 0;
       left: var(--page-gutter);
       width: calc(100% - calc(var(--page-gutter) * 2));
-      height: auto;
-      min-height: 56px;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.35rem;
-      padding: 0.55rem 1rem;
-      border-radius: 12px 12px 0 0;
+      height: auto; min-height: 56px;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.35rem; padding: 0.55rem 1rem; border-radius: 12px 12px 0 0;
     }
-    .footer-entity { display: none; } /* too long for mobile — shown in drawer */
+    .footer-entity { display: none; }
     .footer-center { display: none; }
-    .footer-links {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 0.4rem 0.9rem;
-      width: 100%;
-    }
-    .footer-link {
-      font-size: 0.65rem;
-      white-space: nowrap;
-    }
-    /* Dot-separator between footer links */
-    .footer-link + .footer-link::before {
-      content: '·';
-      margin-right: 0.9rem;
-      color: var(--text-muted);
-      pointer-events: none;
-    }
+    .footer-links { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.4rem 0.9rem; width: 100%; }
+    .footer-link { font-size: 0.65rem; white-space: nowrap; }
+    .footer-link + .footer-link::before { content: '·'; margin-right: 0.9rem; color: var(--text-muted); pointer-events: none; }
 
-    /* § H  MODALS — full-width on mobile */
-    .modal-box {
-      padding: 1.4rem 1.2rem;
-      border-radius: 18px;
-      max-height: calc(100vh - 24px);
-    }
+    .modal-box { padding: 1.4rem 1.2rem; border-radius: 18px; max-height: calc(100vh - 24px); }
     .modal-title { font-size: 1.35rem; }
-    .tool-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-    .tool-link-btn {
-      padding: 0.7rem 0.5rem;
-      font-size: 0.76rem;
-    }
-    .form-input, .form-select, .form-textarea {
-      font-size: 16px; /* prevents iOS auto-zoom on input focus */
-    }
+    .tool-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .tool-link-btn { padding: 0.7rem 0.5rem; font-size: 0.76rem; }
+    .form-input, .form-select, .form-textarea { font-size: 16px; }
+  }
 
-  } /* end @media max-width: 768px */
-
-  /* ── Very small phones ≤380px ── */
   @media (max-width: 380px) {
     :root { --page-gutter: 10px; }
     .tool-card { padding: 1.3rem 1rem; }
@@ -738,25 +538,17 @@
     .footer-link { font-size: 0.60rem; }
   }
 
-  /* ── Forced layout overrides (JS-driven data-layout attribute) ── */
-
-  /* Forced mobile: mirrors the 768px media query layout */
+  /* Forced layout overrides */
   [data-layout="mobile"] .pipeline-row,
   [data-layout="mobile"] .pipeline-row.row-right { justify-content: center; }
   [data-layout="mobile"] .tool-card  { max-width: 100%; }
   [data-layout="mobile"] .pipeline   { gap: 1.8rem; }
   [data-layout="mobile"] .footer-center { display: none; }
-  [data-layout="mobile"] #viewport-shell {
-    transform: none !important;
-    margin-bottom: 0 !important;
-  }
-
-  /* Forced desktop: restores zigzag */
+  [data-layout="mobile"] #viewport-shell { transform: none !important; margin-bottom: 0 !important; }
   [data-layout="desktop"] .pipeline-row      { justify-content: flex-start; }
   [data-layout="desktop"] .pipeline-row.row-right { justify-content: flex-end; }
   [data-layout="desktop"] .tool-card { max-width: 440px; }
 
-  /* ── Reduced motion ── */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
@@ -764,14 +556,12 @@
 </head>
 <body>
 
-  <!-- ════ BACKGROUND STAGE ════ -->
   <div id="bg-stage" aria-hidden="true"></div>
 
-  <!-- ════ MOBILE SIDE NAV ════ -->
+  <!-- Mobile side nav -->
   <div class="side-nav-overlay" id="sideNavOverlay" aria-hidden="true"></div>
   <nav class="side-nav" id="sideNav" aria-label="Mobile navigation">
     <button class="side-nav-close" onclick="closeSideNav()" aria-label="Close menu">✕</button>
-
     <span class="side-nav-label">Navigation</span>
     <a href="https://forms.gle/KpHLCvsCG4f1bWx16" target="_blank" rel="noopener" class="side-nav-item" onclick="closeSideNav()">
       <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
@@ -804,24 +594,36 @@
       <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
       Privacy Policy
     </a>
-
   </nav>
 
-  <!-- ════ VIEWPORT SHELL ════ -->
   <div id="viewport-shell">
 
-    <!-- ━━━━━━━━━━━━━━━━━━━━ HEADER ━━━━━━━━━━━━━━━━━━━━ -->
+    <!-- ════ HEADER ════
+         DOM order:
+           1. .mobile-theme-btn  → grid col 1 on mobile (theme toggle, left)
+           2. .header-left       → grid col 2 on mobile (logo, centre)
+           3. .header-right      → grid col 3 on mobile (hamburger only, right)
+                                   full flex row on desktop (nav + desktop theme btn)
+    -->
     <header>
+
+      <!-- Mobile theme toggle (col 1 on mobile, hidden on desktop via JS) -->
+      <button class="header-theme-btn mobile-theme-btn" id="mobileThemeBtn" aria-label="Switch theme" title="Toggle theme">
+        <svg id="mobileThemeIcon" viewBox="0 0 24 24">
+          <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
+        </svg>
+      </button>
+
+      <!-- Logo -->
       <div class="header-left">
         <div class="logo-container">
           <img src="./Logo2.png" alt="AYR TGW Solutions">
         </div>
       </div>
 
+      <!-- Desktop nav + desktop theme btn / Mobile: hamburger only -->
       <div class="header-right">
-        <!-- Desktop nav items -->
-        <a href="#" onclick="openModal('concernModal'); return false;"
-           class="nav-btn nav-btn-concern" title="Report a service concern">
+        <a href="#" onclick="openModal('concernModal'); return false;" class="nav-btn nav-btn-concern" title="Report a service concern">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
           Report Concern
         </a>
@@ -829,22 +631,20 @@
         <a href="https://forms.gle/Ly9V2jWRsGnoyrjc7" target="_blank" rel="noopener" class="nav-btn">Partners</a>
         <a href="https://forms.gle/LTqD7BCzGvJSpHvq7" target="_blank" rel="noopener" class="nav-btn">Inquiry</a>
 
-        <!-- Theme toggle — always present; on mobile becomes the LEFT slot via CSS order -->
-        <button class="header-theme-btn" id="themeToggleBtn" aria-label="Switch theme" title="Toggle theme">
-          <svg id="themeIcon" viewBox="0 0 24 24">
+        <!-- Desktop theme toggle (hidden on mobile via CSS) -->
+        <button class="header-theme-btn" id="desktopThemeBtn" aria-label="Switch theme" title="Toggle theme">
+          <svg id="desktopThemeIcon" viewBox="0 0 24 24">
             <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
           </svg>
         </button>
 
-        <!-- Hamburger — hidden on desktop, right slot on mobile -->
+        <!-- Hamburger (mobile only) -->
         <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" onclick="openSideNav()">
           <span></span><span></span><span></span>
         </button>
       </div>
     </header>
 
-
-    <!-- ━━━━━━━━━━━━━━━━━━━━ MAIN ━━━━━━━━━━━━━━━━━━━━ -->
     <main id="parallax-scene">
       <div class="pipeline">
 
@@ -895,8 +695,6 @@
       </div>
     </main>
 
-
-    <!-- ━━━━━━━━━━━━━━━━━━━━ FOOTER ━━━━━━━━━━━━━━━━━━━━ -->
     <footer>
       <span class="footer-entity">© 2025 AYR TGW Solutions Inc.</span>
       <span class="footer-center">
@@ -913,9 +711,8 @@
   </div><!-- /viewport-shell -->
 
 
-  <!-- ════════════════════ MODALS ════════════════════ -->
+  <!-- ════ MODALS ════ -->
 
-  <!-- Resource Hub -->
   <div class="modal-overlay" id="resourceHub" role="dialog" aria-modal="true" aria-label="External Resources">
     <div class="modal-box">
       <div class="modal-header">
@@ -935,7 +732,6 @@
     </div>
   </div>
 
-  <!-- Report Service Concern -->
   <div class="modal-overlay" id="concernModal" role="dialog" aria-modal="true" aria-label="Report Service Concern">
     <div class="modal-box">
       <div class="modal-header">
@@ -970,18 +766,15 @@
         </div>
         <div class="form-field">
           <label class="form-label" for="sc-desc">Description</label>
-          <textarea class="form-textarea" id="sc-desc" style="min-height:110px;"
-                    placeholder="Please describe the concern in as much detail as possible…"></textarea>
+          <textarea class="form-textarea" id="sc-desc" style="min-height:110px;" placeholder="Please describe the concern in as much detail as possible…"></textarea>
         </div>
-        <button class="form-submit-btn" style="opacity:1; cursor:pointer;"
-                onclick="submitForm('concernModal', 'Service Concern')">
+        <button class="form-submit-btn" style="opacity:1; cursor:pointer;" onclick="submitForm('concernModal', 'Service Concern')">
           Submit Concern Report
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Regulatory Disclosures — updated -->
   <div class="modal-overlay" id="disclosuresModal" role="dialog" aria-modal="true" aria-label="Regulatory Disclosures">
     <div class="modal-box">
       <div class="modal-header">
@@ -989,32 +782,16 @@
         <button class="nav-btn" onclick="closeModal('disclosuresModal')" aria-label="Close">✕ Close</button>
       </div>
       <div style="font-size:0.80rem; color:var(--text-secondary); line-height:1.75; display:flex; flex-direction:column; gap:1rem;">
-        <p><strong style="color:var(--text-primary);">Registered Entity:</strong>
-          AYR TGW Solutions Inc. is affiliated with World Financial Group (WFG) Canada.
-          Financial advisors associated with AYR TGW Solutions are licensed under the
-          applicable provincial insurance regulator(s).</p>
-        <p><strong style="color:var(--text-primary);">Licensing:</strong>
-          All insurance and investment products are offered by licensed representatives only.
-          Licensing information is available upon request or through the applicable
-          provincial regulator (e.g., FSRA in Ontario).</p>
-        <p><strong style="color:var(--text-primary);">Insurance Disclaimer:</strong>
-          Life insurance products are underwritten by licensed insurance carriers through WFG.
-          Product availability, features, and pricing may vary. Approval is subject to
-          underwriting review. Past performance is not a guarantee of future results.</p>
-        <p><strong style="color:var(--text-primary);">Not a Guarantee:</strong>
-          Information provided through this platform is for educational and informational
-          purposes only and does not constitute a guarantee of coverage, returns, or advice.
-          Always consult a licensed advisor before making financial decisions.</p>
-        <p><strong style="color:var(--text-primary);">Advertising &amp; Compensation:</strong>
-          AYR TGW Solutions receives a fixed monthly advertising fee from partners. We do not receive commissions from insurance products.</p>
-        <p><strong style="color:var(--text-primary);">Privacy:</strong>
-          Personal information collected through this platform is governed by our
-          Privacy Policy and applicable Canadian privacy legislation (PIPEDA).</p>
+        <p><strong style="color:var(--text-primary);">Registered Entity:</strong> AYR TGW Solutions Inc. is affiliated with World Financial Group (WFG) Canada. Financial advisors associated with AYR TGW Solutions are licensed under the applicable provincial insurance regulator(s).</p>
+        <p><strong style="color:var(--text-primary);">Licensing:</strong> All insurance and investment products are offered by licensed representatives only. Licensing information is available upon request or through the applicable provincial regulator (e.g., FSRA in Ontario).</p>
+        <p><strong style="color:var(--text-primary);">Insurance Disclaimer:</strong> Life insurance products are underwritten by licensed insurance carriers through WFG. Product availability, features, and pricing may vary. Approval is subject to underwriting review. Past performance is not a guarantee of future results.</p>
+        <p><strong style="color:var(--text-primary);">Not a Guarantee:</strong> Information provided through this platform is for educational and informational purposes only and does not constitute a guarantee of coverage, returns, or advice. Always consult a licensed advisor before making financial decisions.</p>
+        <p><strong style="color:var(--text-primary);">Advertising &amp; Compensation:</strong> AYR TGW Solutions receives a fixed monthly advertising fee from partners. We do not receive commissions from insurance products.</p>
+        <p><strong style="color:var(--text-primary);">Privacy:</strong> Personal information collected through this platform is governed by our Privacy Policy and applicable Canadian privacy legislation (PIPEDA).</p>
       </div>
     </div>
   </div>
 
-  <!-- Privacy Policy — updated -->
   <div class="modal-overlay" id="privacyModal" role="dialog" aria-modal="true" aria-label="Privacy Policy">
     <div class="modal-box">
       <div class="modal-header">
@@ -1022,284 +799,285 @@
         <button class="nav-btn" onclick="closeModal('privacyModal')" aria-label="Close">✕ Close</button>
       </div>
       <div style="font-size:0.80rem; color:var(--text-secondary); line-height:1.75; display:flex; flex-direction:column; gap:1rem;">
-        <p>AYR TGW Solutions Inc. collects personal information solely for the purpose of
-           providing financial services and fulfilling regulatory requirements under PIPEDA.</p>
-        <p>We do not sell, rent, or share your personal information with third parties
-           except as required by law or with your explicit consent.</p>
+        <p>AYR TGW Solutions Inc. collects personal information solely for the purpose of providing financial services and fulfilling regulatory requirements under PIPEDA.</p>
+        <p>We do not sell, rent, or share your personal information with third parties except as required by law or with your explicit consent.</p>
         <p>We do not engage in lead-sharing for recruitment purposes; personal data is restricted to authorized, licensed service representatives only.</p>
-        <p>You have the right to access, correct, or request deletion of your personal data.
-           Contact our Privacy Officer at <strong style="color:var(--blue);">privacy@ayrtgw.ca</strong>.</p>
+        <p>You have the right to access, correct, or request deletion of your personal data. Contact our Privacy Officer at <strong style="color:var(--blue);">privacy@ayrtgw.ca</strong>.</p>
       </div>
     </div>
   </div>
 
 
-<!-- ════════════════════ JAVASCRIPT ════════════════════ -->
 <script>
 'use strict';
 
-/* ── SVG paths for theme icon ── */
+/* ── Theme icon SVG paths ── */
 const THEME_ICONS = {
   dark:  'M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z',
   light: 'M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z'
 };
 
 /* ════════════════════════════════════════════════════════
-   MODULE 1  ·  BACKGROUND ENGINE  v2
+   BACKGROUND ENGINE  v4
    ─────────────────────────────────────────────────────────
-   Background slot naming convention (place files in ./background/):
-     dark-desktop.{ext}   — dark theme, desktop/tablet
-     light-desktop.{ext}  — light theme, desktop/tablet
-     dark-mobile.{ext}    — dark theme, mobile (≤768px)
-     light-mobile.{ext}   — light theme, mobile (≤768px)
+   Place files in ./background/ (case-sensitive):
 
-   Falls back to the non-mobile variant if a mobile-specific
-   file is not found (e.g. dark-desktop if dark-mobile absent).
-   Falls back to the legacy bare names (dark / light) last.
+   BACKGROUND — auto-detected format, checked in this order:
+     ./background/Background-Desktop.{mp4|webm|mkv|ogv|gif|jpg|jpeg|png|webp|avif|svg}
+     ./background/Background-Mobile.{…}
 
-   File format priority (first hit wins):
-     mp4 › webm › mkv › ogv › gif › jpg › jpeg › png › webp › avif › svg
+   OVERLAY — .png only:
+     ./background/Overlay-Dark-Desktop.png
+     ./background/Overlay-Light-Desktop.png
+     ./background/Overlay-Dark-Mobile.png
+     ./background/Overlay-Light-Mobile.png
 
-   VIDEO TRANSITION — seamless frame-matching:
-     When switching between two video assets (e.g. dark↔light),
-     the incoming video seeks to the same playback position as the
-     outgoing video before crossfading, so the scene appears to
-     continue uninterrupted.
-
-   CONTAIN FIT — no cropping:
-     Assets use object-fit: contain so the full frame is always
-     visible, centred on the stage. Background colour fills any
-     letterbox/pillarbox area.
+   RULES:
+   • Background loads once per viewport class; NEVER changes on theme switch.
+   • Overlay crossfades when theme changes.
+   • Both reload when viewport crosses the 768px breakpoint.
+   • Missing files are silently skipped (CSS gradient fallback for bg).
 ════════════════════════════════════════════════════════ */
 const BGEngine = (() => {
   const VIDEO_EXTS = ['mp4','webm','mkv','ogv'];
-  const ALL_EXTS   = [...VIDEO_EXTS,'gif','jpg','jpeg','png','webp','avif','svg'];
-  const stage = document.getElementById('bg-stage');
+  const BG_EXTS    = [...VIDEO_EXTS,'gif','jpg','jpeg','png','webp','avif','svg'];
+  const stage      = document.getElementById('bg-stage');
 
-  /* probe cache: slot-name → { type, src } | null */
-  const cache = {};
+  const isMobile = () => window.innerWidth <= 768;
+  const vpSuffix = () => isMobile() ? 'Mobile' : 'Desktop';
 
-  let currentTheme  = 'dark';
-  let currentSlot   = null;   /* active slot name e.g. "dark-desktop" */
+  const bgCache = {};   /* 'Desktop'|'Mobile' → {type,src}|null */
+  const ovCache = {};   /* 'Dark-Desktop' etc → src|null */
 
-  /* ── Determine which viewport class we're on ── */
-  function isMobile() { return window.innerWidth <= 768; }
+  let currentTheme = 'dark';
+  let currentVP    = vpSuffix();
 
-  /* ── Build ordered list of slot names to try for theme + viewport ── */
-  function slotCandidates(theme) {
-    const vp = isMobile() ? 'mobile' : 'desktop';
-    return [
-      `${theme}-${vp}`,           /* preferred: theme-viewport  */
-      `${theme}-desktop`,          /* fallback 1: always desktop */
-      theme,                       /* fallback 2: legacy bare name */
-    ];
-  }
-
-  /* ── HEAD-probe a single slot name, return result or null ── */
-  async function probeSlot(name) {
-    if (name in cache) return cache[name];
-    for (const ext of ALL_EXTS) {
-      const src = `./background/${name}.${ext}`;
+  /* Probe background: try each extension in priority order */
+  async function probeBG(vp) {
+    if (vp in bgCache) return bgCache[vp];
+    for (const ext of BG_EXTS) {
+      const src = `./background/Background-${vp}.${ext}`;
       try {
         const r = await fetch(src, { method: 'HEAD', cache: 'force-cache' });
         if (r.ok) {
           const result = { type: VIDEO_EXTS.includes(ext) ? 'video' : 'image', src };
-          cache[name] = result;
+          bgCache[vp] = result;
           return result;
         }
       } catch (_) {}
     }
-    cache[name] = null;
+    bgCache[vp] = null;
     return null;
   }
 
-  /* ── Probe all candidates in order, return first hit ── */
-  async function resolveTheme(theme) {
-    for (const name of slotCandidates(theme)) {
-      const r = await probeSlot(name);
-      if (r) return { result: r, slot: name };
-    }
-    return { result: null, slot: null };
+  /* Probe overlay: .png only, exact name */
+  async function probeOverlay(theme, vp) {
+    const themeKey = theme.charAt(0).toUpperCase() + theme.slice(1);
+    const key      = `${themeKey}-${vp}`;
+    if (key in ovCache) return ovCache[key];
+    const src = `./background/Overlay-${key}.png`;
+    try {
+      const r = await fetch(src, { method: 'HEAD', cache: 'force-cache' });
+      ovCache[key] = r.ok ? src : null;
+    } catch (_) { ovCache[key] = null; }
+    return ovCache[key];
   }
 
-  /* ── Build a DOM element for an asset ── */
-  function buildAsset(result) {
+  function buildBGAsset(result) {
     let el;
     if (result.type === 'video') {
       el = document.createElement('video');
-      el.src        = result.src;
-      el.loop       = true;
-      el.muted      = true;
-      el.playsInline = true;
-      el.setAttribute('playsinline', '');
-      el.preload    = 'auto';
+      el.src = result.src; el.loop = true; el.muted = true;
+      el.playsInline = true; el.setAttribute('playsinline',''); el.preload = 'auto';
     } else {
       el = document.createElement('img');
-      el.src = result.src;
-      el.alt = '';
+      el.src = result.src; el.alt = '';
     }
     el.className = 'bg-asset';
-    el.setAttribute('aria-hidden', 'true');
-    /* CSS handles contain fit — ensure inline style doesn't override */
+    el.setAttribute('aria-hidden','true');
     el.style.opacity = '0';
     return el;
   }
 
-  /* ── Get current playback time of the active video (if any) ── */
-  function activeVideoTime() {
-    const active = stage.querySelector('.bg-asset.active-bg');
-    if (active && active.tagName === 'VIDEO') return active.currentTime;
-    /* fallback: any video in stage */
-    const any = stage.querySelector('video.bg-asset');
-    if (any) return any.currentTime;
-    return 0;
+  function bgVideoTime() {
+    const v = stage.querySelector('video.bg-asset.active-bg') || stage.querySelector('video.bg-asset');
+    return v ? v.currentTime : 0;
   }
 
-  /* ── Crossfade: fade out old, fade in new ── */
-  function crossfade(incoming, outgoing) {
-    /* Mark incoming as the new active BEFORE fading so activeVideoTime() returns it next time */
+  function crossfade(incoming, outgoing, duration = 0.65) {
     incoming.classList.add('active-bg');
-
-    /* Fade in */
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      incoming.style.transition = 'opacity 0.65s ease';
+      incoming.style.transition = `opacity ${duration}s ease`;
       incoming.style.opacity    = '1';
     }));
-
-    /* Fade out old */
     if (outgoing) {
-      outgoing.style.transition = 'opacity 0.65s ease';
+      outgoing.style.transition = `opacity ${duration}s ease`;
       outgoing.style.opacity    = '0';
       outgoing.classList.remove('active-bg');
-      setTimeout(() => { if (outgoing.parentNode) outgoing.remove(); }, 750);
+      setTimeout(() => { if (outgoing.parentNode) outgoing.remove(); }, (duration + 0.1) * 1000);
     }
   }
 
-  /* ── Main swap routine ── */
-  async function swap(result, newSlot) {
-    currentSlot = newSlot;
-
+  async function swapBackground(result) {
     const outgoing = stage.querySelector('.bg-asset');
-
     if (!result) {
-      /* No asset found — use CSS gradient fallback */
       document.body.style.background = currentTheme === 'dark'
         ? 'linear-gradient(135deg,#02081a 0%,#050d1a 100%)'
         : 'linear-gradient(135deg,#c8e6ff 0%,#e8f4ff 100%)';
       if (outgoing) {
         outgoing.style.transition = 'opacity 0.65s ease';
-        outgoing.style.opacity    = '0';
+        outgoing.style.opacity = '0';
         setTimeout(() => { if (outgoing.parentNode) outgoing.remove(); }, 750);
       }
       return;
     }
     document.body.style.background = '';
+    const outSrc = outgoing ? (outgoing.getAttribute('src') || outgoing.src || '') : '';
+    if (outSrc && (outSrc === result.src || outSrc.endsWith(result.src.replace(/^\.\//,'')))) return;
 
-    /* If same src is already playing, do nothing */
-    if (outgoing && outgoing.src && outgoing.src.endsWith(result.src.replace(/^\.\//, ''))) return;
-    if (outgoing && outgoing.getAttribute('src') === result.src) return;
-
-    const incoming = buildAsset(result);
-    stage.prepend(incoming);
+    const incoming = buildBGAsset(result);
+    const firstOverlay = stage.querySelector('.bg-overlay');
+    if (firstOverlay) stage.insertBefore(incoming, firstOverlay);
+    else              stage.prepend(incoming);
 
     if (incoming.tagName === 'VIDEO') {
-      /* Frame-match: seek incoming to outgoing's playback position */
-      const t = activeVideoTime();
-      incoming.addEventListener('loadedmetadata', () => {
-        if (t > 0 && t < incoming.duration) incoming.currentTime = t;
-        incoming.play().catch(() => {});
-        crossfade(incoming, outgoing);
-      }, { once: true });
-      /* If metadata fires before listener in fast cache, trigger manually */
-      if (incoming.readyState >= 1) {
+      const t = bgVideoTime();
+      const doPlay = () => {
         if (t > 0 && incoming.duration && t < incoming.duration) incoming.currentTime = t;
         incoming.play().catch(() => {});
         crossfade(incoming, outgoing);
-      }
+      };
+      if (incoming.readyState >= 1) doPlay();
+      else incoming.addEventListener('loadedmetadata', doPlay, { once: true });
     } else {
-      incoming.onload = () => crossfade(incoming, outgoing);
-      if (incoming.complete) crossfade(incoming, outgoing);
+      const doShow = () => crossfade(incoming, outgoing);
+      if (incoming.complete && incoming.naturalWidth) doShow();
+      else incoming.onload = doShow;
     }
   }
 
-  /* ── Public: set theme + viewport, resolve and swap ── */
-  async function setTheme(theme) {
-    currentTheme = theme;
-    const { result, slot } = await resolveTheme(theme);
-    await swap(result, slot);
+  async function swapOverlay(theme, vp) {
+    const src     = await probeOverlay(theme, vp);
+    const oldOver = stage.querySelector('.bg-overlay');
+    if (!src) {
+      if (oldOver) {
+        oldOver.style.transition = 'opacity 0.5s ease';
+        oldOver.style.opacity    = '0';
+        setTimeout(() => { if (oldOver.parentNode) oldOver.remove(); }, 600);
+      }
+      return;
+    }
+    if (oldOver && oldOver.getAttribute('src') === src) return;
+
+    const img = new Image();
+    img.src = src;
+    img.className = 'bg-overlay';
+    img.setAttribute('aria-hidden','true');
+    img.style.opacity = '0';
+    stage.appendChild(img);
+
+    const doShow = () => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        img.style.transition = 'opacity 0.5s ease';
+        img.style.opacity    = '1';
+      }));
+      if (oldOver) {
+        oldOver.style.transition = 'opacity 0.5s ease';
+        oldOver.style.opacity    = '0';
+        setTimeout(() => { if (oldOver.parentNode) oldOver.remove(); }, 600);
+      }
+    };
+    if (img.complete && img.naturalWidth) doShow();
+    else img.onload = doShow;
   }
 
-  /* ── On resize: if viewport class changed, reload background ── */
+  /* Public: theme changed — swap overlay only, background stays */
+  async function setTheme(theme) {
+    currentTheme = theme;
+    await swapOverlay(theme, currentVP);
+  }
+
+  /* Public: viewport class changed — reload both */
+  async function reloadForViewport() {
+    currentVP = vpSuffix();
+    const bgResult = await probeBG(currentVP);
+    await swapBackground(bgResult);
+    await swapOverlay(currentTheme, currentVP);
+  }
+
+  /* Public: initial boot */
+  async function init(theme) {
+    currentTheme = theme;
+    currentVP    = vpSuffix();
+    const bgResult = await probeBG(currentVP);
+    await swapBackground(bgResult);
+    await swapOverlay(theme, currentVP);
+  }
+
+  /* Reload on mobile/desktop breakpoint crossing */
   let lastMobile = isMobile();
   window.addEventListener('resize', () => {
     const nowMobile = isMobile();
-    if (nowMobile !== lastMobile) {
-      lastMobile = nowMobile;
-      setTheme(currentTheme);
-    }
+    if (nowMobile !== lastMobile) { lastMobile = nowMobile; reloadForViewport(); }
   }, { passive: true });
 
-  function getAsset() { return stage.querySelector('.bg-asset'); }
-
-  return { setTheme, getAsset };
+  const getAsset = () => stage.querySelector('.bg-asset');
+  return { init, setTheme, getAsset };
 })();
 
 
 /* ════════════════════════════════════════════════════════
-   MODULE 2  ·  THEME ENGINE — monotone blue SVG icons
+   THEME ENGINE
+   Wires both mobile (#mobileThemeBtn) and desktop (#desktopThemeBtn)
+   buttons to the same toggle, keeps both icons in sync.
 ════════════════════════════════════════════════════════ */
 const ThemeEngine = (() => {
   const ROOT = document.documentElement;
-  const BTN  = document.getElementById('themeToggleBtn');
-  const SVG_PATH = document.querySelector('#themeIcon path');
   const KEY  = 'ayr-theme';
+  const BTNS = ['mobileThemeBtn','desktopThemeBtn'].map(id => document.getElementById(id)).filter(Boolean);
+  const ICONS = () => ['mobileThemeIcon','desktopThemeIcon'].map(id => {
+    const el = document.getElementById(id);
+    return el ? el.querySelector('path') : null;
+  }).filter(Boolean);
 
   let current = localStorage.getItem(KEY) ||
     (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 
-  function apply(theme, persist = true) {
+  function apply(theme, persist = true, triggerBG = true) {
     current = theme;
     ROOT.setAttribute('data-theme', theme);
-    /* In dark mode, show sun (action = go light); in light mode, show moon (go dark) */
-    if (SVG_PATH) SVG_PATH.setAttribute('d', THEME_ICONS[theme]);
-    BTN.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-    if (persist) localStorage.setItem(KEY, theme);
-    BGEngine.setTheme(theme);
+    ICONS().forEach(p => p.setAttribute('d', THEME_ICONS[theme]));
+    const label = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+    BTNS.forEach(btn => btn.setAttribute('aria-label', label));
+    if (persist)   localStorage.setItem(KEY, theme);
+    if (triggerBG) BGEngine.setTheme(theme);
   }
 
-  BTN.addEventListener('click', () => apply(current === 'dark' ? 'light' : 'dark'));
-  window.matchMedia('(prefers-color-scheme: light)')
-        .addEventListener('change', e => apply(e.matches ? 'light' : 'dark'));
-  apply(current, false);
+  const toggle = () => apply(current === 'dark' ? 'light' : 'dark');
+  BTNS.forEach(btn => btn.addEventListener('click', toggle));
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => apply(e.matches ? 'light' : 'dark'));
+
+  /* Apply visual state now; BGEngine.init() handles background on DOMContentLoaded */
+  apply(current, false, false);
 
   return { apply, getCurrent: () => current };
 })();
 
+
 /* ════════════════════════════════════════════════════════
-   MODULE 4  ·  SCREEN AWARENESS
-   Sets CSS tokens and data-attributes only.
-   NO scale() transform — that breaks pointer hit-testing
-   on mobile, making all interactive elements untappable.
+   SCREEN AWARENESS — sets CSS tokens, no scale() transform
 ════════════════════════════════════════════════════════ */
 const ScreenAwareness = (() => {
   const ROOT = document.documentElement;
-
   function run() {
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
+    const vw = window.innerWidth, vh = window.innerHeight;
     const device = vw <= 768 ? 'mobile' : vw <= 1024 ? 'tablet' : 'desktop';
-    const orient = vw < vh ? 'portrait' : 'landscape';
-
     document.body.setAttribute('data-device',      device);
-    document.body.setAttribute('data-orientation', orient);
-
-    /* Sync CSS layout tokens — CSS media queries handle the visual layout;
-       these JS tokens keep header/footer spacing in sync with JS calculations. */
+    document.body.setAttribute('data-orientation', vw < vh ? 'portrait' : 'landscape');
     if (device === 'mobile') {
       ROOT.style.setProperty('--header-h',   '60px');
       ROOT.style.setProperty('--header-top', '10px');
       ROOT.style.setProperty('--page-gutter','14px');
-      /* footer-h is auto on mobile — don't set a fixed value */
     } else if (device === 'tablet') {
       ROOT.style.setProperty('--header-h',   '70px');
       ROOT.style.setProperty('--header-top', '16px');
@@ -1312,84 +1090,57 @@ const ScreenAwareness = (() => {
       ROOT.style.setProperty('--page-gutter','20px');
     }
   }
-
   let pending = false;
-  const ro = new ResizeObserver(() => {
+  new ResizeObserver(() => {
     if (!pending) { pending = true; requestAnimationFrame(() => { run(); pending = false; }); }
-  });
-  ro.observe(ROOT);
+  }).observe(ROOT);
   window.addEventListener('resize', run, { passive: true });
   run();
-
   return { run };
 })();
 
 
 /* ════════════════════════════════════════════════════════
-   MODULE 5  ·  PARALLAX + TILT PHYSICS
+   PARALLAX + TILT PHYSICS
 ════════════════════════════════════════════════════════ */
 const ParallaxEngine = (() => {
-  const FOCAL = 0.866;
-  const TILT  = 10;
-  const EASE  = 0.068;
+  const FOCAL = 0.866, TILT = 10, EASE = 0.068;
   const DEPTH = { bg: 0.010, card: 0.046 };
-
   let rawX = 0, rawY = 0, curX = 0, curY = 0;
   const scene = document.getElementById('parallax-scene');
   let cards = [], bgEl = null;
 
-  function gather() {
-    cards = Array.from(scene.querySelectorAll('.parallax-layer'));
-    bgEl  = BGEngine.getAsset();
-  }
+  const gather = () => { cards = Array.from(scene.querySelectorAll('.parallax-layer')); bgEl = BGEngine.getAsset(); };
   function updateFocal() {
     const f = Math.round(Math.hypot(window.innerWidth, window.innerHeight) * FOCAL);
     document.documentElement.style.setProperty('--focal', f + 'px');
-    scene.style.perspective       = f + 'px';
-    scene.style.perspectiveOrigin = '50% 50%';
+    scene.style.perspective = f + 'px'; scene.style.perspectiveOrigin = '50% 50%';
   }
-  function onPointer(e) {
-    const hw = window.innerWidth / 2, hh = window.innerHeight / 2;
-    rawX = (e.clientX - hw) / hw;
-    rawY = (e.clientY - hh) / hh;
-  }
-  function onGyro(e) {
-    if (e.gamma !== null) rawX = Math.max(-1, Math.min(1,  e.gamma      / 45));
-    if (e.beta  !== null) rawY = Math.max(-1, Math.min(1, (e.beta - 30) / 45));
-  }
+  const onPointer = e => { const hw = window.innerWidth/2, hh = window.innerHeight/2; rawX = (e.clientX-hw)/hw; rawY = (e.clientY-hh)/hh; };
+  const onGyro    = e => {
+    if (e.gamma !== null) rawX = Math.max(-1, Math.min(1,  e.gamma/45));
+    if (e.beta  !== null) rawY = Math.max(-1, Math.min(1, (e.beta-30)/45));
+  };
   function tick() {
-    curX += (rawX - curX) * EASE;
-    curY += (rawY - curY) * EASE;
-    const hw = window.innerWidth / 2, hh = window.innerHeight / 2;
-
-    const freshBg = BGEngine.getAsset();
-    if (freshBg !== bgEl) bgEl = freshBg;
-    if (bgEl) {
-      bgEl.style.transform =
-        `translate3d(${(curX*DEPTH.bg*hw).toFixed(2)}px,${(curY*DEPTH.bg*hh).toFixed(2)}px,0)`;
-    }
+    curX += (rawX - curX) * EASE; curY += (rawY - curY) * EASE;
+    const hw = window.innerWidth/2, hh = window.innerHeight/2;
+    const freshBg = BGEngine.getAsset(); if (freshBg !== bgEl) bgEl = freshBg;
+    if (bgEl) bgEl.style.transform = `translate3d(${(curX*DEPTH.bg*hw).toFixed(2)}px,${(curY*DEPTH.bg*hh).toFixed(2)}px,0)`;
     for (const el of cards) {
-      const d  = DEPTH[el.getAttribute('data-depth')] ?? DEPTH.card;
-      const tx = (curX * d * hw).toFixed(2);
-      const ty = (curY * d * hh).toFixed(2);
+      const d = DEPTH[el.getAttribute('data-depth')] ?? DEPTH.card;
+      const tx = (curX*d*hw).toFixed(2), ty = (curY*d*hh).toFixed(2);
       if (el.classList.contains('tilt-card')) {
-        const rY = ( curX * TILT).toFixed(3);
-        const rX = (-curY * TILT).toFixed(3);
-        el.style.transform = `translate3d(${tx}px,${ty}px,0) rotateY(${rY}deg) rotateX(${rX}deg)`;
-        el.style.boxShadow =
-          `${(curX*14).toFixed(1)}px ${((curY*9)+14).toFixed(1)}px 48px var(--blue-shadow),` +
-          `0 1px 0 rgba(0,170,255,0.12) inset`;
-      } else {
-        el.style.transform = `translate3d(${tx}px,${ty}px,0)`;
-      }
+        el.style.transform = `translate3d(${tx}px,${ty}px,0) rotateY(${(curX*TILT).toFixed(3)}deg) rotateX(${(-curY*TILT).toFixed(3)}deg)`;
+        el.style.boxShadow = `${(curX*14).toFixed(1)}px ${((curY*9)+14).toFixed(1)}px 48px var(--blue-shadow),0 1px 0 rgba(0,170,255,0.12) inset`;
+      } else { el.style.transform = `translate3d(${tx}px,${ty}px,0)`; }
     }
     requestAnimationFrame(tick);
   }
   function init() {
     gather(); updateFocal();
-    window.addEventListener('pointermove',       onPointer, { passive:true });
-    window.addEventListener('mousemove',         onPointer, { passive:true });
-    window.addEventListener('deviceorientation', onGyro,    { passive:true });
+    window.addEventListener('pointermove', onPointer, { passive:true });
+    window.addEventListener('mousemove',   onPointer, { passive:true });
+    window.addEventListener('deviceorientation', onGyro, { passive:true });
     window.addEventListener('resize', () => { updateFocal(); gather(); }, { passive:true });
     requestAnimationFrame(tick);
   }
@@ -1397,29 +1148,20 @@ const ParallaxEngine = (() => {
 })();
 
 
-/* ════════════════════════════════════════════════════════
-   SIDE NAV CONTROLLER
-════════════════════════════════════════════════════════ */
+/* ════ SIDE NAV ════ */
 function openSideNav() {
-  const nav = document.getElementById('sideNav');
-  const ov  = document.getElementById('sideNavOverlay');
-  const btn = document.getElementById('hamburgerBtn');
-  nav.classList.add('open');
-  ov.classList.add('open');
-  btn.classList.add('open');
-  ov.setAttribute('aria-hidden','false');
+  document.getElementById('sideNav').classList.add('open');
+  document.getElementById('sideNavOverlay').classList.add('open');
+  document.getElementById('hamburgerBtn').classList.add('open');
+  document.getElementById('sideNavOverlay').setAttribute('aria-hidden','false');
   document.body.classList.add('modal-lock');
 }
 function closeSideNav() {
-  const nav = document.getElementById('sideNav');
-  const ov  = document.getElementById('sideNavOverlay');
-  const btn = document.getElementById('hamburgerBtn');
-  nav.classList.remove('open');
-  ov.classList.remove('open');
-  btn.classList.remove('open');
-  ov.setAttribute('aria-hidden','true');
-  if (!document.querySelector('.modal-overlay.active'))
-    document.body.classList.remove('modal-lock');
+  document.getElementById('sideNav').classList.remove('open');
+  document.getElementById('sideNavOverlay').classList.remove('open');
+  document.getElementById('hamburgerBtn').classList.remove('open');
+  document.getElementById('sideNavOverlay').setAttribute('aria-hidden','true');
+  if (!document.querySelector('.modal-overlay.active')) document.body.classList.remove('modal-lock');
 }
 document.getElementById('sideNavOverlay').addEventListener('click', closeSideNav);
 document.addEventListener('keydown', e => {
@@ -1430,34 +1172,22 @@ document.addEventListener('keydown', e => {
   }
 });
 
-/* ════════════════════════════════════════════════════════
-   MODAL CONTROLLER
-════════════════════════════════════════════════════════ */
+/* ════ MODALS ════ */
 function openModal(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.add('active');
-  document.body.classList.add('modal-lock');
+  const el = document.getElementById(id); if (!el) return;
+  el.classList.add('active'); document.body.classList.add('modal-lock');
   const first = el.querySelector('button, input, select, textarea, a');
   if (first) setTimeout(() => first.focus(), 50);
 }
 function closeModal(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
+  const el = document.getElementById(id); if (!el) return;
   el.classList.remove('active');
-  if (!document.querySelector('.modal-overlay.active') &&
-      !document.getElementById('sideNav').classList.contains('open'))
+  if (!document.querySelector('.modal-overlay.active') && !document.getElementById('sideNav').classList.contains('open'))
     document.body.classList.remove('modal-lock');
 }
 document.querySelectorAll('.modal-overlay').forEach(ov => {
   ov.addEventListener('click', e => { if (e.target === ov) closeModal(ov.id); });
 });
-
-function updateSubmit(btnId, checkId) {
-  const btn = document.getElementById(btnId);
-  const chk = document.getElementById(checkId);
-  if (btn && chk) btn.disabled = !chk.checked;
-}
 function submitForm(modalId, formName) {
   alert(`✓ Your ${formName} has been received. A licensed AYR TGW advisor will contact you shortly.`);
   closeModal(modalId);
@@ -1465,10 +1195,13 @@ function submitForm(modalId, formName) {
 
 /* ════════════════════════════════════════════════════════
    BOOT
+   BGEngine.init() must be called here — this is what actually
+   triggers the background + overlay to load on first paint.
 ════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   ScreenAwareness.run();
   ParallaxEngine.init();
+  BGEngine.init(ThemeEngine.getCurrent());
 });
 </script>
 </body>
