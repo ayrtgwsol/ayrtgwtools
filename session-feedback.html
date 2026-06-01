@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="./background/icon.png">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>AYR TGW Solutions | Session Feedback</title>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -21,7 +22,7 @@
 /* ── PREMIUM HAMBURGER + DRAWER ── */
 .site-logo-img{height:48px;width:auto;object-fit:contain;display:block;}
 .hamburger-btn{display:flex;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:transparent;border:1px solid rgba(55,65,81,.60);border-radius:8px;cursor:pointer;padding:8px;transition:border-color .2s;}
-.hamburger-btn:hover{border-color:#2B5BD0;}
+.hamburger-btn:hover{border-color:#004aad;}
 .hamburger-btn span{display:block;height:1.5px;background:#9ca3af;border-radius:2px;transition:all .25s;}
 .hamburger-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
 .hamburger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
@@ -34,8 +35,8 @@
 .drawer-close:hover{color:#f3f4f6;}
 .drawer-links{display:flex;flex-direction:column;padding:10px 0;flex:1;overflow-y:auto;}
 .drawer-links a{padding:13px 24px;color:#9ca3af;font-size:.9375rem;font-weight:500;text-decoration:none;letter-spacing:.03em;border-left:3px solid transparent;transition:all .18s;}
-.drawer-links a:hover{color:#f3f4f6;background:rgba(43,91,208,.06);border-left-color:#2B5BD0;}
-.drawer-links a.active{color:#4A90E2;border-left-color:#2B5BD0;background:rgba(43,91,208,.06);}
+.drawer-links a:hover{color:#f3f4f6;background:rgba(43,91,208,.06);border-left-color:#004aad;}
+.drawer-links a.active{color:#004aad;border-left-color:#004aad;background:rgba(43,91,208,.06);}
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(3,7,18,.55);z-index:199;backdrop-filter:blur(2px);}
 .drawer-overlay.open{display:block;}
 
@@ -81,6 +82,53 @@ body{font-family:'Inter',sans-serif;background-color:#030712;color:#f3f4f6;}
 .feedback-layout{display:grid;grid-template-columns:1fr 400px;gap:28px;align-items:start;}
 .preview-sticky{position:sticky;top:92px;}
 @media(max-width:900px){.feedback-layout{grid-template-columns:1fr;}.preview-sticky{position:static;margin-top:24px;}}
+
+@font-face{font-family:'YD Yoonche Bold';src:local('YD Yoonche Bold'),local('YDYooncheB');font-weight:700;}
+:root{--brand:#004aad;--brand-rgb:0,74,173;}
+body{font-family:'YD Yoonche Bold','Inter',system-ui,sans-serif!important;}
+html.light-mode body{background-color:#eef2ff!important;color:#000000!important;}
+html.light-mode .bg-stack .bg-img{opacity:.12!important;}
+html.light-mode .bg-stack .bg-overlay{opacity:.28!important;}
+/* FLOATING HEADER */
+.site-header-wrap{position:fixed!important;top:14px;left:50%;transform:translateX(-50%);width:calc(100% - 40px);max-width:1240px;z-index:50;}
+.site-header{background:rgba(3,7,18,0.68)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;border:1px solid rgba(0,74,173,.40)!important;border-radius:20px!important;box-shadow:0 8px 32px rgba(0,0,0,.35)!important;position:static!important;top:auto!important;}
+html.light-mode .site-header{background:rgba(238,242,255,0.88)!important;border-color:rgba(0,74,173,.28)!important;}
+.header-spacer{height:96px;}
+/* Ensure all nav uses brand color */
+.dnav-link::after{background:var(--brand)!important;}
+.dnav-link.active{color:var(--brand)!important;}
+.dnav-link:hover::after,.dnav-link.active::after{width:100%!important;}
+.drawer-links-a:hover{background:rgba(0,74,173,.06)!important;border-left-color:var(--brand)!important;}
+.drawer-links-a.active{color:var(--brand)!important;border-left-color:var(--brand)!important;background:rgba(0,74,173,.06)!important;}
+/* SVG icons brand color */
+.p-icon svg,.p-icon-svg{stroke:#004aad!important;color:#004aad!important;}
+svg[class*="w-"]{stroke:#004aad!important;}
+/* Panels light mode */
+html.light-mode .panel{background:rgba(255,255,255,.78)!important;border-color:rgba(0,74,173,.18)!important;}
+html.light-mode .fg label{color:#4b5563!important;}
+html.light-mode .fg input,html.light-mode .fg select,html.light-mode .fg textarea{background:rgba(238,242,255,.85)!important;border-color:rgba(0,74,173,.25)!important;color:#000000!important;}
+/* Theme toggle */
+.theme-toggle{position:fixed;bottom:26px;right:26px;z-index:300;width:50px;height:50px;border-radius:50%;background:rgba(0,74,173,.90);border:2px solid rgba(0,74,173,.55);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,74,173,.40);transition:all .3s;backdrop-filter:blur(12px);}
+.theme-toggle:hover{background:var(--brand);transform:scale(1.08);}
+.theme-toggle svg{width:22px;height:22px;fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.theme-toggle .icon-moon{display:block;}
+.theme-toggle .icon-sun{display:none;}
+html.light-mode .theme-toggle .icon-moon{display:none;}
+html.light-mode .theme-toggle .icon-sun{display:block;}
+/* All glow colors to brand */
+.glow-bloom{background:radial-gradient(circle at 50% 0%,rgba(0,74,173,.22) 0%,rgba(3,7,18,0) 65%)!important;}
+/* Step dots */
+.step.active .step-dot{border-color:#004aad!important;background:#004aad!important;}
+.step.done .step-dot{border-color:#004aad!important;color:#004aad!important;background:rgba(0,74,173,.08)!important;}
+.step-prog-fill{background:#004aad!important;}
+.step.active .step-lbl,.step.done .step-lbl{color:#004aad!important;}
+/* Portal card hover border */
+.portal-card:hover{border-color:rgba(0,74,173,.60)!important;}
+/* Light mode text */
+html.light-mode .text-gray-400{color:#374151!important;}
+html.light-mode .text-gray-500{color:#6b7280!important;}
+html.light-mode main h1{color:#000000;}
+
 </style>
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
@@ -92,58 +140,49 @@ body{font-family:'Inter',sans-serif;background-color:#030712;color:#f3f4f6;}
 <div class="glow-bloom"></div>
 
 
-<!-- STICKY HEADER -->
-<header class="site-header" style="position:sticky;top:0;z-index:50;background:rgba(3,7,18,0.40);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(55,65,81,0.65);">
-  <div style="max-width:1280px;margin:0 auto;padding:0 28px;height:76px;display:flex;align-items:center;justify-content:space-between;">
-    <a href="index.html" style="display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;">
-      <img src="./Logo2.png" alt="AYR TGW Solutions" class="site-logo-img">
-    </a>
-    <ul style="display:none;align-items:center;gap:28px;list-style:none;margin:0;padding:0;" id="desktopNavList">
+<!-- FLOATING HEADER -->
+<div class="site-header-wrap">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="site-logo">
+        <img src="./background/icon.png" alt="AYR TGW Tools Hub" class="site-logo-img" onerror="this.src='./Logo2.png'">
+      </a>
+      <ul style="display:none;align-items:center;gap:22px;list-style:none;margin:0;padding:0;" id="desktopNavList">
       <li><a href="index.html" class="dnav-link">Home</a></li>
-      <li><a href="clients.html" class="dnav-link">Clients</a></li>
-      <li><a href="partners.html" class="dnav-link">Partners</a></li>
-      <li><a href="agents.html" class="dnav-link">Agents</a></li>
-      <li><a href="inquiry.html" class="dnav-link">Inquiry</a></li>
+      <li><a href="clients.html" class="dnav-link">Client</a></li>
+      <li><a href="partners.html" class="dnav-link">Partner</a></li>
       <li><a href="session-feedback.html" class="dnav-link active" aria-current="page">Session Feedback</a></li>
       <li><a href="service-feedback.html" class="dnav-link">Service Feedback</a></li>
-    </ul>
-    <button class="hamburger-btn" id="hamburgerBtn2" aria-label="Open navigation menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</header>
+      <li><a href="inquiry.html" class="dnav-link">Inquiry</a></li>
+      <li><a href="agents.html" class="dnav-link">Agent</a></li>
+      </ul>
+      <button class="hamburger-btn" id="hamburgerBtn2" aria-label="Open navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+</div>
+<div class="header-spacer"></div>
 
 <!-- MOBILE DRAWER -->
 <div class="drawer-overlay" id="drawerOverlay2"></div>
 <nav class="mobile-drawer" id="mobileDrawer2" aria-label="Mobile navigation">
   <div class="drawer-head">
-    <img src="./Logo2.png" alt="AYR TGW Solutions">
+    <img src="./background/icon.png" alt="AYR TGW Tools Hub" onerror="this.src='./Logo2.png'">
     <button class="drawer-close" id="drawerClose2" aria-label="Close menu">&#x2715;</button>
   </div>
   <div class="drawer-links">
     <a href="index.html" class="drawer-links-a">Home</a>
-    <a href="clients.html" class="drawer-links-a">Clients</a>
-    <a href="partners.html" class="drawer-links-a">Partners</a>
-    <a href="agents.html" class="drawer-links-a">Agents</a>
-    <a href="inquiry.html" class="drawer-links-a">Inquiry</a>
+    <a href="clients.html" class="drawer-links-a">Client</a>
+    <a href="partners.html" class="drawer-links-a">Partner</a>
     <a href="session-feedback.html" class="drawer-links-a active" aria-current="page">Session Feedback</a>
     <a href="service-feedback.html" class="drawer-links-a">Service Feedback</a>
+    <a href="inquiry.html" class="drawer-links-a">Inquiry</a>
+    <a href="agents.html" class="drawer-links-a">Agent</a>
   </div>
 </nav>
-
 <style>
-@media(min-width:768px){
-  #desktopNavList{display:flex !important;}
-  #hamburgerBtn2{display:none !important;}
-}
-.dnav-link{font-size:.8125rem;font-weight:500;color:#9ca3af;text-decoration:none;letter-spacing:.04em;transition:color .2s;position:relative;padding-bottom:3px;}
-.dnav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:#2B5BD0;transition:width .2s;}
-.dnav-link:hover{color:#f3f4f6;}
-.dnav-link:hover::after,.dnav-link.active::after{width:100%;}
-.dnav-link.active{color:#4A90E2;}
-.drawer-links-a{display:block;padding:13px 24px;color:#9ca3af;font-size:.9375rem;font-weight:500;text-decoration:none;letter-spacing:.03em;border-left:3px solid transparent;transition:all .18s;}
-.drawer-links-a:hover{color:#f3f4f6;background:rgba(43,91,208,.06);border-left-color:#2B5BD0;}
-.drawer-links-a.active{color:#4A90E2;border-left-color:#2B5BD0;background:rgba(43,91,208,.06);}
+@media(min-width:768px){#desktopNavList{display:flex!important;}#hamburgerBtn2{display:none!important;}}
 </style>
 
 <main class="max-w-6xl mx-auto px-6 py-14 relative z-10">
@@ -199,7 +238,7 @@ body{font-family:'Inter',sans-serif;background-color:#030712;color:#f3f4f6;}
               <div class="ov-quote" id="prev_quote">Your client's testimonial will appear here as you type…</div>
               <div class="ov-divider"></div>
               <div class="ov-author" id="prev_author">— Client Name</div>
-              <div class="ov-tag">#AYRTGWSolutions &nbsp;·&nbsp; #WFG &nbsp;·&nbsp; #FinancialFreedom</div>
+              <div class="ov-tag">#AYRTGWSolutions &nbsp;·&nbsp; &nbsp; #FinancialFreedom</div>
             </div>
           </div>
         </div>
@@ -211,6 +250,17 @@ body{font-family:'Inter',sans-serif;background-color:#030712;color:#f3f4f6;}
 <div class="toast" id="toast"></div>
 
 <script>
+
+  return true;
+}
+
+function checkATKey(key){
+  if(!key||key.includes('YOUR_AIRTABLE_PAT_HERE')){
+    showToast('⚠ Airtable PAT not configured. Open the file and set AT_KEY to your Personal Access Token.','error');
+    return false;
+  }
+  return true;
+}
 const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tblV15r8cTA9HRjEv',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
 
 function updatePreview(){
@@ -242,11 +292,13 @@ async function downloadImage(){
 }
 
 async function submitFeedback(){
+  // AT check done above
   const name=document.getElementById('author_name').value.trim();
   const text=document.getElementById('feedback_text').value.trim();
   const consent=document.getElementById('social_consent').checked;
   if(!name||!text){showToast('Please enter a name and feedback text.','error');return;}
   const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Saving…';
+  if(!checkATKey(AT_KEY)){btn.disabled=false;btn.textContent='Save to Airtable';return;}
   try{
     const res=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,{method:'POST',headers:{'Authorization':`Bearer ${AT_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({records:[{fields:{'Name':name,'Feedback_Text':text,'Social_Consent':consent?'Yes':'No'}}],typecast:true})});
     if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Failed');}
@@ -278,6 +330,22 @@ async function submitFeedback(){
   vid.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.40;';
   vid.addEventListener('canplay',function(){bgStack.querySelector('.bg-img').style.display='none';bgStack.appendChild(vid);},{once:true});
   vid.load();
+})();
+</script>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+  <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+<script>
+// Theme
+(function(){
+  var btn=document.getElementById('themeToggle');
+  if(localStorage.getItem('ayr-theme')==='light')document.documentElement.classList.add('light-mode');
+  if(btn)btn.addEventListener('click',function(){
+    document.documentElement.classList.toggle('light-mode');
+    localStorage.setItem('ayr-theme',document.documentElement.classList.contains('light-mode')?'light':'dark');
+  });
 })();
 </script>
 </body>
