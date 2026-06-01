@@ -104,12 +104,22 @@ html.light-mode .theme-toggle .icon-sun{display:block;}
 
 @media(max-width:640px){.portal-grid{grid-template-columns:1fr;}.stat-inner{gap:24px;}}
 
-/* FEEDBACK DROPDOWN */
+/* FEEDBACK DROPDOWN - JS controlled with delay */
 .dropdown-trigger{position:relative;cursor:pointer;}
-.dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(3,7,18,0.95);border:1px solid rgba(0,74,173,.40);border-radius:10px;padding:6px 0;min-width:160px;z-index:100;backdrop-filter:blur(16px);}
-.dropdown-trigger:hover .dropdown-menu{display:block;}
+.dropdown-menu{
+  visibility:hidden;opacity:0;pointer-events:none;
+  position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);
+  background:rgba(3,7,18,0.97);border:1px solid rgba(0,74,173,.45);
+  border-radius:10px;padding:6px 0;min-width:164px;z-index:300;
+  backdrop-filter:blur(18px);
+  transition:opacity .18s ease,visibility .18s ease;
+}
+.dropdown-menu::before{
+  content:'';position:absolute;top:-10px;left:0;right:0;height:10px;
+}
+.dropdown-menu.dd-open{visibility:visible;opacity:1;pointer-events:auto;}
 .dropdown-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
-.dropdown-menu a:hover{color:#fff;background:rgba(0,74,173,.15);}
+.dropdown-menu a:hover{color:#fff;background:rgba(0,74,173,.18);}
 </style>
 </head>
 <body>
@@ -283,6 +293,23 @@ drawerOverlay.addEventListener('click',closeDrawer);
   vid.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.35;';
   vid.addEventListener('canplay',function(){bgStack.querySelector('.bg-img').style.display='none';bgStack.appendChild(vid);},{once:true});
   vid.load();
+})();
+</script>
+
+<script>
+(function(){
+  var HIDE_DELAY = 3000; // 3 seconds
+  document.querySelectorAll('.dropdown-trigger').forEach(function(trigger){
+    var menu = trigger.querySelector('.dropdown-menu,.dd-menu');
+    if(!menu) return;
+    var hideTimer = null;
+    function showMenu(){ clearTimeout(hideTimer); menu.classList.add('dd-open'); }
+    function scheduleHide(){ hideTimer = setTimeout(function(){ menu.classList.remove('dd-open'); }, HIDE_DELAY); }
+    trigger.addEventListener('mouseenter', showMenu);
+    trigger.addEventListener('mouseleave', scheduleHide);
+    menu.addEventListener('mouseenter', showMenu);
+    menu.addEventListener('mouseleave', scheduleHide);
+  });
 })();
 </script>
 </body>

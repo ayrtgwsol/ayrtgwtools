@@ -137,15 +137,61 @@ html.light-mode .dnav-link:hover{color:#000000;}
 .hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
 /* ─────────────────────────────────────────── */
 
-/* FEEDBACK DROPDOWN */
+/* FEEDBACK DROPDOWN - JS controlled with delay */
 .dropdown-trigger{position:relative;cursor:pointer;display:flex;align-items:center;}
-.dd-menu{display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:rgba(3,7,18,0.96);border:1px solid rgba(0,74,173,.42);border-radius:10px;padding:6px 0;min-width:168px;z-index:200;backdrop-filter:blur(18px);}
-.dropdown-trigger:hover .dd-menu{display:block;}
+.dd-menu{
+  visibility:hidden;opacity:0;pointer-events:none;
+  position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);
+  background:rgba(3,7,18,0.97);border:1px solid rgba(0,74,173,.45);
+  border-radius:10px;padding:6px 0;min-width:168px;z-index:300;
+  backdrop-filter:blur(18px);
+  transition:opacity .18s ease,visibility .18s ease;
+}
+.dd-menu::before{
+  content:'';position:absolute;top:-10px;left:0;right:0;height:10px;
+}
+.dd-menu.dd-open{visibility:visible;opacity:1;pointer-events:auto;}
 .dd-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
 .dd-menu a:hover,.dd-menu a.active{color:#fff;background:rgba(0,74,173,.14);}
+
+/* ── AIRTABLE PAT MODAL ── */
+.pat-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.pat-overlay.hidden{display:none;}
+.pat-box{background:#0a0f1e;border:1px solid rgba(0,74,173,.55);border-radius:16px;padding:32px 28px;max-width:420px;width:calc(100% - 40px);box-shadow:0 24px 64px rgba(0,0,0,.6);}
+.pat-box h3{font-size:1.05rem;font-weight:800;color:#f3f4f6;margin-bottom:6px;}
+.pat-box p{font-size:.78rem;color:#6b7280;line-height:1.6;margin-bottom:18px;}
+.pat-box a{color:#3b82f6;text-decoration:none;}
+.pat-box a:hover{text-decoration:underline;}
+.pat-input{width:100%;background:rgba(17,24,39,.80);border:1px solid rgba(55,65,81,.80);border-radius:8px;color:#f3f4f6;font-size:.85rem;padding:10px 13px;outline:none;font-family:monospace;margin-bottom:14px;box-sizing:border-box;}
+.pat-input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15);}
+.pat-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:8px;background:#004aad;border:1px solid rgba(0,74,173,.60);color:#fff;font-size:.82rem;font-weight:700;cursor:pointer;transition:background .2s;}
+.pat-btn:hover{background:#0053c8;}
+.pat-btn-skip{background:transparent;border-color:rgba(55,65,81,.60);color:#6b7280;margin-left:10px;}
+.pat-btn-skip:hover{color:#f3f4f6;border-color:#6b7280;}
+/* Config gear button */
+.pat-config-btn{position:fixed;bottom:84px;right:26px;z-index:400;width:44px;height:44px;border-radius:50%;background:rgba(0,74,173,.85);border:1px solid rgba(0,74,173,.50);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,74,173,.35);transition:all .25s;backdrop-filter:blur(10px);color:#fff;font-size:1.1rem;}
+.pat-config-btn:hover{background:#004aad;transform:scale(1.08);}
+
 </style>
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
+
+<!-- AIRTABLE PAT CONFIGURATION MODAL -->
+<div class="pat-overlay hidden" id="patOverlay">
+  <div class="pat-box">
+    <h3>🔑 Airtable Connection</h3>
+    <p>Enter your Airtable Personal Access Token (PAT) to enable form submissions.<br>
+    <a href="https://airtable.com/create/tokens" target="_blank" rel="noopener">Get your PAT →</a><br>
+    <span style="color:#4b5563;font-size:.72rem;">Required scope: <code style="color:#60a5fa;">data.records:write</code> on base <code style="color:#60a5fa;">appdtWUAAIOXKZV6F</code></span></p>
+    <input class="pat-input" id="patInput" type="password" placeholder="patXXXXXXXXXXXXXX.XXXXXXXX…" autocomplete="off" spellcheck="false">
+    <div>
+      <button class="pat-btn" onclick="savePAT()">Save &amp; Connect</button>
+      <button class="pat-btn pat-btn-skip" onclick="closePATModal()">Skip for now</button>
+    </div>
+  </div>
+</div>
+<button class="pat-config-btn" id="patConfigBtn" onclick="openPATModal()" title="Configure Airtable PAT">🔑</button>
+
 <!-- BACKGROUND STACK -->
 <div class="bg-stack" id="bgStack">
   <div class="bg-img"></div>
@@ -262,8 +308,9 @@ html.light-mode .dnav-link:hover{color:#000000;}
 <script>
 
 function checkATKey(key){
-  if(!key||key.includes('YOUR_AIRTABLE_PAT_HERE')){
-    showToast('⚠ Airtable PAT not configured. Open the file and set AT_KEY to your Personal Access Token.','error');
+  var pat=window.getATPAT?window.getATPAT():key;
+  if(!pat||pat.includes('YOUR_AIRTABLE_PAT_HERE')){
+    window.openPATModal&&window.openPATModal();
     return false;
   }
   return true;
@@ -281,11 +328,11 @@ async function submitAgent(){
   const btn=document.getElementById('submitBtn');
   for(const el of document.querySelectorAll('#formContent [required]')){if(el.tagName==='SELECT'&&!el.value){el.focus();showToast('Please complete all required fields.','error');return;}if(el.tagName!=='SELECT'&&!el.value.trim()&&el.value!=='0'){el.focus();showToast('Please complete all required fields.','error');return;}}
   btn.disabled=true;btn.textContent='Submitting…';
-  if(!checkATKey(AT_KEY)){btn.disabled=false;btn.textContent=btn.textContent.replace('Submitting…','Submit');return;}
+  if(!window.getATPAT()){window.openPATModal();btn.disabled=false;btn.textContent='Submit';return;}
   const fields={'Full_Name':document.getElementById('full_name').value,'WFG_Email':document.getElementById('wfg_email').value,'City_Region':document.getElementById('city_region').value,'Position':document.getElementById('position').value,'Weekly_Hours':parseInt(document.getElementById('weekly_hours').value)||0,'Monthly_Clients':parseInt(document.getElementById('monthly_clients').value)||0};
   Object.keys(fields).forEach(k=>{if(fields[k]==='')delete fields[k];});
   try{
-    const res=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,{method:'POST',headers:{'Authorization':`Bearer ${AT_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({records:[{fields}],typecast:true})});
+    const res=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,{method:'POST',headers:{'Authorization':`Bearer ${window.getATPAT()}`,'Content-Type':'application/json'},body:JSON.stringify({records:[{fields}],typecast:true})});
     if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Failed');}
     document.getElementById('formContent').style.display='none';
     document.getElementById('successState').classList.remove('hidden');
@@ -333,5 +380,59 @@ async function submitAgent(){
   });
 })();
 </script>
+
+<script>
+(function(){
+  var HIDE_DELAY = 3000; // 3 seconds
+  document.querySelectorAll('.dropdown-trigger').forEach(function(trigger){
+    var menu = trigger.querySelector('.dropdown-menu,.dd-menu');
+    if(!menu) return;
+    var hideTimer = null;
+    function showMenu(){ clearTimeout(hideTimer); menu.classList.add('dd-open'); }
+    function scheduleHide(){ hideTimer = setTimeout(function(){ menu.classList.remove('dd-open'); }, HIDE_DELAY); }
+    trigger.addEventListener('mouseenter', showMenu);
+    trigger.addEventListener('mouseleave', scheduleHide);
+    menu.addEventListener('mouseenter', showMenu);
+    menu.addEventListener('mouseleave', scheduleHide);
+  });
+})();
+</script>
+
+<script>
+/* ── AIRTABLE PAT RUNTIME CONFIG ── */
+(function(){
+  var STORAGE_KEY = 'ayr_at_pat';
+  window.getATPAT = function(){ return sessionStorage.getItem(STORAGE_KEY) || ''; };
+  window.openPATModal = function(){
+    var overlay = document.getElementById('patOverlay');
+    var input = document.getElementById('patInput');
+    if(overlay) overlay.classList.remove('hidden');
+    if(input){ input.value = window.getATPAT(); setTimeout(function(){ input.focus(); }, 100); }
+  };
+  window.closePATModal = function(){
+    var overlay = document.getElementById('patOverlay');
+    if(overlay) overlay.classList.add('hidden');
+  };
+  window.savePAT = function(){
+    var input = document.getElementById('patInput');
+    var val = input ? input.value.trim() : '';
+    if(!val){ input.style.borderColor='#ef4444'; return; }
+    sessionStorage.setItem(STORAGE_KEY, val);
+    window.closePATModal();
+    if(typeof showToast === 'function') showToast('Airtable PAT saved ✓', 'success');
+  };
+  // Allow Enter key in PAT input
+  document.addEventListener('DOMContentLoaded', function(){
+    var inp = document.getElementById('patInput');
+    if(inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') window.savePAT(); });
+    // Auto-open if no PAT set
+    if(!window.getATPAT()) setTimeout(window.openPATModal, 600);
+    // Show/hide config button based on PAT status
+    var btn = document.getElementById('patConfigBtn');
+    if(btn && window.getATPAT()) btn.style.opacity = '0.55';
+  });
+})();
+</script>
+
 </body>
 </html>
