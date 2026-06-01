@@ -135,6 +135,13 @@ html.light-mode .dnav-link:hover{color:#000000;}
 .hamburger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
 .hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
 /* ─────────────────────────────────────────── */
+
+/* FEEDBACK DROPDOWN */
+.dropdown-trigger{position:relative;cursor:pointer;display:flex;align-items:center;}
+.dd-menu{display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:rgba(3,7,18,0.96);border:1px solid rgba(0,74,173,.42);border-radius:10px;padding:6px 0;min-width:168px;z-index:200;backdrop-filter:blur(18px);}
+.dropdown-trigger:hover .dd-menu{display:block;}
+.dd-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
+.dd-menu a:hover,.dd-menu a.active{color:#fff;background:rgba(0,74,173,.14);}
 </style>
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
@@ -157,8 +164,12 @@ html.light-mode .dnav-link:hover{color:#000000;}
       <li><a href="index.html" class="dnav-link">Home</a></li>
       <li><a href="clients.html" class="dnav-link">Client</a></li>
       <li><a href="partners.html" class="dnav-link active" aria-current="page">Partner</a></li>
-      <li><a href="session-feedback.html" class="dnav-link">Session Feedback</a></li>
-      <li><a href="service-feedback.html" class="dnav-link">Service Feedback</a></li>
+      <li class="dropdown-trigger"><a class="dnav-link" href="session-feedback.html">Feedback ▾</a>
+        <div class="dd-menu">
+          <a href="session-feedback.html" class="dnav-link">Session Feedback</a>
+          <a href="service-feedback.html" class="dnav-link">Service Feedback</a>
+        </div>
+      </li>
       <li><a href="inquiry.html" class="dnav-link">Inquiry</a></li>
       <li><a href="agents.html" class="dnav-link">Agent</a></li>
       </ul>
@@ -205,11 +216,11 @@ html.light-mode .dnav-link:hover{color:#000000;}
       </div>
       <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
         <div class="fg"><label>Business Email <span class="req">*</span></label><input type="email" id="business_email" placeholder="contact@business.com" required></div>
-        <div class="fg"><label>Personal / Billing Email</label><input type="email" id="email" placeholder="personal@email.com"></div>
+        <div class="fg"><label>Personal / Billing Email <span class="req">*</span></label><input type="email" id="email" placeholder="personal@email.com" required></div>
       </div>
       <div class="grid grid-cols-2 gap-4 field-grid">
-        <div class="fg"><label>Region of Operation</label><input type="text" id="region_operation" placeholder="e.g. Ontario, GTA, Canada-wide"></div>
-        <div class="fg"><label>Social Handle or Website URL</label><input type="url" id="social_handle_url" placeholder="https://instagram.com/handle"></div>
+        <div class="fg"><label>Region of Operation <span class="req">*</span></label><input type="text" id="region_operation" placeholder="e.g. Ontario, GTA, Canada-wide" required></div>
+        <div class="fg"><label>Social Handle or Website URL <span class="req">*</span></label><input type="url" id="social_handle_url" placeholder="https://instagram.com/handle" required></div>
       </div>
     </div>
 
@@ -233,10 +244,10 @@ html.light-mode .dnav-link:hover{color:#000000;}
     <div class="panel mb-5">
       <div class="panel-title">Agreement Details</div>
       <div class="grid grid-cols-2 gap-4 field-grid">
-        <div class="fg"><label>Preferred Discussion Method</label>
-          <select id="discussion_method"><option value="">Select…</option><option>Zoom Call</option><option>Phone Call</option><option>In-Person Meeting</option><option>Email Exchange</option><option>WhatsApp</option></select></div>
-        <div class="fg"><label>Invoice / Payment Method</label>
-          <select id="invoice_payment_method"><option value="">Select…</option><option>E-Transfer</option><option>PayPal</option><option>Stripe / Credit Card</option><option>Cheque</option><option>Cryptocurrency</option><option>Wire Transfer</option></select></div>
+        <div class="fg"><label>Preferred Discussion Method <span class="req">*</span></label>
+          <select id="discussion_method" required><option value="">Select…</option><option>Zoom Call</option><option>Phone Call</option><option>In-Person Meeting</option><option>Email Exchange</option><option>WhatsApp</option></select></div>
+        <div class="fg"><label>Invoice / Payment Method <span class="req">*</span></label>
+          <select id="invoice_payment_method" required><option value="">Select…</option><option>E-Transfer</option><option>PayPal</option><option>Stripe / Credit Card</option><option>Cheque</option><option>Cryptocurrency</option><option>Wire Transfer</option></select></div>
       </div>
     </div>
 
@@ -262,9 +273,6 @@ html.light-mode .dnav-link:hover{color:#000000;}
 
 <script>
 
-  return true;
-}
-
 function checkATKey(key){
   if(!key||key.includes('YOUR_AIRTABLE_PAT_HERE')){
     showToast('⚠ Airtable PAT not configured. Open the file and set AT_KEY to your Personal Access Token.','error');
@@ -272,14 +280,21 @@ function checkATKey(key){
   }
   return true;
 }
+
+/* ══ AIRTABLE CONFIGURATION ══════════════════════════════════════════
+   To connect this form to Airtable, replace 'YOUR_AIRTABLE_PAT_HERE'
+   below with your Personal Access Token (PAT).
+   Get yours at: https://airtable.com/create/tokens
+   Required scopes: data.records:write on base appdtWUAAIOXKZV6F
+   ═══════════════════════════════════════════════════════════════════ */
 const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tblccEqo6D46RRmeK',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
 const selectedAds=new Set();
 function toggleAd(el,val){el.classList.toggle('selected');selectedAds.has(val)?selectedAds.delete(val):selectedAds.add(val);}
 function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
 async function submitPartner(){
-  if(typeof AT_KEY!=="undefined"&&!checkATKey(AT_KEY)){if(typeof btn!=="undefined"){btn.disabled=false;}return;}
   const btn=document.getElementById('submitBtn');
-  for(const id of['contact_name','business_name','business_email']){const el=document.getElementById(id);if(!el.value.trim()){el.focus();showToast('Please fill in all required fields.','error');return;}}
+  for(const el of document.querySelectorAll('#formContent [required]')){if(el.tagName==='SELECT'&&!el.value){el.focus();showToast('Please complete all required fields.','error');return;}if(el.tagName!=='SELECT'&&!el.value.trim()){el.focus();showToast('Please complete all required fields.','error');return;}}
+  if(selectedAds.size===0){showToast('Please select at least one Ad Placement.','error');return;}
   btn.disabled=true;btn.textContent='Submitting…';
   if(!checkATKey(AT_KEY)){btn.disabled=false;btn.textContent=btn.textContent.replace('Submitting…','Submit');return;}
   const fields={'Contact_Name':document.getElementById('contact_name').value,'Business_Name':document.getElementById('business_name').value,'Business_Email':document.getElementById('business_email').value,'Email':document.getElementById('email').value,'Region_Operation':document.getElementById('region_operation').value,'Social_Handle_URL':document.getElementById('social_handle_url').value,'Ad_Placement':Array.from(selectedAds).join(', '),'Discussion_Method':document.getElementById('discussion_method').value,'Invoice_Payment_Method':document.getElementById('invoice_payment_method').value};

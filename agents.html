@@ -136,6 +136,13 @@ html.light-mode .dnav-link:hover{color:#000000;}
 .hamburger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
 .hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
 /* ─────────────────────────────────────────── */
+
+/* FEEDBACK DROPDOWN */
+.dropdown-trigger{position:relative;cursor:pointer;display:flex;align-items:center;}
+.dd-menu{display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:rgba(3,7,18,0.96);border:1px solid rgba(0,74,173,.42);border-radius:10px;padding:6px 0;min-width:168px;z-index:200;backdrop-filter:blur(18px);}
+.dropdown-trigger:hover .dd-menu{display:block;}
+.dd-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
+.dd-menu a:hover,.dd-menu a.active{color:#fff;background:rgba(0,74,173,.14);}
 </style>
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
@@ -158,8 +165,12 @@ html.light-mode .dnav-link:hover{color:#000000;}
       <li><a href="index.html" class="dnav-link">Home</a></li>
       <li><a href="clients.html" class="dnav-link">Client</a></li>
       <li><a href="partners.html" class="dnav-link">Partner</a></li>
-      <li><a href="session-feedback.html" class="dnav-link">Session Feedback</a></li>
-      <li><a href="service-feedback.html" class="dnav-link">Service Feedback</a></li>
+      <li class="dropdown-trigger"><a class="dnav-link" href="session-feedback.html">Feedback ▾</a>
+        <div class="dd-menu">
+          <a href="session-feedback.html" class="dnav-link">Session Feedback</a>
+          <a href="service-feedback.html" class="dnav-link">Service Feedback</a>
+        </div>
+      </li>
       <li><a href="inquiry.html" class="dnav-link">Inquiry</a></li>
       <li><a href="agents.html" class="dnav-link active" aria-current="page">Agent</a></li>
       </ul>
@@ -204,9 +215,9 @@ html.light-mode .dnav-link:hover{color:#000000;}
         <div class="fg"><label>Agent Email <span class="req">*</span></label><input type="email" id="wfg_email" placeholder="name@ayrtgw.com" required></div>
       </div>
       <div class="grid grid-cols-2 gap-4 field-grid">
-        <div class="fg"><label>City / Region</label><input type="text" id="city_region" placeholder="e.g. Toronto, ON"></div>
-        <div class="fg"><label>Position / Title</label>
-          <select id="position"><option value="">Select position…</option><option>Associate</option><option>Marketing Director</option><option>Senior Marketing Director</option><option>Executive Marketing Director</option><option>Senior Vice President</option><option>CEO</option></select></div>
+        <div class="fg"><label>City / Region <span class="req">*</span></label><input type="text" id="city_region" placeholder="e.g. Toronto, ON" required></div>
+        <div class="fg"><label>Position / Title <span class="req">*</span></label>
+          <select id="position" required><option value="">Select position…</option><option>Associate</option><option>Marketing Director</option><option>Senior Marketing Director</option><option>Executive Marketing Director</option><option>Senior Vice President</option><option>CEO</option></select></div>
       </div>
     </div>
 
@@ -215,16 +226,16 @@ html.light-mode .dnav-link:hover{color:#000000;}
       <p class="text-gray-500 text-xs mb-5 leading-relaxed">Enter your current weekly commitments and client activity numbers.</p>
       <div class="grid grid-cols-3 gap-4 metric-grid">
         <div class="metric-card">
-          <div class="metric-lbl">Weekly Hours</div>
-          <input type="number" class="metric-input" id="weekly_hours" min="0" max="168" placeholder="0">
+          <div class="metric-lbl">Weekly Hours <span class="req">*</span></div>
+          <input type="number" class="metric-input" id="weekly_hours" min="0" max="168" placeholder="0" required>
         </div>
         <div class="metric-card">
-          <div class="metric-lbl">Monthly Clients</div>
-          <input type="number" class="metric-input" id="monthly_clients" min="0" placeholder="0">
+          <div class="metric-lbl">Monthly Clients <span class="req">*</span></div>
+          <input type="number" class="metric-input" id="monthly_clients" min="0" placeholder="0" required>
         </div>
         <div class="metric-card">
-          <div class="metric-lbl">Referrals MTD</div>
-          <input type="number" class="metric-input" id="referrals_mtd" min="0" placeholder="0">
+          <div class="metric-lbl">Referrals MTD <span class="req">*</span></div>
+          <input type="number" class="metric-input" id="referrals_mtd" min="0" placeholder="0" required>
         </div>
       </div>
     </div>
@@ -250,9 +261,6 @@ html.light-mode .dnav-link:hover{color:#000000;}
 
 <script>
 
-  return true;
-}
-
 function checkATKey(key){
   if(!key||key.includes('YOUR_AIRTABLE_PAT_HERE')){
     showToast('⚠ Airtable PAT not configured. Open the file and set AT_KEY to your Personal Access Token.','error');
@@ -260,16 +268,22 @@ function checkATKey(key){
   }
   return true;
 }
+
+/* ══ AIRTABLE CONFIGURATION ══════════════════════════════════════════
+   To connect this form to Airtable, replace 'YOUR_AIRTABLE_PAT_HERE'
+   below with your Personal Access Token (PAT).
+   Get yours at: https://airtable.com/create/tokens
+   Required scopes: data.records:write on base appdtWUAAIOXKZV6F
+   ═══════════════════════════════════════════════════════════════════ */
 const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tblkqdfQ3PbvtR797',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
 function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
 async function submitAgent(){
-  if(typeof AT_KEY!=="undefined"&&!checkATKey(AT_KEY)){if(typeof btn!=="undefined"){btn.disabled=false;}return;}
   const btn=document.getElementById('submitBtn');
-  for(const id of['full_name','wfg_email']){const el=document.getElementById(id);if(!el.value.trim()){el.focus();showToast('Required fields missing.','error');return;}}
+  for(const el of document.querySelectorAll('#formContent [required]')){if(el.tagName==='SELECT'&&!el.value){el.focus();showToast('Please complete all required fields.','error');return;}if(el.tagName!=='SELECT'&&!el.value.trim()&&el.value!=='0'){el.focus();showToast('Please complete all required fields.','error');return;}}
   btn.disabled=true;btn.textContent='Submitting…';
   if(!checkATKey(AT_KEY)){btn.disabled=false;btn.textContent=btn.textContent.replace('Submitting…','Submit');return;}
   const fields={'Full_Name':document.getElementById('full_name').value,'WFG_Email':document.getElementById('wfg_email').value,'City_Region':document.getElementById('city_region').value,'Position':document.getElementById('position').value,'Weekly_Hours':parseInt(document.getElementById('weekly_hours').value)||0,'Monthly_Clients':parseInt(document.getElementById('monthly_clients').value)||0};
-  Object.keys(fields).forEach(k=>{if(fields[k]===''||fields[k]===0)delete fields[k];});
+  Object.keys(fields).forEach(k=>{if(fields[k]==='')delete fields[k];});
   try{
     const res=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,{method:'POST',headers:{'Authorization':`Bearer ${AT_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({records:[{fields}],typecast:true})});
     if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Failed');}

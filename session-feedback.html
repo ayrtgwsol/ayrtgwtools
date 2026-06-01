@@ -156,6 +156,13 @@ html.light-mode .dnav-link:hover{color:#000000;}
 .hamburger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
 .hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
 /* ─────────────────────────────────────────── */
+
+/* FEEDBACK DROPDOWN */
+.dropdown-trigger{position:relative;cursor:pointer;display:flex;align-items:center;}
+.dd-menu{display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:rgba(3,7,18,0.96);border:1px solid rgba(0,74,173,.42);border-radius:10px;padding:6px 0;min-width:168px;z-index:200;backdrop-filter:blur(18px);}
+.dropdown-trigger:hover .dd-menu{display:block;}
+.dd-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
+.dd-menu a:hover,.dd-menu a.active{color:#fff;background:rgba(0,74,173,.14);}
 </style>
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
@@ -178,8 +185,12 @@ html.light-mode .dnav-link:hover{color:#000000;}
       <li><a href="index.html" class="dnav-link">Home</a></li>
       <li><a href="clients.html" class="dnav-link">Client</a></li>
       <li><a href="partners.html" class="dnav-link">Partner</a></li>
-      <li><a href="session-feedback.html" class="dnav-link active" aria-current="page">Session Feedback</a></li>
-      <li><a href="service-feedback.html" class="dnav-link">Service Feedback</a></li>
+      <li class="dropdown-trigger"><a class="dnav-link active" href="session-feedback.html">Feedback ▾</a>
+        <div class="dd-menu">
+          <a href="session-feedback.html" class="dnav-link active">Session Feedback</a>
+          <a href="service-feedback.html" class="dnav-link">Service Feedback</a>
+        </div>
+      </li>
       <li><a href="inquiry.html" class="dnav-link">Inquiry</a></li>
       <li><a href="agents.html" class="dnav-link">Agent</a></li>
       </ul>
@@ -223,7 +234,7 @@ html.light-mode .dnav-link:hover{color:#000000;}
         <div class="panel-title">Client Information</div>
         <div class="fg">
           <label>Client First Name</label>
-          <input type="text" id="author_name" placeholder="e.g. Sarah" oninput="updatePreview()">
+          <input type="text" id="author_name" placeholder="e.g. Sarah" oninput="updatePreview()" required>
         </div>
       </div>
 
@@ -231,10 +242,10 @@ html.light-mode .dnav-link:hover{color:#000000;}
         <div class="panel-title">Session Review</div>
         <div class="fg">
           <label>Feedback / Testimonial Text</label>
-          <textarea id="feedback_text" rows="5" placeholder="The session gave me such clarity on my financial goals. I finally feel prepared for the future…" oninput="updatePreview()"></textarea>
+          <textarea id="feedback_text" required rows="5" placeholder="The session gave me such clarity on my financial goals. I finally feel prepared for the future…" oninput="updatePreview()"></textarea>
         </div>
         <div class="cb-row">
-          <input type="checkbox" id="social_consent">
+          <input type="checkbox" id="social_consent" required>
           <label for="social_consent">Client has given verbal or written consent for this testimonial to be shared on AYR TGW social media channels.</label>
         </div>
       </div>
@@ -288,6 +299,13 @@ function checkATKey(key){
   }
   return true;
 }
+
+/* ══ AIRTABLE CONFIGURATION ══════════════════════════════════════════
+   To connect this form to Airtable, replace 'YOUR_AIRTABLE_PAT_HERE'
+   below with your Personal Access Token (PAT).
+   Get yours at: https://airtable.com/create/tokens
+   Required scopes: data.records:write on base appdtWUAAIOXKZV6F
+   ═══════════════════════════════════════════════════════════════════ */
 const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tblV15r8cTA9HRjEv',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
 
 function updatePreview(){
@@ -323,7 +341,7 @@ async function submitFeedback(){
   const name=document.getElementById('author_name').value.trim();
   const text=document.getElementById('feedback_text').value.trim();
   const consent=document.getElementById('social_consent').checked;
-  if(!name||!text){showToast('Please enter a name and feedback text.','error');return;}
+  if(!name){showToast('Please enter your name.','error');return;}if(!text){showToast('Please enter your feedback text.','error');return;}if(!consent){showToast('Please accept the social consent checkbox.','error');return;}
   const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Saving…';
   if(!checkATKey(AT_KEY)){btn.disabled=false;btn.textContent='Save to Airtable';return;}
   try{

@@ -103,6 +103,13 @@ html.light-mode .theme-toggle .icon-moon{display:none;}
 html.light-mode .theme-toggle .icon-sun{display:block;}
 
 @media(max-width:640px){.portal-grid{grid-template-columns:1fr;}.stat-inner{gap:24px;}}
+
+/* FEEDBACK DROPDOWN */
+.dropdown-trigger{position:relative;cursor:pointer;}
+.dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(3,7,18,0.95);border:1px solid rgba(0,74,173,.40);border-radius:10px;padding:6px 0;min-width:160px;z-index:100;backdrop-filter:blur(16px);}
+.dropdown-trigger:hover .dropdown-menu{display:block;}
+.dropdown-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
+.dropdown-menu a:hover{color:#fff;background:rgba(0,74,173,.15);}
 </style>
 </head>
 <body>
@@ -124,8 +131,13 @@ html.light-mode .theme-toggle .icon-sun{display:block;}
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="clients.html">Client</a></li>
         <li><a href="partners.html">Partner</a></li>
-        <li><a href="session-feedback.html">Session Feedback</a></li>
-        <li><a href="service-feedback.html">Service Feedback</a></li>
+        <li><a href="session-feedback.html" class="dropdown-trigger">
+          Feedback ▾
+          <div class="dropdown-menu">
+            <a href="session-feedback.html">Session Feedback</a>
+            <a href="service-feedback.html">Service Feedback</a>
+          </div>
+        </a></li>
         <li><a href="inquiry.html">Inquiry</a></li>
         <li><a href="agents.html">Agent</a></li>
       </ul>

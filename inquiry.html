@@ -141,6 +141,13 @@ html.light-mode .dnav-link:hover{color:#000000;}
 .hamburger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
 .hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
 /* ─────────────────────────────────────────── */
+
+/* FEEDBACK DROPDOWN */
+.dropdown-trigger{position:relative;cursor:pointer;display:flex;align-items:center;}
+.dd-menu{display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:rgba(3,7,18,0.96);border:1px solid rgba(0,74,173,.42);border-radius:10px;padding:6px 0;min-width:168px;z-index:200;backdrop-filter:blur(18px);}
+.dropdown-trigger:hover .dd-menu{display:block;}
+.dd-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
+.dd-menu a:hover,.dd-menu a.active{color:#fff;background:rgba(0,74,173,.14);}
 </style>
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
@@ -163,8 +170,12 @@ html.light-mode .dnav-link:hover{color:#000000;}
       <li><a href="index.html" class="dnav-link">Home</a></li>
       <li><a href="clients.html" class="dnav-link">Client</a></li>
       <li><a href="partners.html" class="dnav-link">Partner</a></li>
-      <li><a href="session-feedback.html" class="dnav-link">Session Feedback</a></li>
-      <li><a href="service-feedback.html" class="dnav-link">Service Feedback</a></li>
+      <li class="dropdown-trigger"><a class="dnav-link" href="session-feedback.html">Feedback ▾</a>
+        <div class="dd-menu">
+          <a href="session-feedback.html" class="dnav-link">Session Feedback</a>
+          <a href="service-feedback.html" class="dnav-link">Service Feedback</a>
+        </div>
+      </li>
       <li><a href="inquiry.html" class="dnav-link active" aria-current="page">Inquiry</a></li>
       <li><a href="agents.html" class="dnav-link">Agent</a></li>
       </ul>
@@ -209,22 +220,22 @@ html.light-mode .dnav-link:hover{color:#000000;}
         <div class="fg"><label>Email <span class="req">*</span></label><input type="email" id="email" placeholder="your@email.com" required></div>
       </div>
       <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
-        <div class="fg"><label>Contact Method</label>
-          <select id="contact_method"><option value="">Select…</option><option>Email</option><option>Phone Call</option><option>Text Message</option><option>WhatsApp</option></select></div>
-        <div class="fg"><label>Contact Detail</label><input type="text" id="contact_detail" placeholder="Phone or preferred handle"></div>
+        <div class="fg"><label>Contact Method <span class="req">*</span></label>
+          <select id="contact_method" required><option value="">Select…</option><option>Email</option><option>Phone Call</option><option>Text Message</option><option>WhatsApp</option></select></div>
+        <div class="fg"><label>Contact Detail <span class="req">*</span></label><input type="text" id="contact_detail" placeholder="Phone or preferred handle" required></div>
       </div>
       <div class="grid grid-cols-2 gap-4 field-grid">
-        <div class="fg"><label>Inquiry Type</label>
-          <select id="inquiry_type"><option value="">Select type…</option><option>General Question</option><option>Client Support</option><option>New Lead Referral</option><option>Agent Support</option><option>Partner Query</option><option>Complaint</option><option>Billing</option></select></div>
-        <div class="fg"><label>Assign to Agent Email</label><input type="email" id="agent_email" placeholder="agent@wfg.com"></div>
+        <div class="fg"><label>Inquiry Type <span class="req">*</span></label>
+          <select id="inquiry_type" required><option value="">Select type…</option><option>General Question</option><option>Client Support</option><option>New Lead Referral</option><option>Agent Support</option><option>Partner Query</option><option>Complaint</option><option>Billing</option></select></div>
+        <div class="fg"><label>Assign to Agent Email <span class="req">*</span></label><input type="email" id="agent_email" placeholder="agent@wfg.com" required></div>
       </div>
     </div>
 
     <div class="panel mb-5">
       <div class="panel-title">Inquiry Details</div>
       <div class="fg mb-4"><label>Inquiry Subject / Title <span class="req">*</span></label><input type="text" id="inquiry_title" placeholder="Brief one-line summary of your inquiry" required></div>
-      <div class="fg mb-4"><label>What Is This Regarding?</label><input type="text" id="inquiry_regarding" placeholder="e.g. Life insurance quote, claim status, referral follow-up"></div>
-      <div class="fg"><label>Detailed Inquiry</label><textarea id="detailed_inquiry" placeholder="Provide as much detail as possible. Include dates, amounts, policy numbers if applicable…"></textarea></div>
+      <div class="fg mb-4"><label>What Is This Regarding? <span class="req">*</span></label><input type="text" id="inquiry_regarding" placeholder="e.g. Life insurance quote, claim status, referral follow-up" required></div>
+      <div class="fg"><label>Detailed Inquiry <span class="req">*</span></label><textarea id="detailed_inquiry" required placeholder="Provide as much detail as possible. Include dates, amounts, policy numbers if applicable…"></textarea></div>
     </div>
 
     <div class="panel mb-5">
@@ -263,9 +274,6 @@ html.light-mode .dnav-link:hover{color:#000000;}
 
 <script>
 
-  return true;
-}
-
 function checkATKey(key){
   if(!key||key.includes('YOUR_AIRTABLE_PAT_HERE')){
     showToast('⚠ Airtable PAT not configured. Open the file and set AT_KEY to your Personal Access Token.','error');
@@ -273,13 +281,19 @@ function checkATKey(key){
   }
   return true;
 }
+
+/* ══ AIRTABLE CONFIGURATION ══════════════════════════════════════════
+   To connect this form to Airtable, replace 'YOUR_AIRTABLE_PAT_HERE'
+   below with your Personal Access Token (PAT).
+   Get yours at: https://airtable.com/create/tokens
+   Required scopes: data.records:write on base appdtWUAAIOXKZV6F
+   ═══════════════════════════════════════════════════════════════════ */
 const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tbliJ1HFN1qUN6X5P',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
 function setEmergency(el,val){document.querySelectorAll('.em-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');document.getElementById('emergency_level').value=val;}
 function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
 async function submitInquiry(){
-  if(typeof AT_KEY!=="undefined"&&!checkATKey(AT_KEY)){if(typeof btn!=="undefined"){btn.disabled=false;}return;}
   const btn=document.getElementById('submitBtn');
-  for(const id of['full_name','email','inquiry_title']){const el=document.getElementById(id);if(!el.value.trim()){el.focus();showToast('Please fill required fields.','error');return;}}
+  for(const el of document.querySelectorAll('#formContent [required]')){if(el.tagName==='SELECT'&&!el.value){el.focus();showToast('Please complete all required fields.','error');return;}if(el.tagName!=='SELECT'&&!el.value.trim()){el.focus();showToast('Please complete all required fields.','error');return;}}
   if(!document.getElementById('client_consent').checked){showToast('Please accept the consent checkbox.','error');return;}
   btn.disabled=true;btn.textContent='Sending…';
   const fields={'Full_Name':document.getElementById('full_name').value,'Email':document.getElementById('email').value,'Contact_Method':document.getElementById('contact_method').value,'Contact_Detail':document.getElementById('contact_detail').value,'Inquiry_Type':document.getElementById('inquiry_type').value,'Agent_Email':document.getElementById('agent_email').value,'Inquiry_Title':document.getElementById('inquiry_title').value,'Inquiry_Regarding':document.getElementById('inquiry_regarding').value,'Detailed_Inquiry':document.getElementById('detailed_inquiry').value,'Emergency_Level':document.getElementById('emergency_level').value,'Client_Consent':true};

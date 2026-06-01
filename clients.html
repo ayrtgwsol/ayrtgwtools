@@ -150,6 +150,13 @@ html.light-mode .dnav-link:hover{color:#000000;}
 .hamburger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
 .hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
 /* ─────────────────────────────────────────── */
+
+/* FEEDBACK DROPDOWN */
+.dropdown-trigger{position:relative;cursor:pointer;display:flex;align-items:center;}
+.dd-menu{display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:rgba(3,7,18,0.96);border:1px solid rgba(0,74,173,.42);border-radius:10px;padding:6px 0;min-width:168px;z-index:200;backdrop-filter:blur(18px);}
+.dropdown-trigger:hover .dd-menu{display:block;}
+.dd-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
+.dd-menu a:hover,.dd-menu a.active{color:#fff;background:rgba(0,74,173,.14);}
 </style>
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
@@ -172,8 +179,12 @@ html.light-mode .dnav-link:hover{color:#000000;}
       <li><a href="index.html" class="dnav-link">Home</a></li>
       <li><a href="clients.html" class="dnav-link active" aria-current="page">Client</a></li>
       <li><a href="partners.html" class="dnav-link">Partner</a></li>
-      <li><a href="session-feedback.html" class="dnav-link">Session Feedback</a></li>
-      <li><a href="service-feedback.html" class="dnav-link">Service Feedback</a></li>
+      <li class="dropdown-trigger"><a class="dnav-link" href="session-feedback.html">Feedback ▾</a>
+        <div class="dd-menu">
+          <a href="session-feedback.html" class="dnav-link">Session Feedback</a>
+          <a href="service-feedback.html" class="dnav-link">Service Feedback</a>
+        </div>
+      </li>
       <li><a href="inquiry.html" class="dnav-link">Inquiry</a></li>
       <li><a href="agents.html" class="dnav-link">Agent</a></li>
       </ul>
@@ -231,13 +242,13 @@ html.light-mode .dnav-link:hover{color:#000000;}
       </div>
       <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
         <div class="fg"><label>Phone <span class="req">*</span></label><input type="tel" id="phone" placeholder="+1 416 000 0000" required></div>
-        <div class="fg"><label>Preferred Contact</label>
-          <select id="preferred_contact"><option value="">Select…</option><option>Phone</option><option>Email</option><option>Text</option></select></div>
+        <div class="fg"><label>Preferred Contact <span class="req">*</span></label>
+          <select id="preferred_contact" required><option value="">Select…</option><option>Phone</option><option>Email</option><option>Text</option></select></div>
       </div>
       <div class="grid grid-cols-2 gap-4 field-grid">
-        <div class="fg"><label>Citizenship Status</label>
-          <select id="citizens_status"><option value="">Select…</option><option>Canadian Citizen</option><option>Permanent Resident</option><option>Work Permit</option><option>Student Visa</option><option>Other</option></select></div>
-        <div class="fg"><label>Protection Partner</label><input type="text" id="protection_partner" placeholder="Partner full name"></div>
+        <div class="fg"><label>Citizenship Status <span class="req">*</span></label>
+          <select id="citizens_status" required><option value="">Select…</option><option>Canadian Citizen</option><option>Permanent Resident</option><option>Work Permit</option><option>Student Visa</option><option>Other</option></select></div>
+        <div class="fg"><label>Protection Partner <span class="req">*</span></label><input type="text" id="protection_partner" placeholder="Partner full name" required></div>
       </div>
     </div>
     <div class="flex justify-end gap-3 mt-6"><button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20" onclick="goStep(2)">Next Step →</button></div>
@@ -248,14 +259,14 @@ html.light-mode .dnav-link:hover{color:#000000;}
     <div class="panel mb-5">
       <div class="panel-title">Financial Status Overview</div>
       <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
-        <div class="fg"><label>Monthly Income</label><input type="number" id="monthly_income" placeholder="e.g. 5000" min="0"></div>
-        <div class="fg"><label>Monthly Expenses</label><input type="number" id="monthly_expenses" placeholder="e.g. 2500" min="0"></div>
+        <div class="fg"><label>Monthly Income <span class="req">*</span></label><input type="number" id="monthly_income" placeholder="e.g. 5000" min="0" required></div>
+        <div class="fg"><label>Monthly Expenses <span class="req">*</span></label><input type="number" id="monthly_expenses" placeholder="e.g. 2500" min="0" required></div>
       </div>
       <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
-        <div class="fg"><label>Property / Mortgage</label><input type="text" id="property_mortgage" placeholder="Own / Rent / Mortgage amt"></div>
-        <div class="fg"><label>Savings Provisions</label><input type="text" id="provide_savings" placeholder="RRSP, TFSA, GIC…"></div>
+        <div class="fg"><label>Property / Mortgage <span class="req">*</span></label><input type="text" id="property_mortgage" placeholder="Own / Rent / Mortgage amt" required></div>
+        <div class="fg"><label>Savings Provisions <span class="req">*</span></label><input type="text" id="provide_savings" placeholder="RRSP, TFSA, GIC…" required></div>
       </div>
-      <div class="fg"><label>Outstanding Debts</label><input type="text" id="debts" placeholder="e.g. Car loan $10k, Credit card $3k"></div>
+      <div class="fg"><label>Outstanding Debts <span class="req">*</span></label><input type="text" id="debts" placeholder="e.g. Car loan $10k, Credit card $3k" required></div>
     </div>
     <div class="flex justify-end gap-3 mt-6">
       <button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all" onclick="goStep(1)">← Back</button>
@@ -267,8 +278,8 @@ html.light-mode .dnav-link:hover{color:#000000;}
   <div class="step-page" id="step3">
     <div class="panel mb-5">
       <div class="panel-title">Financial Needs &amp; Goals</div>
-      <div class="fg mb-4"><label>Current Financial Needs</label><textarea id="financial_needs" placeholder="Describe your current financial situation and needs…"></textarea></div>
-      <div class="fg"><label>Financial Priorities</label><textarea id="financial_priorities" placeholder="Top priorities: retirement, education savings, debt freedom…"></textarea></div>
+      <div class="fg mb-4"><label>Current Financial Needs <span class="req">*</span></label><textarea id="financial_needs" placeholder="Describe your current financial situation and needs…" required></textarea></div>
+      <div class="fg"><label>Financial Priorities <span class="req">*</span></label><textarea id="financial_priorities" placeholder="Top priorities: retirement, education savings, debt freedom…" required></textarea></div>
     </div>
     <div class="flex justify-end gap-3 mt-6">
       <button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all" onclick="goStep(2)">← Back</button>
@@ -281,10 +292,10 @@ html.light-mode .dnav-link:hover{color:#000000;}
     <div class="panel mb-5">
       <div class="panel-title">Underwriter Considerations</div>
       <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
-        <div class="fg"><label>Active Finances / Current Products</label><input type="text" id="active_finances" placeholder="e.g. Life insurance with Sun Life"></div>
-        <div class="fg"><label>Requested Advisor</label><input type="text" id="requested_advisor" placeholder="Advisor name or Agent ID"></div>
+        <div class="fg"><label>Active Finances / Current Products <span class="req">*</span></label><input type="text" id="active_finances" placeholder="e.g. Life insurance with Sun Life" required></div>
+        <div class="fg"><label>Requested Advisor <span class="req">*</span></label><input type="text" id="requested_advisor" placeholder="Advisor name or Agent ID" required></div>
       </div>
-      <div class="fg"><label>Specific Details for Advisor</label><textarea id="specific_details" placeholder="Additional context or requests for your advisor…"></textarea></div>
+      <div class="fg"><label>Specific Details for Advisor <span class="req">*</span></label><textarea id="specific_details" placeholder="Additional context or requests for your advisor…" required></textarea></div>
     </div>
     <div class="flex justify-end gap-3 mt-6">
       <button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all" onclick="goStep(3)">← Back</button>
@@ -298,8 +309,8 @@ html.light-mode .dnav-link:hover{color:#000000;}
       <div class="panel-title">Book Your Consultation</div>
       <p class="text-gray-500 text-sm mb-5 leading-relaxed">Provide up to three preferred time slots. Your advisor will confirm the best availability.</p>
       <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
-        <div class="fg"><label>Preferred Date #1</label><input type="date" id="date_1"></div>
-        <div class="fg"><label>Preferred Time #1</label><input type="time" id="time_1"></div>
+        <div class="fg"><label>Preferred Date #1 <span class="req">*</span></label><input type="date" id="date_1" required></div>
+        <div class="fg"><label>Preferred Time #1 <span class="req">*</span></label><input type="time" id="time_1" required></div>
       </div>
       <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
         <div class="fg"><label>Preferred Date #2</label><input type="date" id="date_2"></div>
@@ -333,9 +344,6 @@ html.light-mode .dnav-link:hover{color:#000000;}
 
 <script>
 
-  return true;
-}
-
 function checkATKey(key){
   if(!key||key.includes('YOUR_AIRTABLE_PAT_HERE')){
     showToast('⚠ Airtable PAT not configured. Open the file and set AT_KEY to your Personal Access Token.','error');
@@ -343,13 +351,20 @@ function checkATKey(key){
   }
   return true;
 }
+
+/* ══ AIRTABLE CONFIGURATION ══════════════════════════════════════════
+   To connect this form to Airtable, replace 'YOUR_AIRTABLE_PAT_HERE'
+   below with your Personal Access Token (PAT).
+   Get yours at: https://airtable.com/create/tokens
+   Required scopes: data.records:write on base appdtWUAAIOXKZV6F
+   ═══════════════════════════════════════════════════════════════════ */
 const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tblwic381ZdIa1erm',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
 let cur=1;const total=5;
 function goStep(n){
   if(n<1||n>total)return;
   if(n>cur){
     const curr=document.getElementById('step'+cur);
-    for(const el of curr.querySelectorAll('[required]')){if(!el.value.trim()){el.focus();showToast('Please fill in all required fields.','error');return;}}
+    for(const el of curr.querySelectorAll('[required]')){if(el.tagName==='SELECT'&&!el.value){el.focus();showToast('Please complete all required fields.','error');return;}if(el.tagName!=='SELECT'&&!el.value.trim()){el.focus();showToast('Please complete all required fields.','error');return;}}
   }
   document.getElementById('step'+cur).classList.remove('active');
   cur=n;
