@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AYR TGW | Service Feedback</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{--bg:#030712;--surface:#0a0f1e;--border:rgba(59,130,246,.18);--cyan:#06b6d4;--gold:#f59e0b;--white:#f3f4f6;--muted:#6b7280;--danger:#ef4444;--success:#22c55e;--grad:linear-gradient(135deg,#1e3a8a 0%,#0e7490 100%)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(59,130,246,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
+.nav{position:sticky;top:0;z-index:100;background:rgba(3,7,18,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.12em;color:var(--cyan);text-decoration:none;border:1.5px solid var(--cyan);padding:4px 12px;transition:all .2s}
+.nav-logo:hover{background:var(--cyan);color:var(--bg)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--muted);font-size:.875rem;font-weight:500;text-decoration:none;letter-spacing:.03em;transition:color .2s;position:relative;padding-bottom:2px}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--cyan);transition:width .2s}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-links a.active{color:var(--cyan)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{display:block;width:24px;height:2px;background:var(--muted)}
+.mob-nav{position:fixed;top:0;right:0;width:260px;height:100vh;background:var(--surface);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .3s ease;z-index:200;padding:80px 28px 28px;display:flex;flex-direction:column;gap:20px}
+.mob-nav.open{transform:translateX(0)}
+.mob-nav a{color:var(--muted);font-weight:500;text-decoration:none;font-size:1rem;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
+.mob-nav a:hover,.mob-nav a.active{color:var(--cyan)}
+.mob-close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1}
+
+/* MAIN LAYOUT */
+.layout{display:grid;grid-template-columns:1fr 420px;gap:32px;max-width:1100px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1;align-items:start}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,5vw,3.5rem);letter-spacing:.06em;background:linear-gradient(90deg,var(--white) 0%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.page-sub{color:var(--muted);font-size:.9rem;margin-bottom:28px;line-height:1.6}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px}
+.card-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;color:var(--gold);margin-bottom:16px}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+label{font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+input,textarea,select{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--white);font-family:inherit;font-size:.875rem;padding:10px 14px;transition:border-color .2s,box-shadow .2s;width:100%;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,158,11,.1)}
+input::placeholder,textarea::placeholder{color:rgba(255,255,255,.22)}
+select option{background:var(--surface);color:var(--white)}
+textarea{resize:vertical;min-height:96px}
+.checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-top:4px}
+.checkbox-row input[type=checkbox]{width:17px;height:17px;flex-shrink:0;accent-color:var(--gold);margin-top:2px}
+.checkbox-row label{text-transform:none;letter-spacing:0;font-size:.85rem;color:var(--muted);line-height:1.5;font-weight:400}
+
+/* STAR RATING */
+.star-row{display:flex;gap:6px;margin-top:4px}
+.star{font-size:1.6rem;cursor:pointer;color:rgba(255,255,255,.15);transition:color .15s;user-select:none;line-height:1}
+.star.lit{color:var(--gold)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:8px;font-family:inherit;font-size:.875rem;font-weight:600;letter-spacing:.04em;cursor:pointer;transition:all .2s;border:none;width:100%;justify-content:center;margin-bottom:10px}
+.btn-primary{background:linear-gradient(135deg,#92400e 0%,#d97706 100%);color:#fff}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 8px 24px rgba(245,158,11,.25)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* 4:5 PREVIEW */
+.preview-sticky{position:sticky;top:88px}
+.preview-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.preview-frame{position:relative;width:100%;padding-bottom:125%;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#111}
+.preview-inner{position:absolute;inset:0}
+
+/* THE CAPTURABLE GRAPHIC */
+#graphicCapture{
+  position:absolute;inset:0;width:100%;height:100%;
+  background-image:url('main/background/service.jpg');
+  background-size:cover;background-position:center;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  font-family:'DM Sans',sans-serif;overflow:hidden;
+}
+.overlay-mask{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,5,0,.97) 0%,rgba(10,5,0,.6) 45%,rgba(10,5,0,.1) 100%);
+}
+.overlay-content{
+  position:relative;z-index:2;
+  padding:24px 24px 28px;
+  display:flex;flex-direction:column;gap:8px;
+}
+.overlay-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:.68rem;letter-spacing:.3em;
+  color:rgba(245,158,11,.65);text-transform:uppercase;margin-bottom:2px;
+}
+.star-display{font-size:1rem;letter-spacing:2px;color:var(--gold);line-height:1}
+.quote-mark{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:3rem;line-height:.6;color:rgba(245,158,11,.4);user-select:none;
+}
+.overlay-quote{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:.92rem;line-height:1.55;
+  color:rgba(255,255,255,.92);min-height:40px;word-break:break-word;
+}
+.overlay-divider{width:40px;height:1.5px;background:var(--gold);margin:2px 0}
+.overlay-author{font-size:.78rem;font-weight:600;letter-spacing:.08em;color:var(--gold);text-transform:uppercase}
+.overlay-service-tag{
+  font-size:.68rem;color:rgba(255,255,255,.3);letter-spacing:.06em;
+}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;font-size:.875rem;max-width:320px;transform:translateY(80px);opacity:0;transition:all .35s;z-index:999}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-color:var(--success);color:var(--success)}
+.toast.error{border-color:var(--danger);color:var(--danger)}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .preview-sticky{position:static;margin-top:24px}
+  .nav-links{display:none}.hamburger{display:flex}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">AYR TGW</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li><li><a href="clients.html">Clients</a></li>
+      <li><a href="partners.html">Partners</a></li><li><a href="agents.html">Agents</a></li>
+      <li><a href="inquiry.html">Inquiry</a></li>
+      <li><a href="session-feedback.html">Session Feedback</a></li>
+      <li><a href="service-feedback.html" class="active">Service Feedback</a></li>
+    </ul>
+    <button class="hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-nav" id="mobNav">
+  <button class="mob-close" id="mobClose">&#x2715;</button>
+  <a href="index.html">Home</a><a href="clients.html">Clients</a><a href="partners.html">Partners</a>
+  <a href="agents.html">Agents</a><a href="inquiry.html">Inquiry</a>
+  <a href="session-feedback.html">Session Feedback</a>
+  <a href="service-feedback.html" class="active">Service Feedback</a>
+</div>
+
+<div class="layout">
+  <!-- LEFT: CONTROLS -->
+  <div>
+    <h1 class="page-title">Service Feedback</h1>
+    <p class="page-sub">Capture a client's service review as a branded social graphic. Type below — the preview updates in real time.</p>
+
+    <div class="card">
+      <div class="card-title">Client Information</div>
+      <div class="fg">
+        <label>Client First Name</label>
+        <input type="text" id="author_name" placeholder="e.g. Marcus" oninput="updatePreview()">
+      </div>
+      <div class="fg">
+        <label>Service Received</label>
+        <select id="service_type" onchange="updatePreview()">
+          <option value="">Select service type...</option>
+          <option>Life Insurance Planning</option>
+          <option>Retirement Strategy</option>
+          <option>Debt Management</option>
+          <option>Education Savings (RESP)</option>
+          <option>Investment Portfolio Review</option>
+          <option>Financial Needs Analysis</option>
+          <option>Estate Planning</option>
+          <option>General Financial Advisory</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Star Rating</div>
+      <div class="star-row" id="starRow">
+        <span class="star lit" data-val="1" onclick="setRating(1)">★</span>
+        <span class="star lit" data-val="2" onclick="setRating(2)">★</span>
+        <span class="star lit" data-val="3" onclick="setRating(3)">★</span>
+        <span class="star lit" data-val="4" onclick="setRating(4)">★</span>
+        <span class="star lit" data-val="5" onclick="setRating(5)">★</span>
+      </div>
+      <input type="hidden" id="star_rating" value="5">
+    </div>
+
+    <div class="card">
+      <div class="card-title">Service Review</div>
+      <div class="fg">
+        <label>Review / Testimonial Text</label>
+        <textarea id="feedback_text" rows="5" placeholder="AYR TGW helped me understand my life insurance options in a way no one had before. I feel confident in my family's future now..." oninput="updatePreview()"></textarea>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="social_consent">
+        <label for="social_consent">Client has given verbal or written consent for this review to be shared on AYR TGW social media channels.</label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Actions</div>
+      <button class="btn btn-ghost" id="downloadBtn" onclick="downloadImage()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download PNG (4:5)
+      </button>
+      <button class="btn btn-primary" id="submitBtn" onclick="submitFeedback()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Save to Airtable
+      </button>
+    </div>
+  </div>
+
+  <!-- RIGHT: LIVE PREVIEW -->
+  <div class="preview-sticky">
+    <div class="preview-label">Live Preview — 4:5 Export</div>
+    <div class="preview-frame">
+      <div class="preview-inner">
+        <div id="graphicCapture">
+          <div class="overlay-mask"></div>
+          <div class="overlay-content">
+            <div class="overlay-logo">AYR TGW Solutions &nbsp;·&nbsp; World Financial Group</div>
+            <div class="star-display" id="prev_stars">★★★★★</div>
+            <div class="quote-mark">"</div>
+            <div class="overlay-quote" id="prev_quote">Your client's service review will appear here as you type...</div>
+            <div class="overlay-divider"></div>
+            <div class="overlay-author" id="prev_author">— Client Name</div>
+            <div class="overlay-service-tag" id="prev_service">#AYRTGWSolutions &nbsp;·&nbsp; #WFG &nbsp;·&nbsp; #FinancialAdvisory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE_ID = 'appdtWUAAIOXKZV6F';
+const TABLE_ID = 'tblXua0Gg8iMQPxaF';
+const AT_KEY = 'YOUR_AIRTABLE_PAT_HERE';
+
+let currentRating = 5;
+
+function setRating(val) {
+  currentRating = val;
+  document.getElementById('star_rating').value = val;
+  document.querySelectorAll('.star').forEach((s, i) => {
+    s.classList.toggle('lit', i < val);
+  });
+  updatePreview();
+}
+
+function updatePreview() {
+  const quote   = document.getElementById('feedback_text').value.trim();
+  const name    = document.getElementById('author_name').value.trim();
+  const service = document.getElementById('service_type').value;
+  const stars   = '★'.repeat(currentRating) + '☆'.repeat(5 - currentRating);
+
+  document.getElementById('prev_quote').textContent  = quote   || 'Your client\'s service review will appear here as you type...';
+  document.getElementById('prev_author').textContent = name    ? '— ' + name : '— Client Name';
+  document.getElementById('prev_stars').textContent  = stars;
+  document.getElementById('prev_service').textContent = service
+    ? '#AYRTGWSolutions · ' + service.replace(/\s+/g, '')
+    : '#AYRTGWSolutions · #WFG · #FinancialAdvisory';
+}
+
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3800);
+}
+
+async function downloadImage() {
+  const btn = document.getElementById('downloadBtn');
+  btn.disabled = true; btn.textContent = 'Rendering...';
+  try {
+    const el = document.getElementById('graphicCapture');
+    const canvas = await html2canvas(el, {
+      scale: 3,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: null,
+      logging: false,
+      width: el.offsetWidth,
+      height: el.offsetHeight,
+    });
+    const link = document.createElement('a');
+    const name = document.getElementById('author_name').value.trim() || 'service-review';
+    link.download = `ayr-service-${name.toLowerCase().replace(/\s+/g,'-')}-${Date.now()}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('PNG downloaded successfully!', 'success');
+  } catch(e) {
+    showToast('Render error: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PNG (4:5)';
+  }
+}
+
+async function submitFeedback() {
+  const name    = document.getElementById('author_name').value.trim();
+  const text    = document.getElementById('feedback_text').value.trim();
+  const consent = document.getElementById('social_consent').checked;
+  const service = document.getElementById('service_type').value;
+  const rating  = document.getElementById('star_rating').value;
+
+  if (!name || !text) { showToast('Please enter a name and feedback text.', 'error'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  const feedbackFull = `[${rating}/5 ★] [${service || 'General'}] ${text}`;
+  const fields = {
+    'Name': name,
+    'Feedback_Text': feedbackFull,
+    'Social_Consent': consent ? 'Yes' : 'No',
+  };
+
+  try {
+    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${AT_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ records: [{ fields }], typecast: true })
+    });
+    if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || 'Failed'); }
+    showToast('Saved to Airtable ✓', 'success');
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Save to Airtable';
+  }
+}
+
+const menuBtn=document.getElementById('menuBtn'),mobNav=document.getElementById('mobNav'),mobClose=document.getElementById('mobClose');
+menuBtn.addEventListener('click',()=>mobNav.classList.add('open'));
+mobClose.addEventListener('click',()=>mobNav.classList.remove('open'));
+document.addEventListener('click',e=>{if(mobNav.classList.contains('open')&&!mobNav.contains(e.target)&&e.target!==menuBtn)mobNav.classList.remove('open')});
+</script>
+</body>
+</html>
