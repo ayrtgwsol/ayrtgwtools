@@ -89,11 +89,7 @@ body{font-family:'YD Yoonche Bold','Inter',system-ui,sans-serif!important;}
 html.light-mode body{background-color:#eef2ff!important;color:#000000!important;}
 html.light-mode .bg-stack .bg-img{opacity:.12!important;}
 html.light-mode .bg-stack .bg-overlay{opacity:.28!important;}
-/* FLOATING HEADER */
-.site-header-wrap{position:fixed!important;top:14px;left:50%;transform:translateX(-50%);width:calc(100% - 40px);max-width:1240px;z-index:50;}
-.site-header{background:rgba(3,7,18,0.68)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;border:1px solid rgba(0,74,173,.40)!important;border-radius:20px!important;box-shadow:0 8px 32px rgba(0,0,0,.35)!important;position:static!important;top:auto!important;}
-html.light-mode .site-header{background:rgba(238,242,255,0.88)!important;border-color:rgba(0,74,173,.28)!important;}
-.header-spacer{height:96px;}
+
 /* Ensure all nav uses brand color */
 .dnav-link::after{background:var(--brand)!important;}
 .dnav-link.active{color:var(--brand)!important;}
@@ -129,6 +125,37 @@ html.light-mode .text-gray-400{color:#374151!important;}
 html.light-mode .text-gray-500{color:#6b7280!important;}
 html.light-mode main h1{color:#000000;}
 
+
+/* ═══ FLOATING HEADER LAYOUT (all pages) ═══ */
+.site-header-wrap{position:fixed!important;top:14px;left:50%;transform:translateX(-50%);width:calc(100% - 40px);max-width:1240px;z-index:50;}
+.site-header{background:rgba(3,7,18,0.72)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;border:1px solid rgba(0,74,173,.42)!important;border-radius:20px!important;box-shadow:0 8px 32px rgba(0,0,0,.38),0 0 0 1px rgba(0,74,173,.10)!important;position:static!important;top:auto!important;}
+html.light-mode .site-header{background:rgba(238,242,255,0.90)!important;border-color:rgba(0,74,173,.28)!important;box-shadow:0 8px 32px rgba(0,74,173,.12)!important;}
+.header-inner{padding:0 22px;height:66px;display:flex!important;align-items:center!important;justify-content:space-between!important;}
+.header-spacer{height:96px;}
+/* Logo */
+.site-logo{display:inline-flex!important;align-items:center;text-decoration:none;flex-shrink:0;}
+.site-logo img,.site-logo-img{height:42px;width:auto;object-fit:contain;display:block;}
+/* Desktop nav */
+#desktopNavList{display:none;align-items:center;gap:20px;list-style:none;margin:0;padding:0;}
+@media(min-width:768px){
+  #desktopNavList{display:flex!important;}
+  #hamburgerBtn2{display:none!important;}
+}
+.dnav-link{font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;transition:color .2s;position:relative;padding-bottom:3px;font-family:inherit;}
+.dnav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:#004aad;transition:width .2s;}
+.dnav-link:hover{color:#ffffff;}
+html.light-mode .dnav-link{color:#6b7280;}
+html.light-mode .dnav-link:hover{color:#000000;}
+.dnav-link:hover::after,.dnav-link.active::after{width:100%;}
+.dnav-link.active{color:#004aad;}
+/* Hamburger */
+.hamburger-btn{display:flex;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:transparent;border:1px solid rgba(55,65,81,.65);border-radius:8px;cursor:pointer;padding:8px;transition:border-color .2s;flex-shrink:0;}
+.hamburger-btn:hover{border-color:#004aad;}
+.hamburger-btn span{display:block;height:1.5px;background:#9ca3af;border-radius:2px;transition:all .25s;}
+.hamburger-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+/* ─────────────────────────────────────────── */
 </style>
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
@@ -147,7 +174,7 @@ html.light-mode main h1{color:#000000;}
       <a href="index.html" class="site-logo">
         <img src="./background/icon.png" alt="AYR TGW Tools Hub" class="site-logo-img" onerror="this.src='./Logo2.png'">
       </a>
-      <ul style="display:none;align-items:center;gap:22px;list-style:none;margin:0;padding:0;" id="desktopNavList">
+      <ul style="list-style:none;margin:0;padding:0;" id="desktopNavList">
       <li><a href="index.html" class="dnav-link">Home</a></li>
       <li><a href="clients.html" class="dnav-link">Client</a></li>
       <li><a href="partners.html" class="dnav-link">Partner</a></li>
