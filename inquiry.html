@@ -7,209 +7,235 @@
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-/* ── GLOBAL FONT OVERRIDE ── */
-@font-face {
-  font-family: 'YD Yoonche Bold';
-  src: local('YD Yoonche Bold'), local('YDYooncheBold');
-}
-* {
-  font-family: 'YD Yoonche Bold', 'Inter', system-ui, sans-serif !important;
-}
 
+/* ── BACKGROUND STACK ── */
 .bg-stack{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .bg-stack .bg-img{position:absolute;inset:0;background-image:url('./background/Background-Desktop.png');background-size:cover;background-position:center top;background-repeat:no-repeat;opacity:.50;}
 .bg-stack .bg-overlay{position:absolute;inset:0;background-image:url('./background/Overlay-Dark-Desktop.png');background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.85;}
 .glow-bloom{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at 50% 0%,rgba(30,64,175,0.18) 0%,rgba(3,7,18,0) 65%);}
-
 @media(max-width:767px){
-  .bg-stack .bg-img{background-image:url('./background/Background-Mobile.png');opacity:.40;}
-  .bg-stack .bg-overlay{background-image:url('./background/Overlay-Dark-Mobile.png');opacity:.90;}
+  .bg-stack .bg-img{background-image:url('./background/Background-Mobile.png');}
+  .bg-stack .bg-overlay{background-image:url('./background/Overlay-Dark-Mobile.png');}
 }
+/* ── PREMIUM HAMBURGER + DRAWER ── */
+.site-logo-img{height:48px;width:auto;object-fit:contain;display:block;}
+.hamburger-btn{display:flex;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:transparent;border:1px solid rgba(55,65,81,.60);border-radius:8px;cursor:pointer;padding:8px;transition:border-color .2s;}
+.hamburger-btn:hover{border-color:#2B5BD0;}
+.hamburger-btn span{display:block;height:1.5px;background:#9ca3af;border-radius:2px;transition:all .25s;}
+.hamburger-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.mobile-drawer{position:fixed;top:0;right:0;width:280px;height:100vh;background:#020917;border-left:1px solid rgba(55,65,81,.65);transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);z-index:200;display:flex;flex-direction:column;}
+.mobile-drawer.open{transform:translateX(0);}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid rgba(55,65,81,.45);}
+.drawer-head img{height:36px;width:auto;}
+.drawer-close{background:none;border:none;color:#6b7280;font-size:1.5rem;cursor:pointer;line-height:1;padding:2px 6px;transition:color .2s;}
+.drawer-close:hover{color:#f3f4f6;}
+.drawer-links{display:flex;flex-direction:column;padding:10px 0;flex:1;overflow-y:auto;}
+.drawer-links a{padding:13px 24px;color:#9ca3af;font-size:.9375rem;font-weight:500;text-decoration:none;letter-spacing:.03em;border-left:3px solid transparent;transition:all .18s;}
+.drawer-links a:hover{color:#f3f4f6;background:rgba(43,91,208,.06);border-left-color:#2B5BD0;}
+.drawer-links a.active{color:#4A90E2;border-left-color:#2B5BD0;background:rgba(43,91,208,.06);}
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(3,7,18,.55);z-index:199;backdrop-filter:blur(2px);}
+.drawer-overlay.open{display:block;}
 
-.nav-link-item { position: relative; padding: 0.5rem 0.75rem; color: #d1d5db; transition: all 0.2s ease; font-weight: 500; }
-.nav-link-item:hover { color: #ffffff; }
-.nav-link-item.active-tab { color: #3b82f6; font-weight: 700; border-bottom: 2px solid #3b82f6; }
-
-#mobileDrawer2{position:fixed;top:0;right:-300px;width:300px;height:100vh;background-color:#0b1329;z-index:50;transition:transform .3s cubic-bezier(0.4,0,0.2,1);box-shadow:-10px 0 30px rgba(0,0,0,0.5);}
-#mobileDrawer2.open{transform:translateX(-300px);}
-#drawerOverlay2{position:fixed;inset:0;background-color:rgba(3,7,18,0.6);backdrop-filter:blur(4px);z-index:40;display:none;}
-#drawerOverlay2.open{display:block;}
-
-html.light-mode body { background-color: #f3f4f6 !important; color: #1f2937 !important; }
-html.light-mode .bg-stack .bg-overlay { background-color: rgba(243, 244, 246, 0.85) !important; background-image: none !important; }
-html.light-mode header { background-color: rgba(255, 255, 255, 0.9) !important; border-bottom-color: #e5e7eb !important; }
-html.light-mode header a, html.light-mode header button { color: #4b5563 !important; }
-html.light-mode header .nav-link-item:hover { color: #111827 !important; }
-html.light-mode header .active-tab { color: #2563eb !important; border-bottom-color: #2563eb !important; }
-html.light-mode .form-container { background: #ffffff !important; border-color: #e5e7eb !important; color: #1f2937 !important; box-shadow: 0 10px 25px rgba(0,0,0,0.05) !important; }
-html.light-mode label, html.light-mode h2, html.light-mode p { color: #111827 !important; }
-html.light-mode input, html.light-mode select, html.light-mode textarea { background-color: #f9fafb !important; border-color: #d1d5db !important; color: #111827 !important; }
-html.light-mode #mobileDrawer2 { background-color: #ffffff !important; color: #111827 !important; }
+body{font-family:'Inter',sans-serif;background-color:#030712;color:#f3f4f6;}
+.nav-active{color:#60a5fa !important;}
+.panel{background:rgba(3,7,18,0.40);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(55,65,81,0.80);border-radius:12px;padding:28px;}
+.panel-title{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.panel-title::before{content:'';display:block;width:3px;height:14px;background:#3b82f6;border-radius:2px;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg label{font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6b7280;}
+.fg label .req{color:#60a5fa;}
+.fg input,.fg select,.fg textarea{background:rgba(17,24,39,.60);border:1px solid rgba(55,65,81,.80);border-radius:8px;color:#f3f4f6;font-family:inherit;font-size:.875rem;padding:9px 13px;transition:border-color .2s,box-shadow .2s;width:100%;outline:none;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15);}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(255,255,255,.18);}
+.fg select option{background:#0a0f1e;color:#f3f4f6;}
+.fg textarea{resize:vertical;min-height:110px;}
+/* priority buttons */
+.em-btn{padding:7px 16px;border-radius:6px;border:1px solid rgba(55,65,81,.80);background:transparent;color:#9ca3af;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.04em;}
+.em-btn:hover{border-color:#3b82f6;color:#f3f4f6;}
+.em-btn.low.sel{border-color:#22c55e;background:rgba(34,197,94,.08);color:#22c55e;}
+.em-btn.medium.sel{border-color:#f59e0b;background:rgba(245,158,11,.08);color:#f59e0b;}
+.em-btn.high.sel{border-color:#ef4444;background:rgba(239,68,68,.08);color:#ef4444;}
+/* checkbox */
+.cb-row{display:flex;align-items:flex-start;gap:9px;margin-top:8px;}
+.cb-row input[type=checkbox]{width:15px;height:15px;flex-shrink:0;accent-color:#3b82f6;margin-top:3px;}
+.cb-row label{font-size:.83rem;color:#9ca3af;line-height:1.5;font-weight:400;}
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(3,7,18,.95);border:1px solid rgba(55,65,81,.80);border-radius:10px;padding:13px 18px;font-size:.875rem;max-width:320px;transform:translateY(80px);opacity:0;transition:all .35s;z-index:999;backdrop-filter:blur(8px);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:#22c55e;color:#22c55e;}
+.toast.error{border-color:#ef4444;color:#ef4444;}
+@media(max-width:640px){.field-grid{grid-template-columns:1fr !important;}}
 </style>
 </head>
-<body class="bg-[#030712] text-gray-100 min-h-screen relative overflow-x-hidden font-['Inter']">
-
-<div class="bg-stack" id="bgStack"><div class="bg-img"></div><div class="bg-overlay"></div></div>
+<body class="relative min-h-screen overflow-x-hidden">
+<!-- BACKGROUND STACK -->
+<div class="bg-stack" id="bgStack">
+  <div class="bg-img"></div>
+  <div class="bg-overlay"></div>
+</div>
 <div class="glow-bloom"></div>
 
-<header class="relative z-10 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/20 backdrop-blur-md">
-  <div class="flex items-center gap-3">
-    <a href="index.html" class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent">AYR TGW Solutions</a>
-  </div>
-  
-  <nav class="hidden md:flex items-center gap-2 text-sm font-medium">
-    <a href="index.html" class="nav-link-item">Home</a>
-    <a href="clients.html" class="nav-link-item">Client</a>
-    <a href="partners.html" class="nav-link-item">Partner</a>
-    <a href="inquiry.html" class="nav-link-item active-tab">Inquiry</a>
-    <a href="session-feedback.html" class="nav-link-item">Session</a>
-    <a href="service-feedback.html" class="nav-link-item">Service</a>
-    <a href="agents.html" class="nav-link-item">Agent</a>
-  </nav>
 
-  <button id="hamburgerBtn2" class="md:hidden text-gray-300 hover:text-white focus:outline-none">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-  </button>
+<!-- STICKY HEADER -->
+<header class="site-header" style="position:sticky;top:0;z-index:50;background:rgba(3,7,18,0.40);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(55,65,81,0.65);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;height:76px;display:flex;align-items:center;justify-content:space-between;">
+    <a href="index.html" style="display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;">
+      <img src="./Logo2.png" alt="AYR TGW Solutions" class="site-logo-img">
+    </a>
+    <ul style="display:none;align-items:center;gap:28px;list-style:none;margin:0;padding:0;" id="desktopNavList">
+      <li><a href="index.html" class="dnav-link">Home</a></li>
+      <li><a href="clients.html" class="dnav-link">Clients</a></li>
+      <li><a href="partners.html" class="dnav-link">Partners</a></li>
+      <li><a href="agents.html" class="dnav-link">Agents</a></li>
+      <li><a href="inquiry.html" class="dnav-link active" aria-current="page">Inquiry</a></li>
+      <li><a href="session-feedback.html" class="dnav-link">Session Feedback</a></li>
+      <li><a href="service-feedback.html" class="dnav-link">Service Feedback</a></li>
+    </ul>
+    <button class="hamburger-btn" id="hamburgerBtn2" aria-label="Open navigation menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </header>
 
-<div id="drawerOverlay2"></div>
-<div id="mobileDrawer2" class="flex flex-col p-6 space-y-4">
-  <button id="drawerClose2" class="self-end text-gray-400 hover:text-white text-2xl">&times;</button>
-  <a href="index.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Home</a>
-  <a href="clients.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Client Onboarding</a>
-  <a href="partners.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Partner Registration</a>
-  <a href="inquiry.html" class="text-blue-400 font-bold py-1 border-b border-white/5">Rapid Inquiry</a>
-  <a href="session-feedback.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Session Feedback</a>
-  <a href="service-feedback.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Service Feedback</a>
-  <a href="agents.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Agent Portal</a>
-</div>
+<!-- MOBILE DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay2"></div>
+<nav class="mobile-drawer" id="mobileDrawer2" aria-label="Mobile navigation">
+  <div class="drawer-head">
+    <img src="./Logo2.png" alt="AYR TGW Solutions">
+    <button class="drawer-close" id="drawerClose2" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <div class="drawer-links">
+    <a href="index.html" class="drawer-links-a">Home</a>
+    <a href="clients.html" class="drawer-links-a">Clients</a>
+    <a href="partners.html" class="drawer-links-a">Partners</a>
+    <a href="agents.html" class="drawer-links-a">Agents</a>
+    <a href="inquiry.html" class="drawer-links-a active" aria-current="page">Inquiry</a>
+    <a href="session-feedback.html" class="drawer-links-a">Session Feedback</a>
+    <a href="service-feedback.html" class="drawer-links-a">Service Feedback</a>
+  </div>
+</nav>
 
-<main class="relative z-10 max-w-2xl mx-auto px-4 py-12">
-  <div class="form-container bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-xl shadow-2xl">
-    <div class="mb-8 text-center">
-      <h2 class="text-3xl font-extrabold text-white tracking-tight mb-2">Rapid Operational Inquiry</h2>
-      <p class="text-gray-400 text-sm">Direct communications interface. Data packets are routed automatically within corporate networks.</p>
+<style>
+@media(min-width:768px){
+  #desktopNavList{display:flex !important;}
+  #hamburgerBtn2{display:none !important;}
+}
+.dnav-link{font-size:.8125rem;font-weight:500;color:#9ca3af;text-decoration:none;letter-spacing:.04em;transition:color .2s;position:relative;padding-bottom:3px;}
+.dnav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:#2B5BD0;transition:width .2s;}
+.dnav-link:hover{color:#f3f4f6;}
+.dnav-link:hover::after,.dnav-link.active::after{width:100%;}
+.dnav-link.active{color:#4A90E2;}
+.drawer-links-a{display:block;padding:13px 24px;color:#9ca3af;font-size:.9375rem;font-weight:500;text-decoration:none;letter-spacing:.03em;border-left:3px solid transparent;transition:all .18s;}
+.drawer-links-a:hover{color:#f3f4f6;background:rgba(43,91,208,.06);border-left-color:#2B5BD0;}
+.drawer-links-a.active{color:#4A90E2;border-left-color:#2B5BD0;background:rgba(43,91,208,.06);}
+</style>
+
+<main class="max-w-3xl mx-auto px-6 py-14 relative z-10">
+  <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-500 bg-clip-text text-transparent mb-2">Rapid Inquiry</h1>
+  <p class="text-gray-400 text-base mb-10 leading-relaxed max-w-xl">Submit an inquiry, support request, or lead referral. Our team monitors submissions and routes responses by priority level.</p>
+
+  <div id="formContent">
+    <div class="panel mb-5">
+      <div class="panel-title">Contact &amp; Routing</div>
+      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
+        <div class="fg"><label>Full Name <span class="req">*</span></label><input type="text" id="full_name" placeholder="Your full name" required></div>
+        <div class="fg"><label>Email <span class="req">*</span></label><input type="email" id="email" placeholder="your@email.com" required></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
+        <div class="fg"><label>Contact Method</label>
+          <select id="contact_method"><option value="">Select…</option><option>Email</option><option>Phone Call</option><option>Text Message</option><option>WhatsApp</option></select></div>
+        <div class="fg"><label>Contact Detail</label><input type="text" id="contact_detail" placeholder="Phone or preferred handle"></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 field-grid">
+        <div class="fg"><label>Inquiry Type</label>
+          <select id="inquiry_type"><option value="">Select type…</option><option>General Question</option><option>Client Support</option><option>New Lead Referral</option><option>Agent Support</option><option>Partner Query</option><option>Complaint</option><option>Billing</option></select></div>
+        <div class="fg"><label>Assign to Agent Email</label><input type="email" id="agent_email" placeholder="agent@wfg.com"></div>
+      </div>
     </div>
 
-    <form id="inquiryForm" class="space-y-6" onsubmit="handleFormSubmit(event)">
-      <div>
-        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Requester / Subject Name</label>
-        <input type="text" required class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors">
-      </div>
+    <div class="panel mb-5">
+      <div class="panel-title">Inquiry Details</div>
+      <div class="fg mb-4"><label>Inquiry Subject / Title <span class="req">*</span></label><input type="text" id="inquiry_title" placeholder="Brief one-line summary of your inquiry" required></div>
+      <div class="fg mb-4"><label>What Is This Regarding?</label><input type="text" id="inquiry_regarding" placeholder="e.g. Life insurance quote, claim status, referral follow-up"></div>
+      <div class="fg"><label>Detailed Inquiry</label><textarea id="detailed_inquiry" placeholder="Provide as much detail as possible. Include dates, amounts, policy numbers if applicable…"></textarea></div>
+    </div>
 
-      <div>
-        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Return Address Email</label>
-        <input type="email" required class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors">
+    <div class="panel mb-5">
+      <div class="panel-title">Priority Level</div>
+      <p class="text-gray-500 text-xs mb-4 leading-relaxed">How urgently does this need to be addressed?</p>
+      <div class="flex gap-3 flex-wrap">
+        <button type="button" class="em-btn low sel" onclick="setEmergency(this,'Low')">🟢 Low</button>
+        <button type="button" class="em-btn medium" onclick="setEmergency(this,'Medium')">🟡 Medium</button>
+        <button type="button" class="em-btn high" onclick="setEmergency(this,'High — Urgent')">🔴 High — Urgent</button>
       </div>
-
-      <div>
-        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Functional Classification Category</label>
-        <select class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors">
-          <option value="general">General Operations System Inquiry</option>
-          <option value="technical">Ecosystem Interface Technical Support</option>
-          <option value="consulting">Strategic Management Advisory</option>
-          <option value="escalation">Administrative Executive Review</option>
-        </select>
+      <input type="hidden" id="emergency_level" value="Low">
+      <div class="cb-row mt-5">
+        <input type="checkbox" id="client_consent">
+        <label for="client_consent">I consent to AYR TGW Solutions retaining and processing this inquiry for the purpose of providing a response and appropriate follow-up.</label>
       </div>
+    </div>
 
-      <div>
-        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Inquiry Narrative Body</label>
-        <textarea rows="5" required class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 transition-colors" placeholder="Input details here..."></textarea>
-      </div>
-
-      <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        Send Inquiry
+    <div class="flex justify-end mt-6">
+      <button id="submitBtn" onclick="submitInquiry()" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Inquiry
       </button>
-    </form>
+    </div>
+  </div>
+
+  <div id="successState" class="hidden text-center py-16">
+    <div class="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/40 flex items-center justify-center mx-auto mb-5">
+      <svg class="w-7 h-7 stroke-green-400" fill="none" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2 class="text-3xl font-extrabold text-green-400 mb-3">Inquiry Received</h2>
+    <p class="text-gray-400 max-w-md mx-auto mb-8 leading-relaxed">Your message has been submitted and routed. Expect a response within the timeframe corresponding to your priority level.</p>
+    <a href="index.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all">← Return to Hub</a>
   </div>
 </main>
 
-<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 font-medium flex items-center gap-2 text-sm"></div>
-
-<button id="themeToggle" class="fixed-theme-btn" aria-label="Toggle Theme">
-  <svg id="themeIcon" style="width:22px;height:22px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-    <path id="themeIconPath" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"/>
-  </svg>
-</button>
-
-<style>
-.fixed-theme-btn { position:fixed;bottom:1.5rem;right:1.5rem;z-index:100;width:48px;height:48px;border-radius:50%;background:#ffffff;color:#111827;border:1px solid #e5e7eb;box-shadow:0 10px 25px rgba(0,0,0,0.3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s ease; }
-</style>
+<div class="toast" id="toast"></div>
 
 <script>
-function showToast(m,type='success'){
-  var t=document.getElementById('toast'); t.textContent=m;
-  if(type==='error'){t.style.backgroundColor='#ef4444';}else{t.style.backgroundColor='#10b981';}
-  t.classList.remove('translate-y-20','opacity-0');
-  setTimeout(()=>{t.classList.add('translate-y-20','opacity-0');},3000);
-}
-
-async function handleFormSubmit(e){
-  e.preventDefault();
-  var btn=document.getElementById('submitBtn'); btn.disabled=true;
-  btn.innerHTML='<svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Routing...';
+const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tbliJ1HFN1qUN6X5P',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
+function setEmergency(el,val){document.querySelectorAll('.em-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');document.getElementById('emergency_level').value=val;}
+function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
+async function submitInquiry(){
+  const btn=document.getElementById('submitBtn');
+  for(const id of['full_name','email','inquiry_title']){const el=document.getElementById(id);if(!el.value.trim()){el.focus();showToast('Please fill required fields.','error');return;}}
+  if(!document.getElementById('client_consent').checked){showToast('Please accept the consent checkbox.','error');return;}
+  btn.disabled=true;btn.textContent='Sending…';
+  const fields={'Full_Name':document.getElementById('full_name').value,'Email':document.getElementById('email').value,'Contact_Method':document.getElementById('contact_method').value,'Contact_Detail':document.getElementById('contact_detail').value,'Inquiry_Type':document.getElementById('inquiry_type').value,'Agent_Email':document.getElementById('agent_email').value,'Inquiry_Title':document.getElementById('inquiry_title').value,'Inquiry_Regarding':document.getElementById('inquiry_regarding').value,'Detailed_Inquiry':document.getElementById('detailed_inquiry').value,'Emergency_Level':document.getElementById('emergency_level').value,'Client_Consent':true};
+  Object.keys(fields).forEach(k=>{if(fields[k]===''||fields[k]===null)delete fields[k];});
   try{
-    await new Promise(r=>setTimeout(r,1200));
-    showToast('Inquiry transmission dispatched to corporate systems hub.');
-    document.getElementById('inquiryForm').reset();
-    btn.disabled=false;
-    btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Inquiry';
-  }catch(e){
-    showToast('Error: '+e.message,'error');
-    btn.disabled=false;
-    btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Inquiry';
-  }
+    const res=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,{method:'POST',headers:{'Authorization':`Bearer ${AT_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({records:[{fields}],typecast:true})});
+    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Failed');}
+    document.getElementById('formContent').style.display='none';
+    document.getElementById('successState').classList.remove('hidden');
+  }catch(e){showToast('Error: '+e.message,'error');btn.disabled=false;btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Inquiry';}
 }
-
+</script>
+<script>
 (function(){
   var btn=document.getElementById('hamburgerBtn2');
   var drawer=document.getElementById('mobileDrawer2');
   var overlay=document.getElementById('drawerOverlay2');
   var closeBtn=document.getElementById('drawerClose2');
   if(!btn||!drawer)return;
-  btn.addEventListener('click',()=> { drawer.classList.add('open'); overlay.classList.add('open'); });
-  closeBtn.addEventListener('click',()=> { drawer.classList.remove('open'); overlay.classList.remove('open'); });
-  overlay.addEventListener('click',()=> { drawer.classList.remove('open'); overlay.classList.remove('open'); });
-
-  // Floating Switch State Sync
-  const toggleBtn = document.getElementById('themeToggle');
-  const htmlEl = document.documentElement;
-  const iconPath = document.getElementById('themeIconPath');
-  const sunPath = "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z";
-  const moonPath = "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z";
-
-  function applyTheme(theme) {
-    if (theme === 'light') {
-      htmlEl.classList.add('light-mode');
-      if (iconPath) iconPath.setAttribute('d', moonPath);
-      if (toggleBtn) { toggleBtn.style.backgroundColor = '#1f2937'; toggleBtn.style.color = '#f59e0b'; toggleBtn.style.borderColor = '#374151'; }
-    } else {
-      htmlEl.classList.remove('light-mode');
-      if (iconPath) iconPath.setAttribute('d', sunPath);
-      if (toggleBtn) { toggleBtn.style.backgroundColor = '#ffffff'; toggleBtn.style.color = '#111827'; toggleBtn.style.borderColor = '#e5e7eb'; }
-    }
-  }
-  let currentTheme = localStorage.getItem('theme') || 'dark';
-  applyTheme(currentTheme);
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', function() {
-      let nextTheme = htmlEl.classList.contains('light-mode') ? 'dark' : 'light';
-      localStorage.setItem('theme', nextTheme);
-      applyTheme(nextTheme);
-    });
-  }
+  function openD(){drawer.classList.add('open');overlay.classList.add('open');btn.classList.add('open');document.body.style.overflow='hidden';}
+  function closeD(){drawer.classList.remove('open');overlay.classList.remove('open');btn.classList.remove('open');document.body.style.overflow='';}
+  btn.addEventListener('click',openD);
+  closeBtn.addEventListener('click',closeD);
+  overlay.addEventListener('click',closeD);
 })();
-
+// Video background fallback
 (function(){
-  var bgStack=document.getElementById('bgStack'); if(!bgStack)return;
+  var bgStack=document.getElementById('bgStack');
+  if(!bgStack)return;
   var vid=document.createElement('video');
-  vid.src='./background/Background-Desktop.mp4'; vid.autoplay=true; vid.muted=true; vid.loop=true; vid.playsInline=true;
+  vid.src='./background/Background-Desktop.mp4';
+  vid.autoplay=true;vid.muted=true;vid.loop=true;vid.playsInline=true;
   vid.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.40;';
-  vid.addEventListener('canplay',()=> {
-    if(bgStack.querySelector('.bg-img')) bgStack.querySelector('.bg-img').style.display='none';
-    bgStack.appendChild(vid);
-  },{ once:true });
+  vid.addEventListener('canplay',function(){bgStack.querySelector('.bg-img').style.display='none';bgStack.appendChild(vid);},{once:true});
   vid.load();
 })();
 </script>
