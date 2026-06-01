@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AYR TGW | Partner Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#030712;--surface:#0a0f1e;--border:rgba(59,130,246,.18);--blue:#3b82f6;--cyan:#06b6d4;--white:#f3f4f6;--muted:#6b7280;--danger:#ef4444;--success:#22c55e;--grad:linear-gradient(135deg,#1e3a8a 0%,#0e7490 100%)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(59,130,246,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
+.nav{position:sticky;top:0;z-index:100;background:rgba(3,7,18,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.12em;color:var(--cyan);text-decoration:none;border:1.5px solid var(--cyan);padding:4px 12px;transition:all .2s}
+.nav-logo:hover{background:var(--cyan);color:var(--bg)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--muted);font-size:.875rem;font-weight:500;text-decoration:none;letter-spacing:.03em;transition:color .2s;position:relative;padding-bottom:2px}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--cyan);transition:width .2s}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-links a.active{color:var(--cyan)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{display:block;width:24px;height:2px;background:var(--muted)}
+.mob-nav{position:fixed;top:0;right:0;width:260px;height:100vh;background:var(--surface);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .3s ease;z-index:200;padding:80px 28px 28px;display:flex;flex-direction:column;gap:20px}
+.mob-nav.open{transform:translateX(0)}
+.mob-nav a{color:var(--muted);font-weight:500;text-decoration:none;font-size:1rem;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
+.mob-nav a:hover,.mob-nav a.active{color:var(--cyan)}
+.mob-close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1}
+.page-wrap{max-width:860px;margin:0 auto;padding:48px 24px 80px;position:relative;z-index:1}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,6vw,4rem);letter-spacing:.06em;background:linear-gradient(90deg,var(--white) 0%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.page-sub{color:var(--muted);font-size:.95rem;margin-bottom:40px;line-height:1.6}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;margin-bottom:20px}
+.card-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.08em;color:var(--cyan);margin-bottom:20px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.field-row.single{grid-template-columns:1fr}
+.fg{display:flex;flex-direction:column;gap:6px}
+label{font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+label .req{color:var(--cyan)}
+input,select,textarea{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--white);font-family:inherit;font-size:.9rem;padding:10px 14px;transition:border-color .2s,box-shadow .2s;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(6,182,212,.12)}
+input::placeholder,textarea::placeholder{color:rgba(255,255,255,.2)}
+select option{background:var(--surface);color:var(--white)}
+.ad-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:8px}
+.ad-option{border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--muted)}
+.ad-option:hover{border-color:var(--cyan);color:var(--white)}
+.ad-option.selected{border-color:var(--cyan);background:rgba(6,182,212,.08);color:var(--cyan)}
+.ad-option input{display:none}
+.btn-row{display:flex;gap:12px;margin-top:28px;justify-content:flex-end;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;letter-spacing:.04em;cursor:pointer;transition:all .2s;border:none}
+.btn-primary{background:var(--grad);color:#fff}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 8px 24px rgba(6,182,212,.25)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;font-size:.875rem;max-width:320px;transform:translateY(80px);opacity:0;transition:all .35s;z-index:999}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-color:var(--success);color:var(--success)}
+.toast.error{border-color:var(--danger);color:var(--danger)}
+.success-state{text-align:center;padding:60px 20px;display:none}
+.success-state.show{display:block}
+.success-icon{width:72px;height:72px;border-radius:50%;background:rgba(34,197,94,.1);border:2px solid var(--success);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+@media(max-width:640px){.nav-links{display:none}.hamburger{display:flex}.field-row{grid-template-columns:1fr}.card{padding:20px}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">AYR TGW</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li><li><a href="clients.html">Clients</a></li>
+      <li><a href="partners.html" class="active">Partners</a></li><li><a href="agents.html">Agents</a></li>
+      <li><a href="inquiry.html">Inquiry</a></li><li><a href="session-feedback.html">Session Feedback</a></li>
+      <li><a href="service-feedback.html">Service Feedback</a></li>
+    </ul>
+    <button class="hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-nav" id="mobNav">
+  <button class="mob-close" id="mobClose">&#x2715;</button>
+  <a href="index.html">Home</a><a href="clients.html">Clients</a><a href="partners.html" class="active">Partners</a>
+  <a href="agents.html">Agents</a><a href="inquiry.html">Inquiry</a><a href="session-feedback.html">Session Feedback</a><a href="service-feedback.html">Service Feedback</a>
+</div>
+
+<div class="page-wrap">
+  <h1 class="page-title">Partner Registration</h1>
+  <p class="page-sub">Register your business for a digital marketing partnership with AYR TGW Solutions. Complete the agreement details below.</p>
+
+  <div id="formContent">
+    <div class="card">
+      <div class="card-title">Business Information</div>
+      <div class="field-row">
+        <div class="fg"><label>Contact Name <span class="req">*</span></label><input type="text" id="contact_name" placeholder="Your full name" required></div>
+        <div class="fg"><label>Business Name <span class="req">*</span></label><input type="text" id="business_name" placeholder="Company or brand name" required></div>
+      </div>
+      <div class="field-row">
+        <div class="fg"><label>Business Email <span class="req">*</span></label><input type="email" id="business_email" placeholder="contact@business.com" required></div>
+        <div class="fg"><label>Personal / Billing Email</label><input type="email" id="email" placeholder="personal@email.com"></div>
+      </div>
+      <div class="field-row">
+        <div class="fg"><label>Region of Operation</label><input type="text" id="region_operation" placeholder="e.g. Ontario, GTA, Canada-wide"></div>
+        <div class="fg"><label>Social Handle or Website URL</label><input type="url" id="social_handle_url" placeholder="https://instagram.com/yourhandle"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Ad Placement Preferences</div>
+      <p style="color:var(--muted);font-size:.85rem;margin-bottom:14px">Select all placement types you are interested in:</p>
+      <div class="ad-grid" id="adGrid">
+        <label class="ad-option" onclick="toggleAd(this,'Instagram Story')"><span>📱</span> Instagram Story</label>
+        <label class="ad-option" onclick="toggleAd(this,'Instagram Post')"><span>🖼️</span> Instagram Post</label>
+        <label class="ad-option" onclick="toggleAd(this,'Facebook Post')"><span>📘</span> Facebook Post</label>
+        <label class="ad-option" onclick="toggleAd(this,'YouTube Pre-Roll')"><span>▶️</span> YouTube Pre-Roll</label>
+        <label class="ad-option" onclick="toggleAd(this,'Email Newsletter')"><span>📧</span> Email Newsletter</label>
+        <label class="ad-option" onclick="toggleAd(this,'Referral Link')"><span>🔗</span> Referral Link</label>
+        <label class="ad-option" onclick="toggleAd(this,'Event Sponsorship')"><span>🎪</span> Event Sponsorship</label>
+        <label class="ad-option" onclick="toggleAd(this,'LinkedIn Post')"><span>💼</span> LinkedIn Post</label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Agreement Details</div>
+      <div class="field-row">
+        <div class="fg"><label>Preferred Discussion Method</label>
+          <select id="discussion_method">
+            <option value="">Select method...</option>
+            <option>Zoom Call</option><option>Phone Call</option><option>In-Person Meeting</option><option>Email Exchange</option><option>WhatsApp</option>
+          </select>
+        </div>
+        <div class="fg"><label>Invoice / Payment Method</label>
+          <select id="invoice_payment_method">
+            <option value="">Select method...</option>
+            <option>E-Transfer</option><option>PayPal</option><option>Stripe / Credit Card</option><option>Cheque</option><option>Cryptocurrency</option><option>Wire Transfer</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="submitBtn" onclick="submitPartner()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Register Partnership
+      </button>
+    </div>
+  </div>
+
+  <div class="success-state" id="successState">
+    <div class="success-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.06em;color:var(--success);margin-bottom:12px">Partnership Registered</h2>
+    <p style="color:var(--muted);max-width:420px;margin:0 auto 28px;line-height:1.6">Your partnership registration has been received. The AYR TGW team will be in touch within 2 business days to confirm details and schedule your first discussion.</p>
+    <a href="index.html" class="btn" style="background:transparent;border:1px solid var(--border);color:var(--muted);display:inline-flex">← Return to Hub</a>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE_ID = 'appdtWUAAIOXKZV6F';
+const TABLE_ID = 'tblccEqo6D46RRmeK';
+const AT_KEY = 'YOUR_AIRTABLE_PAT_HERE';
+const selectedAds = new Set();
+
+function toggleAd(el, val) {
+  el.classList.toggle('selected');
+  if (selectedAds.has(val)) selectedAds.delete(val); else selectedAds.add(val);
+}
+
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+async function submitPartner() {
+  const btn = document.getElementById('submitBtn');
+  const req = ['contact_name','business_name','business_email'];
+  for (const id of req) {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) { el.focus(); showToast('Please fill in all required fields.', 'error'); return; }
+  }
+  btn.disabled = true; btn.textContent = 'Submitting...';
+
+  const fields = {
+    'Contact_Name': document.getElementById('contact_name').value,
+    'Business_Name': document.getElementById('business_name').value,
+    'Business_Email': document.getElementById('business_email').value,
+    'Email': document.getElementById('email').value,
+    'Region_Operation': document.getElementById('region_operation').value,
+    'Social_Handle_URL': document.getElementById('social_handle_url').value,
+    'Ad_Placement': Array.from(selectedAds).join(', '),
+    'Discussion_Method': document.getElementById('discussion_method').value,
+    'Invoice_Payment_Method': document.getElementById('invoice_payment_method').value,
+  };
+  Object.keys(fields).forEach(k => { if (!fields[k]) delete fields[k]; });
+
+  try {
+    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${AT_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ records: [{ fields }], typecast: true })
+    });
+    if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || 'Failed'); }
+    document.getElementById('formContent').style.display = 'none';
+    document.getElementById('successState').classList.add('show');
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Register Partnership';
+  }
+}
+
+const menuBtn=document.getElementById('menuBtn'),mobNav=document.getElementById('mobNav'),mobClose=document.getElementById('mobClose');
+menuBtn.addEventListener('click',()=>mobNav.classList.add('open'));
+mobClose.addEventListener('click',()=>mobNav.classList.remove('open'));
+document.addEventListener('click',e=>{if(mobNav.classList.contains('open')&&!mobNav.contains(e.target)&&e.target!==menuBtn)mobNav.classList.remove('open')});
+</script>
+</body>
+</html>
