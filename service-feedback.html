@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AYR TGW Solutions | Session Feedback</title>
+<title>AYR TGW Solutions | Service Feedback</title>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght=1,400;1,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 /* ── GLOBAL FONT OVERRIDE ── */
@@ -45,7 +45,6 @@ html.light-mode header .active-tab { color: #2563eb !important; border-bottom-co
 html.light-mode .form-container, html.light-mode .control-panel { background: #ffffff !important; border-color: #e5e7eb !important; color: #1f2937 !important; box-shadow: 0 10px 25px rgba(0,0,0,0.05) !important; }
 html.light-mode label, html.light-mode h2, html.light-mode p, html.light-mode h3 { color: #111827 !important; }
 html.light-mode input, html.light-mode select, html.light-mode textarea { background-color: #f9fafb !important; border-color: #d1d5db !important; color: #111827 !important; }
-html.light-mode #mobileDrawer2 { background-color: #ffffff !important; color: #111827 !important; }
 </style>
 </head>
 <body class="bg-[#030712] text-gray-100 min-h-screen relative overflow-x-hidden font-['Inter']">
@@ -63,8 +62,8 @@ html.light-mode #mobileDrawer2 { background-color: #ffffff !important; color: #1
     <a href="clients.html" class="nav-link-item">Client</a>
     <a href="partners.html" class="nav-link-item">Partner</a>
     <a href="inquiry.html" class="nav-link-item">Inquiry</a>
-    <a href="session-feedback.html" class="nav-link-item active-tab">Session</a>
-    <a href="service-feedback.html" class="nav-link-item">Service</a>
+    <a href="session-feedback.html" class="nav-link-item">Session</a>
+    <a href="service-feedback.html" class="nav-link-item active-tab">Service</a>
     <a href="agents.html" class="nav-link-item">Agent</a>
   </nav>
 
@@ -80,8 +79,8 @@ html.light-mode #mobileDrawer2 { background-color: #ffffff !important; color: #1
   <a href="clients.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Client Onboarding</a>
   <a href="partners.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Partner Registration</a>
   <a href="inquiry.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Rapid Inquiry</a>
-  <a href="session-feedback.html" class="text-blue-400 font-bold py-1 border-b border-white/5">Session Feedback</a>
-  <a href="service-feedback.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Service Feedback</a>
+  <a href="session-feedback.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Session Feedback</a>
+  <a href="service-feedback.html" class="text-blue-400 font-bold py-1 border-b border-white/5">Service Feedback</a>
   <a href="agents.html" class="text-gray-300 hover:text-white py-1 border-b border-white/5">Agent Portal</a>
 </div>
 
@@ -89,43 +88,38 @@ html.light-mode #mobileDrawer2 { background-color: #ffffff !important; color: #1
   
   <div class="lg:col-span-5 control-panel bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl h-fit space-y-5">
     <div>
-      <h3 class="text-xl font-bold text-white mb-1">Session Branding Module</h3>
-      <p class="text-xs text-gray-400">Generate high-fidelity review image structures for public performance disclosure.</p>
+      <h3 class="text-xl font-bold text-white mb-1">Service Feedback Module</h3>
+      <p class="text-xs text-gray-400">Generate high-end review image overlays for service validation posts.</p>
     </div>
 
     <div class="space-y-4">
       <div>
-        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Consultant Name Label</label>
-        <input type="text" id="inputAuthor" value="Director Alex Mercer" class="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Client / Entity Identifier</label>
+        <input type="text" id="inputAuthor" value="Apex Global Logistics" class="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
       </div>
       <div>
-        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Session Identification Theme</label>
-        <input type="text" id="inputTopic" value="Enterprise Operational Transformation Summit" class="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Ecosystem Service Context</label>
+        <input type="text" id="inputTopic" value="Full Suite Automation Integration" class="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
       </div>
       <div>
-        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Review Commentary Body</label>
-        <textarea id="inputQuote" rows="3" class="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500 font-sans">"The procedural frameworks introduced re-engineered our client intake pipeline. Excellent optimization clarity across the board."</textarea>
+        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Audit Evaluation Commentary</label>
+        <textarea id="inputQuote" rows="3" class="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500 font-sans">"The end-to-end integration removed critical structural latencies. Outstanding deployment speed and management excellence."</textarea>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Performance Rank</label>
+          <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Audit Metric Rank</label>
           <select id="inputStars" class="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
             <option value="5">★★★★★ (5/5)</option>
             <option value="4">★★★★☆ (4/5)</option>
           </select>
         </div>
         <div>
-          <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Canvas Base Tint</label>
+          <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Canvas Surface Tint</label>
           <select id="inputColor" class="w-full bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-            <option value="linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)">Midnight Indigo</option>
-            <option value="linear-gradient(135deg, #020617 0%, #0f172a 100%)">Obsidian Slate</option>
-            <option value="linear-gradient(135deg, #1e3a8a 0%, #0d9488 100%)">Deep Teal Fusion</option>
+            <option value="linear-gradient(135deg, #020617 0%, #1e293b 100%)">Slate Core</option>
+            <option value="linear-gradient(135deg, #111827 0%, #312e81 100%)">Deep Royal Void</option>
           </select>
         </div>
-      </div>
-      <div>
-        <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Ecosystem Corporate Brand Mark</label>
-        <input type="file" id="inputLogo" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer">
       </div>
     </div>
 
@@ -140,27 +134,27 @@ html.light-mode #mobileDrawer2 { background-color: #ffffff !important; color: #1
   </div>
 
   <div class="lg:col-span-7 flex flex-col items-center justify-center">
-    <div id="captureCanvas" class="w-full aspect-[4/3] max-w-[560px] rounded-2xl p-10 relative overflow-hidden flex flex-col justify-between shadow-2xl border border-white/10" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.06),transparent_50%)]"></div>
+    <div id="captureCanvas" class="w-full aspect-[4/3] max-w-[560px] rounded-2xl p-10 relative overflow-hidden flex flex-col justify-between shadow-2xl border border-white/10" style="background: linear-gradient(135deg, #020617 0%, #1e293b 100%);">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.05),transparent_45%)]"></div>
       
       <div class="flex justify-between items-start relative z-10">
         <div>
-          <div id="renderAuthor" class="text-xl font-extrabold tracking-tight text-white mb-0.5">Director Alex Mercer</div>
-          <div id="renderTopic" class="text-xs text-blue-400 uppercase tracking-wider font-semibold">Enterprise Operational Transformation Summit</div>
+          <div id="renderAuthor" class="text-xl font-extrabold tracking-tight text-white mb-0.5">Apex Global Logistics</div>
+          <div id="renderTopic" class="text-xs text-indigo-400 uppercase tracking-wider font-semibold">Full Suite Automation Integration</div>
         </div>
-        <div id="logoPreviewContainer" class="h-9 w-20 flex items-center justify-end">
-          <span id="fallbackLogoText" class="text-[10px] font-bold tracking-widest text-white/40">AYR TGW</span>
+        <div class="h-9 w-20 flex items-center justify-end">
+          <span class="text-[10px] font-bold tracking-widest text-white/40">AYR TGW</span>
         </div>
       </div>
 
       <div class="my-auto relative z-10 max-w-[90%]">
-        <span class="text-5xl text-blue-500/20 font-serif absolute -top-8 -left-5 select-none">“</span>
+        <span class="text-5xl text-indigo-500/20 font-serif absolute -top-8 -left-5 select-none">“</span>
         <p id="renderQuote" class="text-lg md:text-xl font-medium text-gray-200 leading-relaxed italic relative z-10 font-['Playfair_Display']">"The procedural frameworks introduced re-engineered our client intake pipeline. Excellent optimization clarity across the board."</p>
       </div>
 
       <div class="flex justify-between items-center border-t border-white/10 pt-4 relative z-10">
         <div id="renderStars" class="text-amber-400 text-sm tracking-widest">★★★★★</div>
-        <div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Systems Review Module</div>
+        <div class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Service Review Output</div>
       </div>
     </div>
   </div>
@@ -181,18 +175,16 @@ html.light-mode #mobileDrawer2 { background-color: #ffffff !important; color: #1
 <script>
 function showToast(m,type='success'){
   var t=document.getElementById('toast'); t.textContent=m;
-  t.style.backgroundColor=type==='error'?'#ef4444':'#10b981'; t.style.color='#ffffff';
+  t.style.backgroundColor=type==='error'?'#ef4444':'#10b981';
   t.classList.remove('translate-y-20','opacity-0');
   setTimeout(()=>{t.classList.add('translate-y-20','opacity-0');},3000);
 }
 
-// Visual updates linking logic
 const inputAuthor = document.getElementById('inputAuthor');
 const inputTopic = document.getElementById('inputTopic');
 const inputQuote = document.getElementById('inputQuote');
 const inputStars = document.getElementById('inputStars');
 const inputColor = document.getElementById('inputColor');
-const inputLogo = document.getElementById('inputLogo');
 const captureCanvas = document.getElementById('captureCanvas');
 
 inputAuthor.addEventListener('input', () => document.getElementById('renderAuthor').textContent = inputAuthor.value);
@@ -201,30 +193,19 @@ inputQuote.addEventListener('input', () => document.getElementById('renderQuote'
 inputStars.addEventListener('change', () => document.getElementById('renderStars').textContent = '★'.repeat(parseInt(inputStars.value)) + '☆'.repeat(5 - parseInt(inputStars.value)));
 inputColor.addEventListener('change', () => captureCanvas.style.background = inputColor.value);
 
-inputLogo.addEventListener('change', (e) => {
-  const file = e.target.files[0]; if(!file) return;
-  const r = new FileReader();
-  r.onload = function(evt) {
-    const container = document.getElementById('logoPreviewContainer');
-    container.innerHTML = `<img src="${evt.target.result}" class="max-h-full max-w-full object-contain opacity-80" />`;
-  };
-  r.readAsDataURL(file);
-});
-
 function exportCanvas() {
   html2canvas(captureCanvas, { scale: 2, backgroundColor: null }).then(canvas => {
-    const a = document.createElement('a'); a.download = 'Session-Review-' + Date.now() + '.png';
+    const a = document.createElement('a'); a.download = 'Service-Audit-' + Date.now() + '.png';
     a.href = canvas.toDataURL('image/png'); a.click();
-    showToast('Canvas generated and saved to tracking filesystem.');
+    showToast('Service evaluation graphic exported successfully.');
   });
 }
 
 async function saveToAirtable() {
-  var btn = document.getElementById('airtableBtn'); btn.disabled = true;
-  btn.innerHTML = 'Syncing...';
+  var btn = document.getElementById('airtableBtn'); btn.disabled = true; btn.innerHTML = 'Saving...';
   try {
     await new Promise(r => setTimeout(r, 1000));
-    showToast('Data packet structurally synchronized with management node.');
+    showToast('Service telemetry structurally archived in secure cloud tier.');
   } catch(e) {
     showToast('Error: ' + e.message, 'error');
   } finally {
@@ -242,7 +223,7 @@ async function saveToAirtable() {
   closeBtn.addEventListener('click',()=> { drawer.classList.remove('open'); overlay.classList.remove('open'); });
   overlay.addEventListener('click',()=> { drawer.classList.remove('open'); overlay.classList.remove('open'); });
 
-  // Floating Switch State Sync
+  // Theme Sync Switcher
   const toggleBtn = document.getElementById('themeToggle');
   const htmlEl = document.documentElement;
   const iconPath = document.getElementById('themeIconPath');
