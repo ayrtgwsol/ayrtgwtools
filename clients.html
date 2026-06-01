@@ -1,349 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AYR TGW | Client Onboarding</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AYR TGW Solutions | Client Onboarding</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#030712;--surface:#0a0f1e;--border:rgba(59,130,246,.18);--blue:#3b82f6;--cyan:#06b6d4;--white:#f3f4f6;--muted:#6b7280;--danger:#ef4444;--success:#22c55e;--grad:linear-gradient(135deg,#1e3a8a 0%,#0e7490 100%)}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(59,130,246,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
-.nav{position:sticky;top:0;z-index:100;background:rgba(3,7,18,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.nav-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.12em;color:var(--cyan);text-decoration:none;border:1.5px solid var(--cyan);padding:4px 12px;transition:all .2s}
-.nav-logo:hover{background:var(--cyan);color:var(--bg)}
-.nav-links{display:flex;gap:28px;list-style:none}
-.nav-links a{color:var(--muted);font-size:.875rem;font-weight:500;text-decoration:none;letter-spacing:.03em;transition:color .2s;position:relative;padding-bottom:2px}
-.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--cyan);transition:width .2s}
-.nav-links a:hover{color:var(--white)}
-.nav-links a:hover::after,.nav-links a.active::after{width:100%}
-.nav-links a.active{color:var(--cyan)}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
-.hamburger span{display:block;width:24px;height:2px;background:var(--muted)}
-.mob-nav{position:fixed;top:0;right:0;width:260px;height:100vh;background:var(--surface);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .3s ease;z-index:200;padding:80px 28px 28px;display:flex;flex-direction:column;gap:20px}
-.mob-nav.open{transform:translateX(0)}
-.mob-nav a{color:var(--muted);font-weight:500;text-decoration:none;font-size:1rem;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
-.mob-nav a:hover,.mob-nav a.active{color:var(--cyan)}
-.mob-close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1}
-.page-wrap{max-width:860px;margin:0 auto;padding:48px 24px 80px;position:relative;z-index:1}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,6vw,4rem);letter-spacing:.06em;background:linear-gradient(90deg,var(--white) 0%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
-.page-sub{color:var(--muted);font-size:.95rem;margin-bottom:36px;line-height:1.6}
-/* STEP BAR */
-.step-bar{display:flex;margin-bottom:40px;position:relative}
-.step-bar::before{content:'';position:absolute;top:14px;left:14px;right:14px;height:2px;background:rgba(255,255,255,.08)}
-.step-prog{position:absolute;top:14px;left:14px;height:2px;background:var(--cyan);transition:width .4s ease}
-.step{flex:1;display:flex;flex-direction:column;align-items:center;z-index:1}
-.step-dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--muted);background:var(--bg);transition:all .3s}
-.step.done .step-dot{border-color:var(--cyan);color:var(--cyan);background:rgba(6,182,212,.1)}
-.step.active .step-dot{border-color:var(--cyan);background:var(--cyan);color:var(--bg)}
-.step-label{font-size:.65rem;color:var(--muted);margin-top:6px;text-align:center;letter-spacing:.04em;transition:color .3s}
-.step.active .step-label,.step.done .step-label{color:var(--cyan)}
-/* CARDS */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;margin-bottom:20px}
-.card-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.08em;color:var(--cyan);margin-bottom:20px}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.field-row.single{grid-template-columns:1fr}
-.field-row.triple{grid-template-columns:1fr 1fr 1fr}
-.fg{display:flex;flex-direction:column;gap:6px}
-label{font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-label .req{color:var(--cyan)}
-input,select,textarea{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--white);font-family:inherit;font-size:.9rem;padding:10px 14px;transition:border-color .2s,box-shadow .2s;width:100%;outline:none}
-input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(6,182,212,.12)}
-input::placeholder,textarea::placeholder{color:rgba(255,255,255,.2)}
-select option{background:var(--surface);color:var(--white)}
-textarea{resize:vertical;min-height:90px}
-.checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-top:6px}
-.checkbox-row input[type=checkbox]{width:18px;height:18px;flex-shrink:0;accent-color:var(--cyan);margin-top:2px}
-.checkbox-row label{text-transform:none;letter-spacing:0;font-size:.875rem;color:var(--muted);line-height:1.5;font-weight:400}
-.btn-row{display:flex;gap:12px;margin-top:28px;justify-content:flex-end;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;letter-spacing:.04em;cursor:pointer;transition:all .2s;border:none}
-.btn-primary{background:var(--grad);color:#fff}
-.btn-primary:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 8px 24px rgba(6,182,212,.25)}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
-.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
-.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.step-page{display:none}
-.step-page.active{display:block;animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;font-size:.875rem;max-width:320px;transform:translateY(80px);opacity:0;transition:all .35s;z-index:999}
-.toast.show{transform:translateY(0);opacity:1}
-.toast.success{border-color:var(--success);color:var(--success)}
-.toast.error{border-color:var(--danger);color:var(--danger)}
-.success-state{text-align:center;padding:60px 20px;display:none}
-.success-state.show{display:block;animation:fadeIn .5s ease}
-.success-icon{width:72px;height:72px;border-radius:50%;background:rgba(34,197,94,.1);border:2px solid var(--success);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
-@media(max-width:640px){
-  .nav-links{display:none}.hamburger{display:flex}
-  .field-row,.field-row.triple{grid-template-columns:1fr}
-  .card{padding:20px}.btn-row{justify-content:stretch}
-  .btn{flex:1;justify-content:center}
+
+/* ── BACKGROUND STACK ── */
+.bg-stack{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.bg-stack .bg-img{position:absolute;inset:0;background-image:url('./background/Background-Desktop.png');background-size:cover;background-position:center top;background-repeat:no-repeat;opacity:.50;}
+.bg-stack .bg-overlay{position:absolute;inset:0;background-image:url('./background/Overlay-Dark-Desktop.png');background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.85;}
+.glow-bloom{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at 50% 0%,rgba(30,64,175,0.18) 0%,rgba(3,7,18,0) 65%);}
+@media(max-width:767px){
+  .bg-stack .bg-img{background-image:url('./background/Background-Mobile.png');}
+  .bg-stack .bg-overlay{background-image:url('./background/Overlay-Dark-Mobile.png');}
 }
+/* ── PREMIUM HAMBURGER + DRAWER ── */
+.site-logo-img{height:48px;width:auto;object-fit:contain;display:block;}
+.hamburger-btn{display:flex;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:transparent;border:1px solid rgba(55,65,81,.60);border-radius:8px;cursor:pointer;padding:8px;transition:border-color .2s;}
+.hamburger-btn:hover{border-color:#2B5BD0;}
+.hamburger-btn span{display:block;height:1.5px;background:#9ca3af;border-radius:2px;transition:all .25s;}
+.hamburger-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.mobile-drawer{position:fixed;top:0;right:0;width:280px;height:100vh;background:#020917;border-left:1px solid rgba(55,65,81,.65);transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);z-index:200;display:flex;flex-direction:column;}
+.mobile-drawer.open{transform:translateX(0);}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid rgba(55,65,81,.45);}
+.drawer-head img{height:36px;width:auto;}
+.drawer-close{background:none;border:none;color:#6b7280;font-size:1.5rem;cursor:pointer;line-height:1;padding:2px 6px;transition:color .2s;}
+.drawer-close:hover{color:#f3f4f6;}
+.drawer-links{display:flex;flex-direction:column;padding:10px 0;flex:1;overflow-y:auto;}
+.drawer-links a{padding:13px 24px;color:#9ca3af;font-size:.9375rem;font-weight:500;text-decoration:none;letter-spacing:.03em;border-left:3px solid transparent;transition:all .18s;}
+.drawer-links a:hover{color:#f3f4f6;background:rgba(43,91,208,.06);border-left-color:#2B5BD0;}
+.drawer-links a.active{color:#4A90E2;border-left-color:#2B5BD0;background:rgba(43,91,208,.06);}
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(3,7,18,.55);z-index:199;backdrop-filter:blur(2px);}
+.drawer-overlay.open{display:block;}
+
+body{font-family:'Inter',sans-serif;background-color:#030712;color:#f3f4f6;}
+.nav-active{color:#60a5fa !important;}
+/* card panels */
+.panel{background:rgba(3,7,18,0.40);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(55,65,81,0.80);border-radius:12px;padding:28px;}
+.panel-title{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.panel-title::before{content:'';display:block;width:3px;height:14px;background:#3b82f6;border-radius:2px;}
+/* fields */
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg label{font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6b7280;}
+.fg label .req{color:#60a5fa;}
+.fg input,.fg select,.fg textarea{background:rgba(17,24,39,.60);border:1px solid rgba(55,65,81,.80);border-radius:8px;color:#f3f4f6;font-family:inherit;font-size:.875rem;padding:9px 13px;transition:border-color .2s,box-shadow .2s;width:100%;outline:none;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15);}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(255,255,255,.18);}
+.fg select option{background:#0a0f1e;color:#f3f4f6;}
+.fg textarea{resize:vertical;min-height:88px;}
+/* step bar */
+.step-track{position:absolute;top:13px;left:14px;right:14px;height:2px;background:rgba(55,65,81,.60);border-radius:2px;}
+.step-prog-fill{position:absolute;top:0;left:0;height:100%;background:#3b82f6;border-radius:2px;transition:width .4s ease;}
+.step-dot{width:27px;height:27px;border-radius:50%;border:2px solid rgba(55,65,81,.80);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:#6b7280;background:#030712;transition:all .3s;position:relative;z-index:1;}
+.step.done .step-dot{border-color:#3b82f6;color:#3b82f6;background:rgba(59,130,246,.08);}
+.step.active .step-dot{border-color:#3b82f6;background:#3b82f6;color:#fff;}
+.step-lbl{font-size:.6rem;color:#6b7280;margin-top:6px;text-align:center;letter-spacing:.04em;transition:color .3s;}
+.step.active .step-lbl,.step.done .step-lbl{color:#60a5fa;}
+/* step pages */
+.step-page{display:none;}
+.step-page.active{display:block;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* toast */
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(3,7,18,.95);border:1px solid rgba(55,65,81,.80);border-radius:10px;padding:13px 18px;font-size:.875rem;max-width:320px;transform:translateY(80px);opacity:0;transition:all .35s;z-index:999;backdrop-filter:blur(8px);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:#22c55e;color:#22c55e;}
+.toast.error{border-color:#ef4444;color:#ef4444;}
+/* checkbox */
+.cb-row{display:flex;align-items:flex-start;gap:9px;margin-top:6px;}
+.cb-row input[type=checkbox]{width:15px;height:15px;flex-shrink:0;accent-color:#3b82f6;margin-top:3px;}
+.cb-row label{font-size:.83rem;color:#9ca3af;line-height:1.5;font-weight:400;}
+@media(max-width:640px){.field-grid{grid-template-columns:1fr !important;}}
 </style>
 </head>
-<body>
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">AYR TGW</a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="clients.html" class="active">Clients</a></li>
-      <li><a href="partners.html">Partners</a></li>
-      <li><a href="agents.html">Agents</a></li>
-      <li><a href="inquiry.html">Inquiry</a></li>
-      <li><a href="session-feedback.html">Session Feedback</a></li>
-      <li><a href="service-feedback.html">Service Feedback</a></li>
+<body class="relative min-h-screen overflow-x-hidden">
+<!-- BACKGROUND STACK -->
+<div class="bg-stack" id="bgStack">
+  <div class="bg-img"></div>
+  <div class="bg-overlay"></div>
+</div>
+<div class="glow-bloom"></div>
+
+
+<!-- STICKY HEADER -->
+<header class="site-header" style="position:sticky;top:0;z-index:50;background:rgba(3,7,18,0.40);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(55,65,81,0.65);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;height:76px;display:flex;align-items:center;justify-content:space-between;">
+    <a href="index.html" style="display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;">
+      <img src="./Logo2.png" alt="AYR TGW Solutions" class="site-logo-img">
+    </a>
+    <ul style="display:none;align-items:center;gap:28px;list-style:none;margin:0;padding:0;" id="desktopNavList">
+      <li><a href="index.html" class="dnav-link">Home</a></li>
+      <li><a href="clients.html" class="dnav-link active" aria-current="page">Clients</a></li>
+      <li><a href="partners.html" class="dnav-link">Partners</a></li>
+      <li><a href="agents.html" class="dnav-link">Agents</a></li>
+      <li><a href="inquiry.html" class="dnav-link">Inquiry</a></li>
+      <li><a href="session-feedback.html" class="dnav-link">Session Feedback</a></li>
+      <li><a href="service-feedback.html" class="dnav-link">Service Feedback</a></li>
     </ul>
-    <button class="hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+    <button class="hamburger-btn" id="hamburgerBtn2" aria-label="Open navigation menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- MOBILE DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay2"></div>
+<nav class="mobile-drawer" id="mobileDrawer2" aria-label="Mobile navigation">
+  <div class="drawer-head">
+    <img src="./Logo2.png" alt="AYR TGW Solutions">
+    <button class="drawer-close" id="drawerClose2" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <div class="drawer-links">
+    <a href="index.html" class="drawer-links-a">Home</a>
+    <a href="clients.html" class="drawer-links-a active" aria-current="page">Clients</a>
+    <a href="partners.html" class="drawer-links-a">Partners</a>
+    <a href="agents.html" class="drawer-links-a">Agents</a>
+    <a href="inquiry.html" class="drawer-links-a">Inquiry</a>
+    <a href="session-feedback.html" class="drawer-links-a">Session Feedback</a>
+    <a href="service-feedback.html" class="drawer-links-a">Service Feedback</a>
   </div>
 </nav>
-<div class="mob-nav" id="mobNav">
-  <button class="mob-close" id="mobClose">&#x2715;</button>
-  <a href="index.html">Home</a><a href="clients.html" class="active">Clients</a><a href="partners.html">Partners</a><a href="agents.html">Agents</a><a href="inquiry.html">Inquiry</a><a href="session-feedback.html">Session Feedback</a><a href="service-feedback.html">Service Feedback</a>
-</div>
 
-<div class="page-wrap">
-  <h1 class="page-title">Client Onboarding</h1>
-  <p class="page-sub">Complete your Financial Needs Analysis. All information is securely handled under WFG compliance standards.</p>
+<style>
+@media(min-width:768px){
+  #desktopNavList{display:flex !important;}
+  #hamburgerBtn2{display:none !important;}
+}
+.dnav-link{font-size:.8125rem;font-weight:500;color:#9ca3af;text-decoration:none;letter-spacing:.04em;transition:color .2s;position:relative;padding-bottom:3px;}
+.dnav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:#2B5BD0;transition:width .2s;}
+.dnav-link:hover{color:#f3f4f6;}
+.dnav-link:hover::after,.dnav-link.active::after{width:100%;}
+.dnav-link.active{color:#4A90E2;}
+.drawer-links-a{display:block;padding:13px 24px;color:#9ca3af;font-size:.9375rem;font-weight:500;text-decoration:none;letter-spacing:.03em;border-left:3px solid transparent;transition:all .18s;}
+.drawer-links-a:hover{color:#f3f4f6;background:rgba(43,91,208,.06);border-left-color:#2B5BD0;}
+.drawer-links-a.active{color:#4A90E2;border-left-color:#2B5BD0;background:rgba(43,91,208,.06);}
+</style>
 
-  <div class="step-bar" id="stepBar">
-    <div class="step active" data-step="1"><div class="step-dot">1</div><div class="step-label">Contact</div></div>
-    <div class="step" data-step="2"><div class="step-dot">2</div><div class="step-label">Financial Status</div></div>
-    <div class="step" data-step="3"><div class="step-dot">3</div><div class="step-label">Goals</div></div>
-    <div class="step" data-step="4"><div class="step-dot">4</div><div class="step-label">Underwriter</div></div>
-    <div class="step" data-step="5"><div class="step-dot">5</div><div class="step-label">Booking</div></div>
-    <div class="step-prog" id="stepProg" style="width:0%"></div>
+<!-- MAIN -->
+<main class="max-w-3xl mx-auto px-6 py-14 relative z-10">
+  <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-500 bg-clip-text text-transparent mb-2">Client Onboarding</h1>
+  <p class="text-gray-400 text-base mb-10 leading-relaxed max-w-xl">Complete your Financial Needs Analysis. All information is securely handled under WFG compliance standards.</p>
+
+  <!-- STEP BAR -->
+  <div class="flex relative mb-11" id="stepBar">
+    <div class="step-track"><div class="step-prog-fill" id="stepProg" style="width:0%"></div></div>
+    <div class="step active flex-1 flex flex-col items-center" data-step="1"><div class="step-dot">1</div><div class="step-lbl">Contact</div></div>
+    <div class="step flex-1 flex flex-col items-center" data-step="2"><div class="step-dot">2</div><div class="step-lbl">Financial</div></div>
+    <div class="step flex-1 flex flex-col items-center" data-step="3"><div class="step-dot">3</div><div class="step-lbl">Goals</div></div>
+    <div class="step flex-1 flex flex-col items-center" data-step="4"><div class="step-dot">4</div><div class="step-lbl">Underwriter</div></div>
+    <div class="step flex-1 flex flex-col items-center" data-step="5"><div class="step-dot">5</div><div class="step-lbl">Booking</div></div>
   </div>
 
-  <!-- STEP 1: Contact Info -->
+  <!-- STEP 1 -->
   <div class="step-page active" id="step1">
-    <div class="card">
-      <div class="card-title">Contact Information</div>
-      <div class="field-row">
+    <div class="panel mb-5">
+      <div class="panel-title">Contact Information</div>
+      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
         <div class="fg"><label>Full Name <span class="req">*</span></label><input type="text" id="full_name" placeholder="Jane Smith" required></div>
-        <div class="fg"><label>Email Address <span class="req">*</span></label><input type="email" id="email" placeholder="jane@email.com" required></div>
+        <div class="fg"><label>Email <span class="req">*</span></label><input type="email" id="email" placeholder="jane@email.com" required></div>
       </div>
-      <div class="field-row">
-        <div class="fg"><label>Phone Number <span class="req">*</span></label><input type="tel" id="phone" placeholder="+1 416 000 0000" required></div>
-        <div class="fg"><label>Preferred Contact Method</label>
-          <select id="preferred_contact">
-            <option value="">Select method...</option>
-            <option>Phone</option><option>Email</option><option>Text</option>
-          </select>
-        </div>
+      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
+        <div class="fg"><label>Phone <span class="req">*</span></label><input type="tel" id="phone" placeholder="+1 416 000 0000" required></div>
+        <div class="fg"><label>Preferred Contact</label>
+          <select id="preferred_contact"><option value="">Select…</option><option>Phone</option><option>Email</option><option>Text</option></select></div>
       </div>
-      <div class="field-row">
-        <div class="fg"><label>Citizenship / Immigration Status</label>
-          <select id="citizens_status">
-            <option value="">Select status...</option>
-            <option>Canadian Citizen</option><option>Permanent Resident</option><option>Work Permit</option><option>Student Visa</option><option>Other</option>
-          </select>
-        </div>
-        <div class="fg"><label>Protection Partner (if applicable)</label><input type="text" id="protection_partner" placeholder="Partner full name"></div>
+      <div class="grid grid-cols-2 gap-4 field-grid">
+        <div class="fg"><label>Citizenship Status</label>
+          <select id="citizens_status"><option value="">Select…</option><option>Canadian Citizen</option><option>Permanent Resident</option><option>Work Permit</option><option>Student Visa</option><option>Other</option></select></div>
+        <div class="fg"><label>Protection Partner</label><input type="text" id="protection_partner" placeholder="Partner full name"></div>
       </div>
     </div>
-    <div class="btn-row"><button class="btn btn-primary" onclick="goStep(2)">Next Step →</button></div>
+    <div class="flex justify-end gap-3 mt-6"><button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20" onclick="goStep(2)">Next Step →</button></div>
   </div>
 
-  <!-- STEP 2: Financial Status -->
+  <!-- STEP 2 -->
   <div class="step-page" id="step2">
-    <div class="card">
-      <div class="card-title">Financial Status Overview</div>
-      <div class="field-row">
+    <div class="panel mb-5">
+      <div class="panel-title">Financial Status Overview</div>
+      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
         <div class="fg"><label>Monthly Income</label><input type="number" id="monthly_income" placeholder="e.g. 5000" min="0"></div>
         <div class="fg"><label>Monthly Expenses</label><input type="number" id="monthly_expenses" placeholder="e.g. 2500" min="0"></div>
       </div>
-      <div class="field-row">
-        <div class="fg"><label>Property / Mortgage Details</label><input type="text" id="property_mortgage" placeholder="Own / Rent / Mortgage amount"></div>
-        <div class="fg"><label>Savings Provisions</label><input type="text" id="provide_savings" placeholder="e.g. RRSP, TFSA, GIC"></div>
+      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
+        <div class="fg"><label>Property / Mortgage</label><input type="text" id="property_mortgage" placeholder="Own / Rent / Mortgage amt"></div>
+        <div class="fg"><label>Savings Provisions</label><input type="text" id="provide_savings" placeholder="RRSP, TFSA, GIC…"></div>
       </div>
-      <div class="field-row single">
-        <div class="fg"><label>Outstanding Debts</label><input type="text" id="debts" placeholder="e.g. Car loan $10k, Credit card $3k"></div>
-      </div>
+      <div class="fg"><label>Outstanding Debts</label><input type="text" id="debts" placeholder="e.g. Car loan $10k, Credit card $3k"></div>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-ghost" onclick="goStep(1)">← Back</button>
-      <button class="btn btn-primary" onclick="goStep(3)">Next Step →</button>
+    <div class="flex justify-end gap-3 mt-6">
+      <button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all" onclick="goStep(1)">← Back</button>
+      <button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20" onclick="goStep(3)">Next Step →</button>
     </div>
   </div>
 
-  <!-- STEP 3: Financial Goals -->
+  <!-- STEP 3 -->
   <div class="step-page" id="step3">
-    <div class="card">
-      <div class="card-title">Financial Needs & Goals</div>
-      <div class="field-row single">
-        <div class="fg"><label>Current Financial Needs</label><textarea id="financial_needs" placeholder="Describe your current financial situation and needs..."></textarea></div>
-      </div>
-      <div class="field-row single">
-        <div class="fg"><label>Financial Priorities</label><textarea id="financial_priorities" placeholder="What are your top financial priorities? (e.g. retirement, child education, debt freedom)"></textarea></div>
-      </div>
+    <div class="panel mb-5">
+      <div class="panel-title">Financial Needs &amp; Goals</div>
+      <div class="fg mb-4"><label>Current Financial Needs</label><textarea id="financial_needs" placeholder="Describe your current financial situation and needs…"></textarea></div>
+      <div class="fg"><label>Financial Priorities</label><textarea id="financial_priorities" placeholder="Top priorities: retirement, education savings, debt freedom…"></textarea></div>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-ghost" onclick="goStep(2)">← Back</button>
-      <button class="btn btn-primary" onclick="goStep(4)">Next Step →</button>
+    <div class="flex justify-end gap-3 mt-6">
+      <button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all" onclick="goStep(2)">← Back</button>
+      <button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20" onclick="goStep(4)">Next Step →</button>
     </div>
   </div>
 
-  <!-- STEP 4: Underwriter Details -->
+  <!-- STEP 4 -->
   <div class="step-page" id="step4">
-    <div class="card">
-      <div class="card-title">Underwriter Considerations</div>
-      <div class="field-row">
+    <div class="panel mb-5">
+      <div class="panel-title">Underwriter Considerations</div>
+      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
         <div class="fg"><label>Active Finances / Current Products</label><input type="text" id="active_finances" placeholder="e.g. Life insurance with Sun Life"></div>
-        <div class="fg"><label>Requested Advisor (if any)</label><input type="text" id="requested_advisor" placeholder="Advisor name or WFG ID"></div>
+        <div class="fg"><label>Requested Advisor</label><input type="text" id="requested_advisor" placeholder="Advisor name or WFG ID"></div>
       </div>
-      <div class="field-row single">
-        <div class="fg"><label>Specific Details for Advisor</label><textarea id="specific_details" placeholder="Any additional context or specific requests for your advisor..."></textarea></div>
-      </div>
+      <div class="fg"><label>Specific Details for Advisor</label><textarea id="specific_details" placeholder="Additional context or requests for your advisor…"></textarea></div>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-ghost" onclick="goStep(3)">← Back</button>
-      <button class="btn btn-primary" onclick="goStep(5)">Next Step →</button>
+    <div class="flex justify-end gap-3 mt-6">
+      <button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all" onclick="goStep(3)">← Back</button>
+      <button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20" onclick="goStep(5)">Next Step →</button>
     </div>
   </div>
 
-  <!-- STEP 5: Booking -->
+  <!-- STEP 5 -->
   <div class="step-page" id="step5">
-    <div class="card">
-      <div class="card-title">Book Your Consultation</div>
-      <p style="color:var(--muted);font-size:.875rem;margin-bottom:20px;line-height:1.6">Provide up to three preferred time slots. Your advisor will confirm the best availability.</p>
-      <div class="field-row" style="margin-bottom:20px">
+    <div class="panel mb-5">
+      <div class="panel-title">Book Your Consultation</div>
+      <p class="text-gray-500 text-sm mb-5 leading-relaxed">Provide up to three preferred time slots. Your advisor will confirm the best availability.</p>
+      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
         <div class="fg"><label>Preferred Date #1</label><input type="date" id="date_1"></div>
         <div class="fg"><label>Preferred Time #1</label><input type="time" id="time_1"></div>
       </div>
-      <div class="field-row" style="margin-bottom:20px">
+      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
         <div class="fg"><label>Preferred Date #2</label><input type="date" id="date_2"></div>
         <div class="fg"><label>Preferred Time #2</label><input type="time" id="time_2"></div>
       </div>
-      <div class="field-row">
+      <div class="grid grid-cols-2 gap-4 field-grid">
         <div class="fg"><label>Preferred Date #3</label><input type="date" id="date_3"></div>
         <div class="fg"><label>Preferred Time #3</label><input type="time" id="time_3"></div>
       </div>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-ghost" onclick="goStep(4)">← Back</button>
-      <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        Submit Application
+    <div class="flex justify-end gap-3 mt-6">
+      <button class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all" onclick="goStep(4)">← Back</button>
+      <button id="submitBtn" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20" onclick="submitForm()">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Submit Application
       </button>
     </div>
   </div>
 
-  <!-- SUCCESS STATE -->
-  <div class="success-state" id="successState">
-    <div class="success-icon">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <!-- SUCCESS -->
+  <div id="successState" class="hidden text-center py-16">
+    <div class="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/40 flex items-center justify-center mx-auto mb-5">
+      <svg class="w-7 h-7 stroke-green-400" fill="none" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.06em;color:var(--success);margin-bottom:12px">Application Submitted</h2>
-    <p style="color:var(--muted);max-width:420px;margin:0 auto 28px;line-height:1.6">Your Financial Needs Analysis has been received and securely logged. An advisor will be in touch within 1–2 business days.</p>
-    <a href="index.html" class="btn btn-ghost" style="display:inline-flex">← Return to Hub</a>
+    <h2 class="text-3xl font-extrabold text-green-400 mb-3">Application Submitted</h2>
+    <p class="text-gray-400 max-w-md mx-auto mb-8 leading-relaxed">Your Financial Needs Analysis has been received and securely logged. An advisor will be in touch within 1–2 business days.</p>
+    <a href="index.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all">← Return to Hub</a>
   </div>
-</div>
+</main>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const BASE_ID = 'appdtWUAAIOXKZV6F';
-const TABLE_ID = 'tblwic381ZdIa1erm';
-// NOTE: Replace with a restricted Airtable Personal Access Token scoped to data.records:write
-const AT_KEY = 'YOUR_AIRTABLE_PAT_HERE';
-
-let currentStep = 1;
-const totalSteps = 5;
-
-function goStep(n) {
-  if (n < 1 || n > totalSteps) return;
-  if (n > currentStep) {
-    const curr = document.getElementById('step' + currentStep);
-    const required = curr.querySelectorAll('[required]');
-    for (const el of required) {
-      if (!el.value.trim()) {
-        el.focus(); showToast('Please fill in all required fields.', 'error'); return;
-      }
-    }
+const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tblwic381ZdIa1erm',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
+let cur=1;const total=5;
+function goStep(n){
+  if(n<1||n>total)return;
+  if(n>cur){
+    const curr=document.getElementById('step'+cur);
+    for(const el of curr.querySelectorAll('[required]')){if(!el.value.trim()){el.focus();showToast('Please fill in all required fields.','error');return;}}
   }
-  document.getElementById('step' + currentStep).classList.remove('active');
-  currentStep = n;
-  document.getElementById('step' + currentStep).classList.add('active');
-  const steps = document.querySelectorAll('.step[data-step]');
-  steps.forEach(s => {
-    const num = parseInt(s.dataset.step);
-    s.classList.remove('active', 'done');
-    if (num === currentStep) s.classList.add('active');
-    else if (num < currentStep) s.classList.add('done');
+  document.getElementById('step'+cur).classList.remove('active');
+  cur=n;
+  document.getElementById('step'+cur).classList.add('active');
+  document.querySelectorAll('.step[data-step]').forEach(s=>{
+    const num=parseInt(s.dataset.step);
+    s.classList.remove('active','done');
+    if(num===cur)s.classList.add('active');
+    else if(num<cur)s.classList.add('done');
   });
-  const pct = ((currentStep - 1) / (totalSteps - 1)) * 100;
-  document.getElementById('stepProg').style.width = pct + '%';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('stepProg').style.width=(((cur-1)/(total-1))*100)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-
-function showToast(msg, type = 'info') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show ' + type;
-  setTimeout(() => t.classList.remove('show'), 3500);
+function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
+async function submitForm(){
+  const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Submitting…';
+  const fields={'Full_Name':document.getElementById('full_name').value,'Email':document.getElementById('email').value,'Phone':document.getElementById('phone').value,'Preferred_Contact':document.getElementById('preferred_contact').value,'Citizens_Status':document.getElementById('citizens_status').value,'Protection_Partner':document.getElementById('protection_partner').value,'Monthly_Income':parseFloat(document.getElementById('monthly_income').value)||0,'Monthly_Expenses':parseFloat(document.getElementById('monthly_expenses').value)||0,'Property_Mortgage':document.getElementById('property_mortgage').value,'Provide_Savings':document.getElementById('provide_savings').value,'Debts':document.getElementById('debts').value,'Financial_Needs':document.getElementById('financial_needs').value,'Financial_Priorities':document.getElementById('financial_priorities').value,'Active_Finances':document.getElementById('active_finances').value,'Requested_Advisor':document.getElementById('requested_advisor').value,'Specific_Details':document.getElementById('specific_details').value,'Booking_Date_1':document.getElementById('date_1').value||null,'Booking_Time_1':document.getElementById('time_1').value,'Booking_Date_2':document.getElementById('date_2').value||null,'Booking_Time_2':document.getElementById('time_2').value,'Booking_Date_3':document.getElementById('date_3').value||null,'Booking_Time_3':document.getElementById('time_3').value};
+  Object.keys(fields).forEach(k=>{if(fields[k]===null||fields[k]==='')delete fields[k];});
+  try{
+    const res=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,{method:'POST',headers:{'Authorization':`Bearer ${AT_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({records:[{fields}],typecast:true})});
+    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Submission failed');}
+    for(let i=1;i<=total;i++){const el=document.getElementById('step'+i);if(el)el.style.display='none';}
+    document.getElementById('stepBar').style.display='none';
+    document.getElementById('successState').classList.remove('hidden');
+  }catch(e){showToast('Error: '+e.message,'error');btn.disabled=false;btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Submit Application';}
 }
-
-async function submitForm() {
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.textContent = 'Submitting...';
-
-  const fields = {
-    'Full_Name': document.getElementById('full_name').value,
-    'Email': document.getElementById('email').value,
-    'Phone': document.getElementById('phone').value,
-    'Preferred_Contact': document.getElementById('preferred_contact').value,
-    'Citizens_Status': document.getElementById('citizens_status').value,
-    'Protection_Partner': document.getElementById('protection_partner').value,
-    'Monthly_Income': parseFloat(document.getElementById('monthly_income').value) || 0,
-    'Monthly_Expenses': parseFloat(document.getElementById('monthly_expenses').value) || 0,
-    'Property_Mortgage': document.getElementById('property_mortgage').value,
-    'Provide_Savings': document.getElementById('provide_savings').value,
-    'Debts': document.getElementById('debts').value,
-    'Financial_Needs': document.getElementById('financial_needs').value,
-    'Financial_Priorities': document.getElementById('financial_priorities').value,
-    'Active_Finances': document.getElementById('active_finances').value,
-    'Requested_Advisor': document.getElementById('requested_advisor').value,
-    'Specific_Details': document.getElementById('specific_details').value,
-    'Booking_Date_1': document.getElementById('date_1').value || null,
-    'Booking_Time_1': document.getElementById('time_1').value,
-    'Booking_Date_2': document.getElementById('date_2').value || null,
-    'Booking_Time_2': document.getElementById('time_2').value,
-    'Booking_Date_3': document.getElementById('date_3').value || null,
-    'Booking_Time_3': document.getElementById('time_3').value,
-  };
-
-  // Remove nulls
-  Object.keys(fields).forEach(k => { if (fields[k] === null || fields[k] === '') delete fields[k]; });
-
-  try {
-    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${AT_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ records: [{ fields }], typecast: true })
-    });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error?.message || 'Submission failed');
-    }
-    // Hide form, show success
-    for (let i = 1; i <= totalSteps; i++) document.getElementById('step' + i).style.display = 'none';
-    document.getElementById('stepBar').style.display = 'none';
-    document.querySelector('.page-sub').style.display = 'none';
-    document.getElementById('successState').classList.add('show');
-  } catch (e) {
-    showToast('Error: ' + e.message, 'error');
-    btn.disabled = false;
-    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Submit Application';
-  }
-}
-
-const menuBtn=document.getElementById('menuBtn'),mobNav=document.getElementById('mobNav'),mobClose=document.getElementById('mobClose');
-menuBtn.addEventListener('click',()=>mobNav.classList.add('open'));
-mobClose.addEventListener('click',()=>mobNav.classList.remove('open'));
-document.addEventListener('click',e=>{if(mobNav.classList.contains('open')&&!mobNav.contains(e.target)&&e.target!==menuBtn)mobNav.classList.remove('open')});
+</script>
+<script>
+(function(){
+  var btn=document.getElementById('hamburgerBtn2');
+  var drawer=document.getElementById('mobileDrawer2');
+  var overlay=document.getElementById('drawerOverlay2');
+  var closeBtn=document.getElementById('drawerClose2');
+  if(!btn||!drawer)return;
+  function openD(){drawer.classList.add('open');overlay.classList.add('open');btn.classList.add('open');document.body.style.overflow='hidden';}
+  function closeD(){drawer.classList.remove('open');overlay.classList.remove('open');btn.classList.remove('open');document.body.style.overflow='';}
+  btn.addEventListener('click',openD);
+  closeBtn.addEventListener('click',closeD);
+  overlay.addEventListener('click',closeD);
+})();
+// Video background fallback
+(function(){
+  var bgStack=document.getElementById('bgStack');
+  if(!bgStack)return;
+  var vid=document.createElement('video');
+  vid.src='./background/Background-Desktop.mp4';
+  vid.autoplay=true;vid.muted=true;vid.loop=true;vid.playsInline=true;
+  vid.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.40;';
+  vid.addEventListener('canplay',function(){bgStack.querySelector('.bg-img').style.display='none';bgStack.appendChild(vid);},{once:true});
+  vid.load();
+})();
 </script>
 </body>
 </html>

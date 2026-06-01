@@ -1,183 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AYR TGW | Agent Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AYR TGW Solutions | Agent Portal</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#030712;--surface:#0a0f1e;--border:rgba(59,130,246,.18);--blue:#3b82f6;--cyan:#06b6d4;--white:#f3f4f6;--muted:#6b7280;--danger:#ef4444;--success:#22c55e;--grad:linear-gradient(135deg,#1e3a8a 0%,#0e7490 100%)}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(59,130,246,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
-.nav{position:sticky;top:0;z-index:100;background:rgba(3,7,18,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.nav-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.12em;color:var(--cyan);text-decoration:none;border:1.5px solid var(--cyan);padding:4px 12px;transition:all .2s}
-.nav-logo:hover{background:var(--cyan);color:var(--bg)}
-.nav-links{display:flex;gap:28px;list-style:none}
-.nav-links a{color:var(--muted);font-size:.875rem;font-weight:500;text-decoration:none;letter-spacing:.03em;transition:color .2s;position:relative;padding-bottom:2px}
-.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--cyan);transition:width .2s}
-.nav-links a:hover{color:var(--white)}
-.nav-links a:hover::after,.nav-links a.active::after{width:100%}
-.nav-links a.active{color:var(--cyan)}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
-.hamburger span{display:block;width:24px;height:2px;background:var(--muted)}
-.mob-nav{position:fixed;top:0;right:0;width:260px;height:100vh;background:var(--surface);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .3s ease;z-index:200;padding:80px 28px 28px;display:flex;flex-direction:column;gap:20px}
-.mob-nav.open{transform:translateX(0)}
-.mob-nav a{color:var(--muted);font-weight:500;text-decoration:none;font-size:1rem;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
-.mob-nav a:hover,.mob-nav a.active{color:var(--cyan)}
-.mob-close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1}
-.page-wrap{max-width:860px;margin:0 auto;padding:48px 24px 80px;position:relative;z-index:1}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,6vw,4rem);letter-spacing:.06em;background:linear-gradient(90deg,var(--white) 0%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
-.page-sub{color:var(--muted);font-size:.95rem;margin-bottom:40px;line-height:1.6}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;margin-bottom:20px}
-.card-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.08em;color:var(--cyan);margin-bottom:20px}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.field-row.single{grid-template-columns:1fr}
-.field-row.triple{grid-template-columns:1fr 1fr 1fr}
-.fg{display:flex;flex-direction:column;gap:6px}
-label{font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-label .req{color:var(--cyan)}
-input,select{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--white);font-family:inherit;font-size:.9rem;padding:10px 14px;transition:border-color .2s,box-shadow .2s;width:100%;outline:none}
-input:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(6,182,212,.12)}
-input::placeholder{color:rgba(255,255,255,.2)}
-select option{background:var(--surface);color:var(--white)}
-.metric-card{background:rgba(6,182,212,.04);border:1px solid rgba(6,182,212,.15);border-radius:10px;padding:20px;text-align:center}
-.metric-label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-input[type=number].metric-input{font-family:'Bebas Neue',sans-serif;font-size:2rem;text-align:center;background:transparent;border:none;border-bottom:2px solid rgba(6,182,212,.3);border-radius:0;padding:4px 0;color:var(--cyan)}
-input[type=number].metric-input:focus{border-bottom-color:var(--cyan);box-shadow:none}
-.btn-row{display:flex;gap:12px;margin-top:28px;justify-content:flex-end}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;letter-spacing:.04em;cursor:pointer;transition:all .2s;border:none}
-.btn-primary{background:var(--grad);color:#fff}
-.btn-primary:hover{opacity:.88;transform:translateY(-1px)}
-.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;font-size:.875rem;max-width:320px;transform:translateY(80px);opacity:0;transition:all .35s;z-index:999}
-.toast.show{transform:translateY(0);opacity:1}
-.toast.success{border-color:var(--success);color:var(--success)}
-.toast.error{border-color:var(--danger);color:var(--danger)}
-.success-state{text-align:center;padding:60px 20px;display:none}
-.success-state.show{display:block}
-.success-icon{width:72px;height:72px;border-radius:50%;background:rgba(34,197,94,.1);border:2px solid var(--success);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
-@media(max-width:640px){.nav-links{display:none}.hamburger{display:flex}.field-row,.field-row.triple{grid-template-columns:1fr}.card{padding:20px}}
+
+/* ── BACKGROUND STACK ── */
+.bg-stack{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.bg-stack .bg-img{position:absolute;inset:0;background-image:url('./background/Background-Desktop.png');background-size:cover;background-position:center top;background-repeat:no-repeat;opacity:.50;}
+.bg-stack .bg-overlay{position:absolute;inset:0;background-image:url('./background/Overlay-Dark-Desktop.png');background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.85;}
+.glow-bloom{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at 50% 0%,rgba(30,64,175,0.18) 0%,rgba(3,7,18,0) 65%);}
+@media(max-width:767px){
+  .bg-stack .bg-img{background-image:url('./background/Background-Mobile.png');}
+  .bg-stack .bg-overlay{background-image:url('./background/Overlay-Dark-Mobile.png');}
+}
+/* ── PREMIUM HAMBURGER + DRAWER ── */
+.site-logo-img{height:48px;width:auto;object-fit:contain;display:block;}
+.hamburger-btn{display:flex;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:transparent;border:1px solid rgba(55,65,81,.60);border-radius:8px;cursor:pointer;padding:8px;transition:border-color .2s;}
+.hamburger-btn:hover{border-color:#2B5BD0;}
+.hamburger-btn span{display:block;height:1.5px;background:#9ca3af;border-radius:2px;transition:all .25s;}
+.hamburger-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.mobile-drawer{position:fixed;top:0;right:0;width:280px;height:100vh;background:#020917;border-left:1px solid rgba(55,65,81,.65);transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);z-index:200;display:flex;flex-direction:column;}
+.mobile-drawer.open{transform:translateX(0);}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid rgba(55,65,81,.45);}
+.drawer-head img{height:36px;width:auto;}
+.drawer-close{background:none;border:none;color:#6b7280;font-size:1.5rem;cursor:pointer;line-height:1;padding:2px 6px;transition:color .2s;}
+.drawer-close:hover{color:#f3f4f6;}
+.drawer-links{display:flex;flex-direction:column;padding:10px 0;flex:1;overflow-y:auto;}
+.drawer-links a{padding:13px 24px;color:#9ca3af;font-size:.9375rem;font-weight:500;text-decoration:none;letter-spacing:.03em;border-left:3px solid transparent;transition:all .18s;}
+.drawer-links a:hover{color:#f3f4f6;background:rgba(43,91,208,.06);border-left-color:#2B5BD0;}
+.drawer-links a.active{color:#4A90E2;border-left-color:#2B5BD0;background:rgba(43,91,208,.06);}
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(3,7,18,.55);z-index:199;backdrop-filter:blur(2px);}
+.drawer-overlay.open{display:block;}
+
+body{font-family:'Inter',sans-serif;background-color:#030712;color:#f3f4f6;}
+.nav-active{color:#60a5fa !important;}
+.panel{background:rgba(3,7,18,0.40);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(55,65,81,0.80);border-radius:12px;padding:28px;}
+.panel-title{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.panel-title::before{content:'';display:block;width:3px;height:14px;background:#3b82f6;border-radius:2px;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg label{font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6b7280;}
+.fg label .req{color:#60a5fa;}
+.fg input,.fg select{background:rgba(17,24,39,.60);border:1px solid rgba(55,65,81,.80);border-radius:8px;color:#f3f4f6;font-family:inherit;font-size:.875rem;padding:9px 13px;transition:border-color .2s,box-shadow .2s;width:100%;outline:none;}
+.fg input:focus,.fg select:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15);}
+.fg input::placeholder{color:rgba(255,255,255,.18);}
+.fg select option{background:#0a0f1e;color:#f3f4f6;}
+/* metric card */
+.metric-card{background:rgba(59,130,246,.04);border:1px solid rgba(59,130,246,.15);border-radius:10px;padding:20px 16px;text-align:center;}
+.metric-lbl{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:#6b7280;margin-bottom:8px;}
+.metric-input{font-size:2.4rem;font-weight:800;text-align:center;background:transparent;border:none;border-bottom:2px solid rgba(59,130,246,.30);border-radius:0;padding:4px 0;color:#60a5fa;width:100%;outline:none;font-family:inherit;}
+.metric-input:focus{border-bottom-color:#3b82f6;box-shadow:none;}
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(3,7,18,.95);border:1px solid rgba(55,65,81,.80);border-radius:10px;padding:13px 18px;font-size:.875rem;max-width:320px;transform:translateY(80px);opacity:0;transition:all .35s;z-index:999;backdrop-filter:blur(8px);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:#22c55e;color:#22c55e;}
+.toast.error{border-color:#ef4444;color:#ef4444;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:640px){.field-grid{grid-template-columns:1fr !important;}.metric-grid{grid-template-columns:1fr !important;}}
 </style>
 </head>
-<body>
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">AYR TGW</a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li><li><a href="clients.html">Clients</a></li>
-      <li><a href="partners.html">Partners</a></li><li><a href="agents.html" class="active">Agents</a></li>
-      <li><a href="inquiry.html">Inquiry</a></li><li><a href="session-feedback.html">Session Feedback</a></li>
-      <li><a href="service-feedback.html">Service Feedback</a></li>
+<body class="relative min-h-screen overflow-x-hidden">
+<!-- BACKGROUND STACK -->
+<div class="bg-stack" id="bgStack">
+  <div class="bg-img"></div>
+  <div class="bg-overlay"></div>
+</div>
+<div class="glow-bloom"></div>
+
+
+<!-- STICKY HEADER -->
+<header class="site-header" style="position:sticky;top:0;z-index:50;background:rgba(3,7,18,0.40);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(55,65,81,0.65);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;height:76px;display:flex;align-items:center;justify-content:space-between;">
+    <a href="index.html" style="display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;">
+      <img src="./Logo2.png" alt="AYR TGW Solutions" class="site-logo-img">
+    </a>
+    <ul style="display:none;align-items:center;gap:28px;list-style:none;margin:0;padding:0;" id="desktopNavList">
+      <li><a href="index.html" class="dnav-link">Home</a></li>
+      <li><a href="clients.html" class="dnav-link">Clients</a></li>
+      <li><a href="partners.html" class="dnav-link">Partners</a></li>
+      <li><a href="agents.html" class="dnav-link active" aria-current="page">Agents</a></li>
+      <li><a href="inquiry.html" class="dnav-link">Inquiry</a></li>
+      <li><a href="session-feedback.html" class="dnav-link">Session Feedback</a></li>
+      <li><a href="service-feedback.html" class="dnav-link">Service Feedback</a></li>
     </ul>
-    <button class="hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+    <button class="hamburger-btn" id="hamburgerBtn2" aria-label="Open navigation menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- MOBILE DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay2"></div>
+<nav class="mobile-drawer" id="mobileDrawer2" aria-label="Mobile navigation">
+  <div class="drawer-head">
+    <img src="./Logo2.png" alt="AYR TGW Solutions">
+    <button class="drawer-close" id="drawerClose2" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <div class="drawer-links">
+    <a href="index.html" class="drawer-links-a">Home</a>
+    <a href="clients.html" class="drawer-links-a">Clients</a>
+    <a href="partners.html" class="drawer-links-a">Partners</a>
+    <a href="agents.html" class="drawer-links-a active" aria-current="page">Agents</a>
+    <a href="inquiry.html" class="drawer-links-a">Inquiry</a>
+    <a href="session-feedback.html" class="drawer-links-a">Session Feedback</a>
+    <a href="service-feedback.html" class="drawer-links-a">Service Feedback</a>
   </div>
 </nav>
-<div class="mob-nav" id="mobNav">
-  <button class="mob-close" id="mobClose">&#x2715;</button>
-  <a href="index.html">Home</a><a href="clients.html">Clients</a><a href="partners.html">Partners</a>
-  <a href="agents.html" class="active">Agents</a><a href="inquiry.html">Inquiry</a>
-  <a href="session-feedback.html">Session Feedback</a><a href="service-feedback.html">Service Feedback</a>
-</div>
 
-<div class="page-wrap">
-  <h1 class="page-title">Agent Portal</h1>
-  <p class="page-sub">WFG agent registration and weekly performance metrics reporting. All data is synced to the AYR TGW operations dashboard.</p>
+<style>
+@media(min-width:768px){
+  #desktopNavList{display:flex !important;}
+  #hamburgerBtn2{display:none !important;}
+}
+.dnav-link{font-size:.8125rem;font-weight:500;color:#9ca3af;text-decoration:none;letter-spacing:.04em;transition:color .2s;position:relative;padding-bottom:3px;}
+.dnav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:#2B5BD0;transition:width .2s;}
+.dnav-link:hover{color:#f3f4f6;}
+.dnav-link:hover::after,.dnav-link.active::after{width:100%;}
+.dnav-link.active{color:#4A90E2;}
+.drawer-links-a{display:block;padding:13px 24px;color:#9ca3af;font-size:.9375rem;font-weight:500;text-decoration:none;letter-spacing:.03em;border-left:3px solid transparent;transition:all .18s;}
+.drawer-links-a:hover{color:#f3f4f6;background:rgba(43,91,208,.06);border-left-color:#2B5BD0;}
+.drawer-links-a.active{color:#4A90E2;border-left-color:#2B5BD0;background:rgba(43,91,208,.06);}
+</style>
+
+<main class="max-w-3xl mx-auto px-6 py-14 relative z-10">
+  <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-500 bg-clip-text text-transparent mb-2">Agent Portal</h1>
+  <p class="text-gray-400 text-base mb-10 leading-relaxed max-w-xl">WFG agent registration and weekly performance metrics reporting. All data syncs to the AYR TGW operations dashboard.</p>
 
   <div id="formContent">
-    <div class="card">
-      <div class="card-title">Agent Identity</div>
-      <div class="field-row">
+    <div class="panel mb-5">
+      <div class="panel-title">Agent Identity</div>
+      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
         <div class="fg"><label>Full Name <span class="req">*</span></label><input type="text" id="full_name" placeholder="Your legal name" required></div>
         <div class="fg"><label>WFG Email <span class="req">*</span></label><input type="email" id="wfg_email" placeholder="name@wfg.com" required></div>
       </div>
-      <div class="field-row">
+      <div class="grid grid-cols-2 gap-4 field-grid">
         <div class="fg"><label>City / Region</label><input type="text" id="city_region" placeholder="e.g. Toronto, ON"></div>
         <div class="fg"><label>WFG Position / Title</label>
-          <select id="position">
-            <option value="">Select position...</option>
-            <option>Associate</option><option>Marketing Director</option><option>Senior Marketing Director</option>
-            <option>Executive Marketing Director</option><option>Senior Vice President</option><option>CEO</option>
-          </select>
-        </div>
+          <select id="position"><option value="">Select position…</option><option>Associate</option><option>Marketing Director</option><option>Senior Marketing Director</option><option>Executive Marketing Director</option><option>Senior Vice President</option><option>CEO</option></select></div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-title">Weekly Performance Metrics</div>
-      <p style="color:var(--muted);font-size:.85rem;margin-bottom:20px;line-height:1.5">Enter your current weekly commitments and client activity numbers.</p>
-      <div class="field-row triple">
+    <div class="panel mb-5">
+      <div class="panel-title">Weekly Performance Metrics</div>
+      <p class="text-gray-500 text-xs mb-5 leading-relaxed">Enter your current weekly commitments and client activity numbers.</p>
+      <div class="grid grid-cols-3 gap-4 metric-grid">
         <div class="metric-card">
-          <div class="metric-label">Weekly Hours</div>
+          <div class="metric-lbl">Weekly Hours</div>
           <input type="number" class="metric-input" id="weekly_hours" min="0" max="168" placeholder="0">
         </div>
         <div class="metric-card">
-          <div class="metric-label">Monthly Clients</div>
+          <div class="metric-lbl">Monthly Clients</div>
           <input type="number" class="metric-input" id="monthly_clients" min="0" placeholder="0">
         </div>
         <div class="metric-card">
-          <div class="metric-label">Referrals MTD</div>
+          <div class="metric-lbl">Referrals MTD</div>
           <input type="number" class="metric-input" id="referrals_mtd" min="0" placeholder="0">
         </div>
       </div>
     </div>
 
-    <div class="btn-row">
-      <button class="btn btn-primary" id="submitBtn" onclick="submitAgent()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        Register Agent
+    <div class="flex justify-end mt-6">
+      <button id="submitBtn" onclick="submitAgent()" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Register Agent
       </button>
     </div>
   </div>
 
-  <div class="success-state" id="successState">
-    <div class="success-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.06em;color:var(--success);margin-bottom:12px">Agent Registered</h2>
-    <p style="color:var(--muted);max-width:420px;margin:0 auto 28px;line-height:1.6">Your agent profile and metrics have been logged to the AYR TGW operations dashboard. Welcome aboard.</p>
-    <a href="index.html" class="btn" style="background:transparent;border:1px solid var(--border);color:var(--muted);display:inline-flex">← Return to Hub</a>
+  <div id="successState" class="hidden text-center py-16">
+    <div class="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/40 flex items-center justify-center mx-auto mb-5">
+      <svg class="w-7 h-7 stroke-green-400" fill="none" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2 class="text-3xl font-extrabold text-green-400 mb-3">Agent Registered</h2>
+    <p class="text-gray-400 max-w-md mx-auto mb-8 leading-relaxed">Your agent profile and metrics have been logged to the AYR TGW operations dashboard. Welcome aboard.</p>
+    <a href="index.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all">← Return to Hub</a>
   </div>
-</div>
+</main>
+
 <div class="toast" id="toast"></div>
 
 <script>
-const BASE_ID = 'appdtWUAAIOXKZV6F';
-const TABLE_ID = 'tblkqdfQ3PbvtR797';
-const AT_KEY = 'YOUR_AIRTABLE_PAT_HERE';
-
-function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500)}
-
-async function submitAgent() {
-  const btn = document.getElementById('submitBtn');
-  const req = ['full_name','wfg_email'];
-  for (const id of req) { const el=document.getElementById(id); if (!el.value.trim()) { el.focus(); showToast('Required fields missing.','error'); return; } }
-  btn.disabled=true; btn.textContent='Submitting...';
-  const fields = {
-    'Full_Name': document.getElementById('full_name').value,
-    'WFG_Email': document.getElementById('wfg_email').value,
-    'City_Region': document.getElementById('city_region').value,
-    'Position': document.getElementById('position').value,
-    'Weekly_Hours': parseInt(document.getElementById('weekly_hours').value)||0,
-    'Monthly_Clients': parseInt(document.getElementById('monthly_clients').value)||0,
-  };
-  Object.keys(fields).forEach(k=>{if(fields[k]===''||fields[k]===0)delete fields[k]});
-  try {
-    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,{
-      method:'POST',headers:{'Authorization':`Bearer ${AT_KEY}`,'Content-Type':'application/json'},
-      body:JSON.stringify({records:[{fields}],typecast:true})
-    });
-    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Failed')}
+const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tblkqdfQ3PbvtR797',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
+function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
+async function submitAgent(){
+  const btn=document.getElementById('submitBtn');
+  for(const id of['full_name','wfg_email']){const el=document.getElementById(id);if(!el.value.trim()){el.focus();showToast('Required fields missing.','error');return;}}
+  btn.disabled=true;btn.textContent='Submitting…';
+  const fields={'Full_Name':document.getElementById('full_name').value,'WFG_Email':document.getElementById('wfg_email').value,'City_Region':document.getElementById('city_region').value,'Position':document.getElementById('position').value,'Weekly_Hours':parseInt(document.getElementById('weekly_hours').value)||0,'Monthly_Clients':parseInt(document.getElementById('monthly_clients').value)||0};
+  Object.keys(fields).forEach(k=>{if(fields[k]===''||fields[k]===0)delete fields[k];});
+  try{
+    const res=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,{method:'POST',headers:{'Authorization':`Bearer ${AT_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({records:[{fields}],typecast:true})});
+    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Failed');}
     document.getElementById('formContent').style.display='none';
-    document.getElementById('successState').classList.add('show');
-  } catch(e) {
-    showToast('Error: '+e.message,'error');
-    btn.disabled=false;
-    btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Register Agent';
-  }
+    document.getElementById('successState').classList.remove('hidden');
+  }catch(e){showToast('Error: '+e.message,'error');btn.disabled=false;btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Register Agent';}
 }
-const menuBtn=document.getElementById('menuBtn'),mobNav=document.getElementById('mobNav'),mobClose=document.getElementById('mobClose');
-menuBtn.addEventListener('click',()=>mobNav.classList.add('open'));
-mobClose.addEventListener('click',()=>mobNav.classList.remove('open'));
-document.addEventListener('click',e=>{if(mobNav.classList.contains('open')&&!mobNav.contains(e.target)&&e.target!==menuBtn)mobNav.classList.remove('open')});
+</script>
+<script>
+(function(){
+  var btn=document.getElementById('hamburgerBtn2');
+  var drawer=document.getElementById('mobileDrawer2');
+  var overlay=document.getElementById('drawerOverlay2');
+  var closeBtn=document.getElementById('drawerClose2');
+  if(!btn||!drawer)return;
+  function openD(){drawer.classList.add('open');overlay.classList.add('open');btn.classList.add('open');document.body.style.overflow='hidden';}
+  function closeD(){drawer.classList.remove('open');overlay.classList.remove('open');btn.classList.remove('open');document.body.style.overflow='';}
+  btn.addEventListener('click',openD);
+  closeBtn.addEventListener('click',closeD);
+  overlay.addEventListener('click',closeD);
+})();
+// Video background fallback
+(function(){
+  var bgStack=document.getElementById('bgStack');
+  if(!bgStack)return;
+  var vid=document.createElement('video');
+  vid.src='./background/Background-Desktop.mp4';
+  vid.autoplay=true;vid.muted=true;vid.loop=true;vid.playsInline=true;
+  vid.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.40;';
+  vid.addEventListener('canplay',function(){bgStack.querySelector('.bg-img').style.display='none';bgStack.appendChild(vid);},{once:true});
+  vid.load();
+})();
 </script>
 </body>
 </html>
