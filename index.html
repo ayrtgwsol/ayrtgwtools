@@ -1,1208 +1,174 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-layout="auto">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AYR TGW Solutions — Tools Workspace</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AYR TGW Solutions | Ecosystem Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#030712;--surface:#0a0f1e;--border:rgba(59,130,246,.18);--blue:#3b82f6;--cyan:#06b6d4;--white:#f3f4f6;--muted:#6b7280;--grad:linear-gradient(135deg,#1e3a8a 0%,#0e7490 100%)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(59,130,246,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
+.nav{position:sticky;top:0;z-index:100;background:rgba(3,7,18,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.12em;color:var(--cyan);text-decoration:none;border:1.5px solid var(--cyan);padding:4px 12px;transition:all .2s}
+.nav-logo:hover{background:var(--cyan);color:var(--bg)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--muted);font-size:.875rem;font-weight:500;text-decoration:none;letter-spacing:.03em;transition:color .2s;position:relative;padding-bottom:2px}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--cyan);transition:width .2s}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-links a.active{color:var(--cyan)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{display:block;width:24px;height:2px;background:var(--muted);transition:all .25s}
+.mob-nav{position:fixed;top:0;right:0;width:260px;height:100vh;background:var(--surface);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .3s ease;z-index:200;padding:80px 28px 28px;display:flex;flex-direction:column;gap:20px}
+.mob-nav.open{transform:translateX(0)}
+.mob-nav a{color:var(--muted);font-weight:500;text-decoration:none;font-size:1rem;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
+.mob-nav a:hover,.mob-nav a.active{color:var(--cyan)}
+.mob-close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;line-height:1}
 
-  <style>
-  :root {
-    --blue:          #00AAFF;
-    --blue-glow:     rgba(0, 170, 255, 0.30);
-    --blue-glow-lg:  rgba(0, 170, 255, 0.18);
-    --blue-dim:      rgba(0, 170, 255, 0.10);
-    --blue-border:   rgba(0, 170, 255, 0.28);
-    --blue-border-s: rgba(0, 170, 255, 0.14);
-    --blue-shadow:   rgba(0, 170, 255, 0.12);
-    --bg-fallback:   #050d1a;
-    --glass-base:    rgba(4, 14, 32, 0.60);
-    --glass-card:    rgba(4, 14, 32, 0.46);
-    --glass-btn:     rgba(0, 170, 255, 0.10);
-    --glass-scrim:   rgba(0, 5, 18, 0.70);
-    --text-primary:  #FFFFFF;
-    --text-secondary:rgba(255, 255, 255, 0.65);
-    --text-muted:    rgba(255, 255, 255, 0.38);
-    --text-accent:   var(--blue);
-    --header-h:       76px;
-    --header-top:     20px;
-    --footer-h:       60px;
-    --page-gutter:    20px;
-    --focal:          900px;
-  }
+/* HERO */
+.hero{min-height:calc(100vh - 68px);display:flex;align-items:center;justify-content:center;text-align:center;position:relative;z-index:1;padding:40px 24px}
+.hero-inner{max-width:900px}
+.hero-eyebrow{font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;color:var(--cyan);margin-bottom:20px;opacity:.8}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,10vw,7rem);letter-spacing:.05em;line-height:.96;margin-bottom:28px}
+.hero-title .line1{display:block;background:linear-gradient(90deg,var(--white) 0%,#e2e8f0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-title .line2{display:block;background:linear-gradient(90deg,var(--cyan) 0%,var(--blue) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{color:var(--muted);font-size:1.05rem;line-height:1.7;max-width:560px;margin:0 auto 48px}
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  html { height: 100%; scroll-behavior: smooth; }
-  body {
-    min-height: 100%;
-    font-family: 'Inter', system-ui, sans-serif;
-    background: var(--bg-fallback);
-    color: var(--text-primary);
-    overflow-x: hidden;
-    overflow-y: scroll;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  body.modal-lock { overflow: hidden !important; }
+/* PORTAL GRID */
+.portal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;max-width:1100px;margin:0 auto;padding:0 24px 80px;position:relative;z-index:1}
+.portal-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 24px;text-decoration:none;color:inherit;transition:all .25s;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px}
+.portal-card::before{content:'';position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .25s}
+.portal-card:hover{border-color:var(--cyan);transform:translateY(-3px);box-shadow:0 16px 40px rgba(6,182,212,.15)}
+.portal-card:hover::before{opacity:.05}
+.portal-icon{width:44px;height:44px;border-radius:10px;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.2);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.portal-icon svg{width:20px;height:20px;stroke:var(--cyan);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.portal-label{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.1em;color:var(--white);position:relative;z-index:1}
+.portal-desc{font-size:.82rem;color:var(--muted);line-height:1.5;position:relative;z-index:1}
+.portal-arrow{margin-top:auto;font-size:.75rem;color:var(--cyan);letter-spacing:.05em;position:relative;z-index:1;opacity:0;transform:translateX(-6px);transition:all .2s}
+.portal-card:hover .portal-arrow{opacity:1;transform:translateX(0)}
 
-  /* ── BACKGROUND STAGE ── */
-  #bg-stage {
-    position: fixed; top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    z-index: -1; overflow: hidden; pointer-events: none;
-  }
-  #bg-stage .bg-asset {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: contain; object-position: center center;
-    transform-origin: center center; will-change: transform;
-  }
-  #bg-stage video.bg-asset {
-    width: 100%; height: 100%;
-    object-fit: contain; object-position: center center;
-  }
-  #bg-stage .bg-overlay {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: contain; object-position: center center;
-    pointer-events: none;
-  }
-  #bg-stage::after {
-    content: ''; position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0,5,18,0.55) 100%),
-      linear-gradient(180deg, rgba(0,170,255,0.04) 0%, rgba(0,5,18,0.20) 100%);
-    pointer-events: none; z-index: 1;
-  }
+/* STAT STRIP */
+.stat-strip{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;padding:40px 24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:60px;position:relative;z-index:1}
+.stat{text-align:center}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.06em;background:linear-gradient(90deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:2px}
 
-  /* ── VIEWPORT SHELL ── */
-  #viewport-shell {
-    width: 100%; min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center;
-    padding: 0 var(--page-gutter);
-    transform-origin: top center;
-  }
-
-  .parallax-layer { will-change: transform; transform-style: preserve-3d; }
-  .tilt-card      { transform-style: preserve-3d; }
-
-  /* ══════════════════════════════════════════════
-     HEADER — DESKTOP (flex, normal flow)
-  ══════════════════════════════════════════════ */
-  header {
-    position: fixed;
-    top: var(--header-top);
-    left: var(--page-gutter);
-    width: calc(100% - calc(var(--page-gutter) * 2));
-    max-width: calc(1400px - calc(var(--page-gutter) * 2));
-    margin-left: max(0px, calc((100vw - 1400px) / 2));
-    height: var(--header-h);
-    background: var(--glass-base);
-    backdrop-filter: blur(30px) saturate(1.5);
-    -webkit-backdrop-filter: blur(30px) saturate(1.5);
-    border: 1px solid var(--blue-border);
-    border-radius: 18px;
-    padding: 0 1.8rem;
-    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-    z-index: 300;
-    box-shadow: 0 8px 40px var(--blue-shadow), inset 0 1px 0 rgba(0,170,255,0.12);
-    pointer-events: auto;
-  }
-  .header-left { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
-  .header-right { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: flex-end; }
-
-  .logo-container img {
-    height: 38px;
-    filter: drop-shadow(0 0 8px var(--blue-glow));
-    transition: filter 0.3s ease;
-  }
-  .logo-container img:hover { filter: drop-shadow(0 0 20px var(--blue-glow)); }
-
-  /* The standalone mobile theme btn — hidden on desktop via JS + media query */
-  .mobile-theme-btn { display: none; }
-
-  .nav-btn {
-    background: var(--glass-btn);
-    border: 1px solid var(--blue-border-s);
-    padding: 0.48rem 1.1rem;
-    border-radius: 10px;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.78rem; font-weight: 600;
-    color: var(--text-primary);
-    cursor: pointer; text-decoration: none;
-    display: inline-flex; align-items: center; gap: 0.35rem;
-    letter-spacing: 0.025em; white-space: nowrap;
-    position: relative; overflow: hidden;
-    transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
-  }
-  .nav-btn::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,170,255,0.10) 0%, transparent 60%);
-    pointer-events: none;
-  }
-  .nav-btn:hover {
-    background: rgba(0,170,255,0.18);
-    box-shadow: 0 4px 20px var(--blue-glow), inset 0 1px 0 rgba(0,170,255,0.20);
-    transform: translateY(-1px);
-  }
-  .nav-btn:active { transform: translateY(0); }
-  .nav-btn-concern { border-color: rgba(0,170,255,0.40); color: var(--blue); font-size: 0.74rem; }
-  .nav-btn-concern:hover { background: rgba(0,170,255,0.22); box-shadow: 0 4px 24px rgba(0,170,255,0.35); }
-
-  .header-theme-btn {
-    background: var(--glass-btn);
-    border: 1px solid var(--blue-border-s);
-    border-radius: 10px; width: 38px; height: 38px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: background 0.18s, box-shadow 0.18s;
-    color: var(--blue); flex-shrink: 0;
-  }
-  .header-theme-btn:hover { background: rgba(0,170,255,0.18); box-shadow: 0 4px 20px var(--blue-glow); }
-  .header-theme-btn svg { width: 16px; height: 16px; fill: currentColor; }
-
-  /* ── HAMBURGER (mobile only) ── */
-  .hamburger-btn {
-    display: none;
-    flex-direction: column; justify-content: center; align-items: center; gap: 5px;
-    background: var(--glass-btn);
-    border: 1px solid var(--blue-border-s);
-    border-radius: 10px; width: 38px; height: 38px;
-    cursor: pointer; transition: background 0.18s; flex-shrink: 0;
-  }
-  .hamburger-btn span {
-    display: block; width: 18px; height: 2px;
-    background: var(--blue); border-radius: 2px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-  }
-  .hamburger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .hamburger-btn.open span:nth-child(2) { opacity: 0; }
-  .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-  .hamburger-btn:hover { background: rgba(0,170,255,0.18); }
-
-  /* ── SIDE NAV ── */
-  .side-nav-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,5,18,0.55);
-    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-    z-index: 500; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-  }
-  .side-nav-overlay.open { opacity: 1; pointer-events: auto; }
-  .side-nav {
-    position: fixed; top: 0; right: 0;
-    width: 280px; max-width: 85vw; height: 100vh;
-    background: rgba(4, 14, 32, 0.95);
-    backdrop-filter: blur(36px) saturate(1.6); -webkit-backdrop-filter: blur(36px) saturate(1.6);
-    border-left: 1px solid var(--blue-border); z-index: 600;
-    display: flex; flex-direction: column;
-    padding: 5rem 1.4rem 2rem; gap: 0.5rem;
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
-    box-shadow: -8px 0 48px rgba(0,0,0,0.5);
-  }
-  .side-nav.open { transform: translateX(0); }
-  .side-nav-close {
-    position: absolute; top: 1.2rem; right: 1.2rem;
-    background: var(--glass-btn); border: 1px solid var(--blue-border-s);
-    border-radius: 8px; width: 34px; height: 34px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; color: var(--blue); font-size: 1rem; transition: background 0.18s;
-  }
-  .side-nav-close:hover { background: rgba(0,170,255,0.22); }
-  .side-nav-label {
-    font-size: 0.62rem; font-weight: 700; color: var(--text-muted);
-    letter-spacing: 0.12em; text-transform: uppercase;
-    padding: 0.6rem 0 0.3rem; border-top: 1px solid var(--blue-border-s); margin-top: 0.3rem;
-  }
-  .side-nav-label:first-child { border-top: none; margin-top: 0; }
-  .side-nav-item {
-    display: flex; align-items: center; gap: 0.8rem;
-    padding: 0.75rem 1rem; border-radius: 12px;
-    text-decoration: none; cursor: pointer;
-    background: transparent; border: none;
-    font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 600;
-    color: var(--text-primary); letter-spacing: 0.02em;
-    width: 100%; text-align: left; transition: background 0.18s ease;
-  }
-  .side-nav-item:hover { background: rgba(0,170,255,0.12); }
-  .side-nav-item.concern { color: var(--blue); }
-  .side-nav-item svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; color: var(--blue); }
-  .side-nav-div { height: 1px; background: var(--blue-border-s); margin: 0.4rem 0; }
-
-  /* ── MAIN ── */
-  main {
-    margin-top: calc(var(--header-h) + var(--header-top) + 24px);
-    padding-bottom: calc(var(--footer-h) + 16px);
-    flex: 1; display: flex; flex-direction: column; align-items: center;
-    width: 100%;
-    perspective: var(--focal); perspective-origin: 50% 50%;
-    transform-style: preserve-3d;
-  }
-
-  /* ── PIPELINE ── */
-  .pipeline {
-    width: 100%; max-width: 1400px;
-    display: flex; flex-direction: column; gap: 3.5rem;
-    padding: 1.5rem 0 2rem; transform-style: preserve-3d;
-  }
-  .pipeline-row { display: flex; width: 100%; justify-content: flex-start; }
-  .pipeline-row.row-right { justify-content: flex-end; }
-
-  .tool-card {
-    background: var(--glass-card);
-    backdrop-filter: blur(32px) saturate(1.6); -webkit-backdrop-filter: blur(32px) saturate(1.6);
-    border: 1px solid var(--blue-border); border-radius: 22px; padding: 2.4rem 2.2rem;
-    width: 100%; max-width: 440px;
-    box-shadow: 0 16px 48px var(--blue-shadow), 0 1px 0 rgba(0,170,255,0.12) inset, 0 -1px 0 rgba(0,5,18,0.25) inset;
-    position: relative; overflow: hidden; transform-style: preserve-3d; cursor: default;
-  }
-  .tool-card::before {
-    content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0,170,255,0.50), transparent);
-  }
-  .tool-card::after {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 25% 20%, rgba(0,170,255,0.07) 0%, transparent 65%);
-    pointer-events: none; border-radius: 22px; opacity: 0; transition: opacity 0.4s ease;
-  }
-  .tool-card:hover::after { opacity: 1; }
-  .card-inner { transform-style: preserve-3d; position: relative; }
-
-  .card-badge {
-    display: inline-flex; align-items: center; gap: 0.3rem;
-    background: rgba(0,170,255,0.12); border: 1px solid var(--blue-border-s);
-    border-radius: 6px; padding: 0.22rem 0.65rem;
-    font-size: 0.68rem; font-weight: 700; color: var(--blue);
-    text-transform: uppercase; letter-spacing: 0.06em;
-    margin-bottom: 1rem; transform: translateZ(8px);
-  }
-  .card-badge.live { background: rgba(0,170,255,0.20); border-color: rgba(0,170,255,0.40); }
-  .card-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--blue); }
-  .card-badge.live::before { animation: pulse 1.8s ease-in-out infinite; }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--blue-glow); }
-    50%       { opacity: 0.6; box-shadow: 0 0 0 5px transparent; }
-  }
-  .tool-name {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem;
-    letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.8rem;
-    color: var(--text-primary); text-shadow: 0 0 24px var(--blue-glow); transform: translateZ(12px);
-  }
-  .card-desc {
-    font-size: 0.82rem; font-weight: 400; color: var(--text-secondary);
-    margin-bottom: 1.6rem; line-height: 1.7; transform: translateZ(8px);
-  }
-
-  .launch-btn {
-    width: 100%; background: rgba(0,170,255,0.12);
-    border: 1px solid var(--blue-border); padding: 0.9rem 1.5rem; border-radius: 13px;
-    font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.14em;
-    cursor: pointer; text-transform: uppercase; text-align: center;
-    text-decoration: none; display: block; color: var(--text-primary);
-    position: relative; overflow: hidden; transform: translateZ(20px);
-    box-shadow: 0 4px 20px var(--blue-shadow), 0 1px 0 rgba(0,170,255,0.15) inset;
-    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
-  }
-  .launch-btn::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,170,255,0.14) 0%, transparent 55%); pointer-events: none;
-  }
-  .launch-btn:hover {
-    background: rgba(0,170,255,0.22);
-    box-shadow: 0 8px 36px rgba(0,170,255,0.35), 0 1px 0 rgba(0,170,255,0.30) inset;
-    transform: translateZ(28px) scale(1.02);
-  }
-  .launch-btn:active { transform: translateZ(16px) scale(0.975); }
-  .launch-btn.disabled, .launch-btn[disabled] { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
-
-  /* ── FOOTER ── */
-  footer {
-    position: fixed; bottom: 0;
-    left: var(--page-gutter);
-    width: calc(100% - calc(var(--page-gutter) * 2));
-    max-width: calc(1400px - calc(var(--page-gutter) * 2));
-    margin-left: max(0px, calc((100vw - 1400px) / 2));
-    height: var(--footer-h);
-    background: var(--glass-base);
-    backdrop-filter: blur(28px) saturate(1.4); -webkit-backdrop-filter: blur(28px) saturate(1.4);
-    border: 1px solid var(--blue-border); border-bottom: none;
-    border-radius: 14px 14px 0 0; padding: 0 1.8rem;
-    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-    z-index: 300;
-    box-shadow: 0 -4px 30px var(--blue-shadow), inset 0 1px 0 rgba(0,170,255,0.10);
-    pointer-events: auto; flex-wrap: wrap;
-  }
-  .footer-entity { font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
-  .footer-center { font-size: 0.64rem; color: var(--text-muted); line-height: 1.45; text-align: center; flex: 1; min-width: 0; }
-  .footer-links { display: flex; gap: 1rem; align-items: center; flex-shrink: 0; }
-  .footer-link { font-size: 0.70rem; font-weight: 600; color: var(--blue); text-decoration: none; letter-spacing: 0.03em; white-space: nowrap; transition: opacity 0.2s ease; }
-  .footer-link:hover { opacity: 0.75; text-decoration: underline; }
-
-  /* ── MODALS ── */
-  .modal-overlay {
-    position: fixed; inset: 0; width: 100vw; height: 100vh;
-    background: var(--glass-scrim);
-    backdrop-filter: blur(20px) saturate(1.2); -webkit-backdrop-filter: blur(20px) saturate(1.2);
-    z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
-  }
-  .modal-overlay.active { display: flex; }
-  .modal-box {
-    width: 100%; max-width: 700px; max-height: calc(100vh - 40px); overflow-y: auto;
-    background: rgba(4, 14, 32, 0.92);
-    backdrop-filter: blur(36px) saturate(1.8); -webkit-backdrop-filter: blur(36px) saturate(1.8);
-    border: 1px solid var(--blue-border); border-radius: 24px; padding: 2.2rem;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.50), 0 0 0 1px rgba(0,170,255,0.08);
-    animation: modalReveal 0.32s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-  }
-  @keyframes modalReveal {
-    from { opacity: 0; transform: scale(0.94) translateY(14px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-  }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; }
-  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.65rem; letter-spacing: 0.09em; color: var(--text-primary); }
-  .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px; }
-  .tool-link-btn {
-    padding: 0.9rem; background: rgba(0,170,255,0.08); border: 1px solid var(--blue-border-s);
-    border-radius: 11px; text-decoration: none; text-align: center;
-    font-weight: 600; font-size: 0.82rem; color: var(--text-primary);
-    letter-spacing: 0.02em; display: block; position: relative; overflow: hidden;
-    box-shadow: 0 2px 12px var(--blue-shadow);
-    transition: background 0.18s, box-shadow 0.18s, transform 0.15s;
-  }
-  .tool-link-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,170,255,0.08) 0%, transparent 60%); pointer-events: none; }
-  .tool-link-btn:hover { background: rgba(0,170,255,0.18); box-shadow: 0 6px 24px var(--blue-glow); transform: translateY(-2px); }
-  .compliance-form { display: flex; flex-direction: column; gap: 1.2rem; }
-  .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-label { font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.03em; }
-  .form-input, .form-select, .form-textarea {
-    background: rgba(0,170,255,0.06); border: 1px solid var(--blue-border-s);
-    border-radius: 10px; padding: 0.75rem 1rem;
-    font-family: 'Inter', sans-serif; font-size: 0.85rem;
-    color: var(--text-primary); outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease; width: 100%;
-  }
-  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,170,255,0.15); }
-  .form-textarea { resize: vertical; min-height: 90px; }
-  .form-select option { background: #050d1a; }
-  .form-submit-btn {
-    width: 100%;
-    background: linear-gradient(135deg, rgba(0,170,255,0.25), rgba(0,170,255,0.12));
-    border: 1px solid var(--blue-border); padding: 0.9rem; border-radius: 13px;
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.14em;
-    color: var(--text-primary); cursor: pointer; text-transform: uppercase;
-    transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
-    box-shadow: 0 4px 20px var(--blue-shadow);
-  }
-  .form-submit-btn:hover:not(:disabled) { background: linear-gradient(135deg, rgba(0,170,255,0.40), rgba(0,170,255,0.22)); box-shadow: 0 8px 32px rgba(0,170,255,0.35); }
-  .form-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  /* ── ENTRY ANIMATIONS ── */
-  .shimmer-load { animation: shimmerIn 0.85s cubic-bezier(0.23, 1, 0.32, 1) both; }
-  @keyframes shimmerIn {
-    from { opacity: 0; transform: translateY(16px) translateZ(-16px); }
-    to   { opacity: 1; transform: translateY(0) translateZ(0); }
-  }
-  .shimmer-load:nth-child(1) { animation-delay: 0.05s; }
-  .shimmer-load:nth-child(2) { animation-delay: 0.14s; }
-  .shimmer-load:nth-child(3) { animation-delay: 0.23s; }
-  .shimmer-load:nth-child(4) { animation-delay: 0.32s; }
-
-  /* ══════════════════════════════════════════════
-     RESPONSIVE
-  ══════════════════════════════════════════════ */
-
-  /* Tablet */
-  @media (min-width: 681px) and (max-width: 1024px) {
-    .tool-card { max-width: 380px; }
-    .pipeline  { gap: 3rem; }
-    .footer-center { font-size: 0.60rem; }
-  }
-
-  /* ── MOBILE ≤768px ──────────────────────────────────────────────────────
-     Header 3-column grid:
-       [38px theme-btn] [1fr logo] [38px hamburger]
-     
-     The .mobile-theme-btn is a sibling of .header-left and .header-right,
-     placed first in the DOM so it naturally lands in col 1.
-     .header-left  → col 2, centred.
-     .header-right → col 3, shows only hamburger (nav-btns hidden).
-     Desktop .header-theme-btn inside .header-right → hidden on mobile.
-  ────────────────────────────────────────────────────────────────────── */
-  @media (max-width: 768px) {
-    :root {
-      --header-h:    60px;
-      --header-top:  10px;
-      --footer-h:    auto;
-      --page-gutter: 14px;
-    }
-
-    #viewport-shell {
-      transform: none !important;
-      margin-bottom: 0 !important;
-      padding: 0 var(--page-gutter);
-      align-items: stretch;
-    }
-
-    /* 3-col grid header */
-    header {
-      padding: 0 0.9rem;
-      border-radius: 14px;
-      height: var(--header-h);
-      display: grid;
-      grid-template-columns: 38px 1fr 38px;
-      grid-template-rows: var(--header-h);
-      align-items: center;
-      gap: 0;
-    }
-
-    /* Mobile theme toggle — col 1 */
-    .mobile-theme-btn {
-      display: flex !important;
-      grid-column: 1;
-      grid-row: 1;
-      align-self: center;
-      justify-self: center;
-    }
-
-    /* Logo — col 2, centred */
-    .header-left {
-      grid-column: 2;
-      grid-row: 1;
-      justify-self: center;
-      align-self: center;
-      gap: 0;
-    }
-
-    /* header-right — col 3, only hamburger visible */
-    .header-right {
-      grid-column: 3;
-      grid-row: 1;
-      justify-self: center;
-      align-self: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-      flex-wrap: nowrap;
-    }
-
-    /* Hide desktop nav links and the desktop theme btn */
-    .header-right .nav-btn,
-    .header-right .nav-btn-concern,
-    .header-right .header-theme-btn { display: none !important; }
-
-    /* Show hamburger */
-    .hamburger-btn { display: flex !important; }
-
-    .logo-container img { height: 30px; }
-
-    main {
-      margin-top: calc(var(--header-h) + var(--header-top) + 16px);
-      padding-bottom: 160px;
-    }
-
-    .pipeline { gap: 1.8rem; padding: 0.75rem 0 1rem; width: 100%; }
-    .pipeline-row, .pipeline-row.row-right { justify-content: center; }
-
-    .tool-card { max-width: 100%; padding: 1.6rem 1.4rem; border-radius: 16px; }
-    .tool-name { font-size: clamp(1.35rem, 5vw, 1.75rem); margin-bottom: 0.55rem; }
-    .card-desc { font-size: 0.78rem; margin-bottom: 1.2rem; line-height: 1.6; }
-    .card-badge { font-size: 0.62rem; padding: 0.18rem 0.55rem; margin-bottom: 0.75rem; }
-    .launch-btn { font-size: 0.88rem; padding: 0.75rem 1rem; letter-spacing: 0.10em; }
-
-    footer {
-      position: fixed; bottom: 0;
-      left: var(--page-gutter);
-      width: calc(100% - calc(var(--page-gutter) * 2));
-      height: auto; min-height: 56px;
-      flex-direction: column; align-items: center; justify-content: center;
-      gap: 0.35rem; padding: 0.55rem 1rem; border-radius: 12px 12px 0 0;
-    }
-    .footer-entity { display: none; }
-    .footer-center { display: none; }
-    .footer-links { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.4rem 0.9rem; width: 100%; }
-    .footer-link { font-size: 0.65rem; white-space: nowrap; }
-    .footer-link + .footer-link::before { content: '·'; margin-right: 0.9rem; color: var(--text-muted); pointer-events: none; }
-
-    .modal-box { padding: 1.4rem 1.2rem; border-radius: 18px; max-height: calc(100vh - 24px); }
-    .modal-title { font-size: 1.35rem; }
-    .tool-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .tool-link-btn { padding: 0.7rem 0.5rem; font-size: 0.76rem; }
-    .form-input, .form-select, .form-textarea { font-size: 16px; }
-  }
-
-  @media (max-width: 380px) {
-    :root { --page-gutter: 10px; }
-    .tool-card { padding: 1.3rem 1rem; }
-    .tool-name { font-size: 1.25rem; }
-    .footer-link { font-size: 0.60rem; }
-  }
-
-  /* Forced layout overrides */
-  [data-layout="mobile"] .pipeline-row,
-  [data-layout="mobile"] .pipeline-row.row-right { justify-content: center; }
-  [data-layout="mobile"] .tool-card  { max-width: 100%; }
-  [data-layout="mobile"] .pipeline   { gap: 1.8rem; }
-  [data-layout="mobile"] .footer-center { display: none; }
-  [data-layout="mobile"] #viewport-shell { transform: none !important; margin-bottom: 0 !important; }
-  [data-layout="desktop"] .pipeline-row      { justify-content: flex-start; }
-  [data-layout="desktop"] .pipeline-row.row-right { justify-content: flex-end; }
-  [data-layout="desktop"] .tool-card { max-width: 440px; }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-  }
-  </style>
+@media(max-width:640px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .portal-grid{grid-template-columns:1fr}
+  .stat-strip{gap:28px}
+}
+</style>
 </head>
 <body>
 
-  <div id="bg-stage" aria-hidden="true"></div>
-
-  <!-- Mobile side nav -->
-  <div class="side-nav-overlay" id="sideNavOverlay" aria-hidden="true"></div>
-  <nav class="side-nav" id="sideNav" aria-label="Mobile navigation">
-    <button class="side-nav-close" onclick="closeSideNav()" aria-label="Close menu">✕</button>
-    <span class="side-nav-label">Navigation</span>
-    <a href="https://forms.gle/KpHLCvsCG4f1bWx16" target="_blank" rel="noopener" class="side-nav-item" onclick="closeSideNav()">
-      <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-      Clients
-    </a>
-    <a href="https://forms.gle/Ly9V2jWRsGnoyrjc7" target="_blank" rel="noopener" class="side-nav-item" onclick="closeSideNav()">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-      Partners
-    </a>
-    <a href="https://forms.gle/LTqD7BCzGvJSpHvq7" target="_blank" rel="noopener" class="side-nav-item" onclick="closeSideNav()">
-      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-      Inquiry
-    </a>
-    <div class="side-nav-div"></div>
-    <button class="side-nav-item concern" onclick="closeSideNav(); openModal('concernModal');">
-      <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-      Report Concern
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">AYR TGW</a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="clients.html">Clients</a></li>
+      <li><a href="partners.html">Partners</a></li>
+      <li><a href="agents.html">Agents</a></li>
+      <li><a href="inquiry.html">Inquiry</a></li>
+      <li><a href="session-feedback.html">Session Feedback</a></li>
+      <li><a href="service-feedback.html">Service Feedback</a></li>
+    </ul>
+    <button class="hamburger" id="menuBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
     </button>
-    <div class="side-nav-div"></div>
-    <button class="side-nav-item" onclick="closeSideNav(); openModal('resourceHub');">
-      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-      External Tools
-    </button>
-    <div class="side-nav-div"></div>
-    <a href="#" onclick="closeSideNav(); openModal('disclosuresModal'); return false;" class="side-nav-item">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-      Regulatory Disclosures
-    </a>
-    <a href="#" onclick="closeSideNav(); openModal('privacyModal'); return false;" class="side-nav-item">
-      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-      Privacy Policy
-    </a>
-  </nav>
-
-  <div id="viewport-shell">
-
-    <!-- ════ HEADER ════
-         DOM order:
-           1. .mobile-theme-btn  → grid col 1 on mobile (theme toggle, left)
-           2. .header-left       → grid col 2 on mobile (logo, centre)
-           3. .header-right      → grid col 3 on mobile (hamburger only, right)
-                                   full flex row on desktop (nav + desktop theme btn)
-    -->
-    <header>
-
-      <!-- Mobile theme toggle (col 1 on mobile, hidden on desktop via JS) -->
-      <button class="header-theme-btn mobile-theme-btn" id="mobileThemeBtn" aria-label="Switch theme" title="Toggle theme">
-        <svg id="mobileThemeIcon" viewBox="0 0 24 24">
-          <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
-        </svg>
-      </button>
-
-      <!-- Logo -->
-      <div class="header-left">
-        <div class="logo-container">
-          <img src="./Logo2.png" alt="AYR TGW Solutions">
-        </div>
-      </div>
-
-      <!-- Desktop nav + desktop theme btn / Mobile: hamburger only -->
-      <div class="header-right">
-        <a href="#" onclick="openModal('concernModal'); return false;" class="nav-btn nav-btn-concern" title="Report a service concern">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-          Report Concern
-        </a>
-        <a href="https://forms.gle/KpHLCvsCG4f1bWx16" target="_blank" rel="noopener" class="nav-btn">Clients</a>
-        <a href="https://forms.gle/Ly9V2jWRsGnoyrjc7" target="_blank" rel="noopener" class="nav-btn">Partners</a>
-        <a href="https://forms.gle/LTqD7BCzGvJSpHvq7" target="_blank" rel="noopener" class="nav-btn">Inquiry</a>
-
-        <!-- Desktop theme toggle (hidden on mobile via CSS) -->
-        <button class="header-theme-btn" id="desktopThemeBtn" aria-label="Switch theme" title="Toggle theme">
-          <svg id="desktopThemeIcon" viewBox="0 0 24 24">
-            <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
-          </svg>
-        </button>
-
-        <!-- Hamburger (mobile only) -->
-        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" onclick="openSideNav()">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </header>
-
-    <main id="parallax-scene">
-      <div class="pipeline">
-
-        <div class="pipeline-row shimmer-load">
-          <div class="tool-card tilt-card parallax-layer" data-depth="card">
-            <div class="card-inner">
-              <div class="card-badge live">Live</div>
-              <div class="tool-name">External Tools</div>
-              <p class="card-desc">Financial calculators, market data feeds, CRA portal, and productivity resources.</p>
-              <button class="launch-btn" onclick="openModal('resourceHub')">Open Resource Hub</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="pipeline-row row-right shimmer-load">
-          <div class="tool-card tilt-card parallax-layer" data-depth="card">
-            <div class="card-inner">
-              <div class="card-badge">Soon</div>
-              <div class="tool-name">Client Portal</div>
-              <p class="card-desc">Onboarding, document review, e-signature workflows, and account management.</p>
-              <button class="launch-btn disabled" disabled>Coming Soon</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="pipeline-row shimmer-load">
-          <div class="tool-card tilt-card parallax-layer" data-depth="card">
-            <div class="card-inner">
-              <div class="card-badge">Soon</div>
-              <div class="tool-name">AI Advisor</div>
-              <p class="card-desc">Automated wealth profiling, scenario modeling, and AI-generated plan summaries.</p>
-              <button class="launch-btn disabled" disabled>Coming Soon</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="pipeline-row row-right shimmer-load">
-          <div class="tool-card tilt-card parallax-layer" data-depth="card">
-            <div class="card-inner">
-              <div class="card-badge">Soon</div>
-              <div class="tool-name">Analytics Hub</div>
-              <p class="card-desc">Live pipeline metrics, conversion tracking, and advisor performance dashboards.</p>
-              <button class="launch-btn disabled" disabled>Coming Soon</button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </main>
-
-    <footer>
-      <span class="footer-entity">© 2025 AYR TGW Solutions Inc.</span>
-      <span class="footer-center">
-        Insurance products underwritten by licensed carriers through World Financial Group.
-        Not a guarantee of coverage. For licensed financial advice only.
-      </span>
-      <div class="footer-links">
-        <a href="#" onclick="openModal('disclosuresModal'); return false;" class="footer-link">Regulatory Disclosures</a>
-        <a href="#" onclick="openModal('privacyModal'); return false;" class="footer-link">Privacy Policy</a>
-        <a href="#" onclick="openModal('concernModal'); return false;" class="footer-link">File a Concern</a>
-      </div>
-    </footer>
-
-  </div><!-- /viewport-shell -->
-
-
-  <!-- ════ MODALS ════ -->
-
-  <div class="modal-overlay" id="resourceHub" role="dialog" aria-modal="true" aria-label="External Resources">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h2 class="modal-title">External Resources</h2>
-        <button class="nav-btn" onclick="closeModal('resourceHub')" aria-label="Close">✕ Close</button>
-      </div>
-      <div class="tool-grid">
-        <a href="https://financial-calculators.ca/#/"           target="_blank" rel="noopener" class="tool-link-btn">Financial Calculator</a>
-        <a href="https://ycharts.com"                           target="_blank" rel="noopener" class="tool-link-btn">YCharts</a>
-        <a href="https://koyfin.com"                           target="_blank" rel="noopener" class="tool-link-btn">Koyfin</a>
-        <a href="https://fred.stlouisfed.org"                   target="_blank" rel="noopener" class="tool-link-btn">FRED Data</a>
-        <a href="https://www.taxtips.ca"                       target="_blank" rel="noopener" class="tool-link-btn">TaxTips.ca</a>
-        <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener" class="tool-link-btn">CRA Portal</a>
-        <a href="https://calendly.com"                         target="_blank" rel="noopener" class="tool-link-btn">Calendly</a>
-        <a href="https://www.docusign.com"                     target="_blank" rel="noopener" class="tool-link-btn">DocuSign</a>
-      </div>
-    </div>
   </div>
+</nav>
 
-  <div class="modal-overlay" id="concernModal" role="dialog" aria-modal="true" aria-label="Report Service Concern">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h2 class="modal-title">Report Service Concern</h2>
-        <button class="nav-btn" onclick="closeModal('concernModal')" aria-label="Close">✕ Close</button>
-      </div>
-      <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:1.4rem; line-height:1.65;">
-        AYR TGW Solutions takes all service concerns seriously. Your report will be reviewed
-        by our compliance team within 5 business days. For urgent matters, contact us directly.
-      </p>
-      <div class="compliance-form">
-        <div class="form-field">
-          <label class="form-label" for="sc-name">Your Name (optional)</label>
-          <input class="form-input" type="text" id="sc-name" placeholder="Anonymous submissions accepted">
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="sc-email">Contact Email (optional)</label>
-          <input class="form-input" type="email" id="sc-email" placeholder="For follow-up only">
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="sc-type">Concern Type</label>
-          <select class="form-select" id="sc-type">
-            <option value="">— Select —</option>
-            <option>Misleading Financial Advice</option>
-            <option>Unsuitable Product Recommendation</option>
-            <option>Disclosure Issue</option>
-            <option>Advisor Conduct</option>
-            <option>Billing / Fee Dispute</option>
-            <option>Privacy Concern</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label class="form-label" for="sc-desc">Description</label>
-          <textarea class="form-textarea" id="sc-desc" style="min-height:110px;" placeholder="Please describe the concern in as much detail as possible…"></textarea>
-        </div>
-        <button class="form-submit-btn" style="opacity:1; cursor:pointer;" onclick="submitForm('concernModal', 'Service Concern')">
-          Submit Concern Report
-        </button>
-      </div>
-    </div>
+<div class="mob-nav" id="mobNav">
+  <button class="mob-close" id="mobClose">&#x2715;</button>
+  <a href="index.html" class="active">Home</a>
+  <a href="clients.html">Clients</a>
+  <a href="partners.html">Partners</a>
+  <a href="agents.html">Agents</a>
+  <a href="inquiry.html">Inquiry</a>
+  <a href="session-feedback.html">Session Feedback</a>
+  <a href="service-feedback.html">Service Feedback</a>
+</div>
+
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">AYR TGW Solutions &bull; World Financial Group Affiliate</p>
+    <h1 class="hero-title">
+      <span class="line1">Ecosystem</span>
+      <span class="line2">Central Hub</span>
+    </h1>
+    <p class="hero-desc">Your unified operations matrix for client onboarding, partner registration, agent metrics, rapid inquiry response, and social feedback generation.</p>
   </div>
+</section>
 
-  <div class="modal-overlay" id="disclosuresModal" role="dialog" aria-modal="true" aria-label="Regulatory Disclosures">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h2 class="modal-title">Regulatory Disclosures</h2>
-        <button class="nav-btn" onclick="closeModal('disclosuresModal')" aria-label="Close">✕ Close</button>
-      </div>
-      <div style="font-size:0.80rem; color:var(--text-secondary); line-height:1.75; display:flex; flex-direction:column; gap:1rem;">
-        <p><strong style="color:var(--text-primary);">Registered Entity:</strong> AYR TGW Solutions Inc. is affiliated with World Financial Group (WFG) Canada. Financial advisors associated with AYR TGW Solutions are licensed under the applicable provincial insurance regulator(s).</p>
-        <p><strong style="color:var(--text-primary);">Licensing:</strong> All insurance and investment products are offered by licensed representatives only. Licensing information is available upon request or through the applicable provincial regulator (e.g., FSRA in Ontario).</p>
-        <p><strong style="color:var(--text-primary);">Insurance Disclaimer:</strong> Life insurance products are underwritten by licensed insurance carriers through WFG. Product availability, features, and pricing may vary. Approval is subject to underwriting review. Past performance is not a guarantee of future results.</p>
-        <p><strong style="color:var(--text-primary);">Not a Guarantee:</strong> Information provided through this platform is for educational and informational purposes only and does not constitute a guarantee of coverage, returns, or advice. Always consult a licensed advisor before making financial decisions.</p>
-        <p><strong style="color:var(--text-primary);">Advertising &amp; Compensation:</strong> AYR TGW Solutions receives a fixed monthly advertising fee from partners. We do not receive commissions from insurance products.</p>
-        <p><strong style="color:var(--text-primary);">Privacy:</strong> Personal information collected through this platform is governed by our Privacy Policy and applicable Canadian privacy legislation (PIPEDA).</p>
-      </div>
+<div class="stat-strip">
+  <div class="stat"><div class="stat-value">6</div><div class="stat-label">Active Modules</div></div>
+  <div class="stat"><div class="stat-value">WFG</div><div class="stat-label">Affiliate Network</div></div>
+  <div class="stat"><div class="stat-value">AT</div><div class="stat-label">Airtable Sync</div></div>
+  <div class="stat"><div class="stat-value">24/7</div><div class="stat-label">Live Intake</div></div>
+</div>
+
+<div class="portal-grid">
+  <a href="clients.html" class="portal-card">
+    <div class="portal-icon">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
     </div>
-  </div>
-
-  <div class="modal-overlay" id="privacyModal" role="dialog" aria-modal="true" aria-label="Privacy Policy">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h2 class="modal-title">Privacy Policy</h2>
-        <button class="nav-btn" onclick="closeModal('privacyModal')" aria-label="Close">✕ Close</button>
-      </div>
-      <div style="font-size:0.80rem; color:var(--text-secondary); line-height:1.75; display:flex; flex-direction:column; gap:1rem;">
-        <p>AYR TGW Solutions Inc. collects personal information solely for the purpose of providing financial services and fulfilling regulatory requirements under PIPEDA.</p>
-        <p>We do not sell, rent, or share your personal information with third parties except as required by law or with your explicit consent.</p>
-        <p>We do not engage in lead-sharing for recruitment purposes; personal data is restricted to authorized, licensed service representatives only.</p>
-        <p>You have the right to access, correct, or request deletion of your personal data. Contact our Privacy Officer at <strong style="color:var(--blue);">privacy@ayrtgw.ca</strong>.</p>
-      </div>
+    <div class="portal-label">Client Onboarding</div>
+    <div class="portal-desc">Multi-step Financial Needs Analysis wizard with booking system and Airtable sync.</div>
+    <div class="portal-arrow">Enter Module →</div>
+  </a>
+  <a href="partners.html" class="portal-card">
+    <div class="portal-icon">
+      <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="m9 12 2 2 4-4"/></svg>
     </div>
-  </div>
-
+    <div class="portal-label">Partner Registration</div>
+    <div class="portal-desc">Digital marketing partnership agreements, ad placement selections and invoicing preferences.</div>
+    <div class="portal-arrow">Enter Module →</div>
+  </a>
+  <a href="agents.html" class="portal-card">
+    <div class="portal-icon">
+      <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 8h.01"/><path d="M12 8h.01"/><path d="M17 8h.01"/><path d="M7 12h.01"/><path d="M12 12h.01"/><path d="M17 12h.01"/></svg>
+    </div>
+    <div class="portal-label">Agent Portal</div>
+    <div class="portal-desc">WFG agent registration, metrics reporting and performance tracking system.</div>
+    <div class="portal-arrow">Enter Module →</div>
+  </a>
+  <a href="inquiry.html" class="portal-card">
+    <div class="portal-icon">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </div>
+    <div class="portal-label">Rapid Inquiry</div>
+    <div class="portal-desc">Lead response and validation fields with emergency level triage and agent routing.</div>
+    <div class="portal-arrow">Enter Module →</div>
+  </a>
+  <a href="session-feedback.html" class="portal-card">
+    <div class="portal-icon">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <div class="portal-label">Session Feedback</div>
+    <div class="portal-desc">Live image overlay generator — capture session testimonials as shareable social graphics.</div>
+    <div class="portal-arrow">Enter Module →</div>
+  </a>
+  <a href="service-feedback.html" class="portal-card">
+    <div class="portal-icon">
+      <svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+    </div>
+    <div class="portal-label">Service Feedback</div>
+    <div class="portal-desc">Service review image overlay generator for branded testimonial social media posts.</div>
+    <div class="portal-arrow">Enter Module →</div>
+  </a>
+</div>
 
 <script>
-'use strict';
-
-/* ── Theme icon SVG paths ── */
-const THEME_ICONS = {
-  dark:  'M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z',
-  light: 'M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z'
-};
-
-/* ════════════════════════════════════════════════════════
-   BACKGROUND ENGINE  v4
-   ─────────────────────────────────────────────────────────
-   Place files in ./background/ (case-sensitive):
-
-   BACKGROUND — auto-detected format, checked in this order:
-     ./background/Background-Desktop.{mp4|webm|mkv|ogv|gif|jpg|jpeg|png|webp|avif|svg}
-     ./background/Background-Mobile.{…}
-
-   OVERLAY — .png only:
-     ./background/Overlay-Dark-Desktop.png
-     ./background/Overlay-Light-Desktop.png
-     ./background/Overlay-Dark-Mobile.png
-     ./background/Overlay-Light-Mobile.png
-
-   RULES:
-   • Background loads once per viewport class; NEVER changes on theme switch.
-   • Overlay crossfades when theme changes.
-   • Both reload when viewport crosses the 768px breakpoint.
-   • Missing files are silently skipped (CSS gradient fallback for bg).
-════════════════════════════════════════════════════════ */
-const BGEngine = (() => {
-  const VIDEO_EXTS = ['mp4','webm','mkv','ogv'];
-  const BG_EXTS    = [...VIDEO_EXTS,'gif','jpg','jpeg','png','webp','avif','svg'];
-  const stage      = document.getElementById('bg-stage');
-
-  const isMobile = () => window.innerWidth <= 768;
-  const vpSuffix = () => isMobile() ? 'Mobile' : 'Desktop';
-
-  const bgCache = {};   /* 'Desktop'|'Mobile' → {type,src}|null */
-  const ovCache = {};   /* 'Dark-Desktop' etc → src|null */
-
-  let currentTheme = 'dark';
-  let currentVP    = vpSuffix();
-
-  /* Probe background: try each extension in priority order */
-  async function probeBG(vp) {
-    if (vp in bgCache) return bgCache[vp];
-    for (const ext of BG_EXTS) {
-      const src = `./background/Background-${vp}.${ext}`;
-      try {
-        const r = await fetch(src, { method: 'HEAD', cache: 'force-cache' });
-        if (r.ok) {
-          const result = { type: VIDEO_EXTS.includes(ext) ? 'video' : 'image', src };
-          bgCache[vp] = result;
-          return result;
-        }
-      } catch (_) {}
-    }
-    bgCache[vp] = null;
-    return null;
-  }
-
-  /* Probe overlay: .png only, exact name */
-  async function probeOverlay(theme, vp) {
-    const themeKey = theme.charAt(0).toUpperCase() + theme.slice(1);
-    const key      = `${themeKey}-${vp}`;
-    if (key in ovCache) return ovCache[key];
-    const src = `./background/Overlay-${key}.png`;
-    try {
-      const r = await fetch(src, { method: 'HEAD', cache: 'force-cache' });
-      ovCache[key] = r.ok ? src : null;
-    } catch (_) { ovCache[key] = null; }
-    return ovCache[key];
-  }
-
-  function buildBGAsset(result) {
-    let el;
-    if (result.type === 'video') {
-      el = document.createElement('video');
-      el.src = result.src; el.loop = true; el.muted = true;
-      el.playsInline = true; el.setAttribute('playsinline',''); el.preload = 'auto';
-    } else {
-      el = document.createElement('img');
-      el.src = result.src; el.alt = '';
-    }
-    el.className = 'bg-asset';
-    el.setAttribute('aria-hidden','true');
-    el.style.opacity = '0';
-    return el;
-  }
-
-  function bgVideoTime() {
-    const v = stage.querySelector('video.bg-asset.active-bg') || stage.querySelector('video.bg-asset');
-    return v ? v.currentTime : 0;
-  }
-
-  function crossfade(incoming, outgoing, duration = 0.65) {
-    incoming.classList.add('active-bg');
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      incoming.style.transition = `opacity ${duration}s ease`;
-      incoming.style.opacity    = '1';
-    }));
-    if (outgoing) {
-      outgoing.style.transition = `opacity ${duration}s ease`;
-      outgoing.style.opacity    = '0';
-      outgoing.classList.remove('active-bg');
-      setTimeout(() => { if (outgoing.parentNode) outgoing.remove(); }, (duration + 0.1) * 1000);
-    }
-  }
-
-  async function swapBackground(result) {
-    const outgoing = stage.querySelector('.bg-asset');
-    if (!result) {
-      document.body.style.background = currentTheme === 'dark'
-        ? 'linear-gradient(135deg,#02081a 0%,#050d1a 100%)'
-        : 'linear-gradient(135deg,#c8e6ff 0%,#e8f4ff 100%)';
-      if (outgoing) {
-        outgoing.style.transition = 'opacity 0.65s ease';
-        outgoing.style.opacity = '0';
-        setTimeout(() => { if (outgoing.parentNode) outgoing.remove(); }, 750);
-      }
-      return;
-    }
-    document.body.style.background = '';
-    const outSrc = outgoing ? (outgoing.getAttribute('src') || outgoing.src || '') : '';
-    if (outSrc && (outSrc === result.src || outSrc.endsWith(result.src.replace(/^\.\//,'')))) return;
-
-    const incoming = buildBGAsset(result);
-    const firstOverlay = stage.querySelector('.bg-overlay');
-    if (firstOverlay) stage.insertBefore(incoming, firstOverlay);
-    else              stage.prepend(incoming);
-
-    if (incoming.tagName === 'VIDEO') {
-      const t = bgVideoTime();
-      const doPlay = () => {
-        if (t > 0 && incoming.duration && t < incoming.duration) incoming.currentTime = t;
-        incoming.play().catch(() => {});
-        crossfade(incoming, outgoing);
-      };
-      if (incoming.readyState >= 1) doPlay();
-      else incoming.addEventListener('loadedmetadata', doPlay, { once: true });
-    } else {
-      const doShow = () => crossfade(incoming, outgoing);
-      if (incoming.complete && incoming.naturalWidth) doShow();
-      else incoming.onload = doShow;
-    }
-  }
-
-  async function swapOverlay(theme, vp) {
-    const src     = await probeOverlay(theme, vp);
-    const oldOver = stage.querySelector('.bg-overlay');
-    if (!src) {
-      if (oldOver) {
-        oldOver.style.transition = 'opacity 0.5s ease';
-        oldOver.style.opacity    = '0';
-        setTimeout(() => { if (oldOver.parentNode) oldOver.remove(); }, 600);
-      }
-      return;
-    }
-    if (oldOver && oldOver.getAttribute('src') === src) return;
-
-    const img = new Image();
-    img.src = src;
-    img.className = 'bg-overlay';
-    img.setAttribute('aria-hidden','true');
-    img.style.opacity = '0';
-    stage.appendChild(img);
-
-    const doShow = () => {
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        img.style.transition = 'opacity 0.5s ease';
-        img.style.opacity    = '1';
-      }));
-      if (oldOver) {
-        oldOver.style.transition = 'opacity 0.5s ease';
-        oldOver.style.opacity    = '0';
-        setTimeout(() => { if (oldOver.parentNode) oldOver.remove(); }, 600);
-      }
-    };
-    if (img.complete && img.naturalWidth) doShow();
-    else img.onload = doShow;
-  }
-
-  /* Public: theme changed — swap overlay only, background stays */
-  async function setTheme(theme) {
-    currentTheme = theme;
-    await swapOverlay(theme, currentVP);
-  }
-
-  /* Public: viewport class changed — reload both */
-  async function reloadForViewport() {
-    currentVP = vpSuffix();
-    const bgResult = await probeBG(currentVP);
-    await swapBackground(bgResult);
-    await swapOverlay(currentTheme, currentVP);
-  }
-
-  /* Public: initial boot */
-  async function init(theme) {
-    currentTheme = theme;
-    currentVP    = vpSuffix();
-    const bgResult = await probeBG(currentVP);
-    await swapBackground(bgResult);
-    await swapOverlay(theme, currentVP);
-  }
-
-  /* Reload on mobile/desktop breakpoint crossing */
-  let lastMobile = isMobile();
-  window.addEventListener('resize', () => {
-    const nowMobile = isMobile();
-    if (nowMobile !== lastMobile) { lastMobile = nowMobile; reloadForViewport(); }
-  }, { passive: true });
-
-  const getAsset = () => stage.querySelector('.bg-asset');
-  return { init, setTheme, getAsset };
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   THEME ENGINE
-   Wires both mobile (#mobileThemeBtn) and desktop (#desktopThemeBtn)
-   buttons to the same toggle, keeps both icons in sync.
-════════════════════════════════════════════════════════ */
-const ThemeEngine = (() => {
-  const ROOT = document.documentElement;
-  const KEY  = 'ayr-theme';
-  const BTNS = ['mobileThemeBtn','desktopThemeBtn'].map(id => document.getElementById(id)).filter(Boolean);
-  const ICONS = () => ['mobileThemeIcon','desktopThemeIcon'].map(id => {
-    const el = document.getElementById(id);
-    return el ? el.querySelector('path') : null;
-  }).filter(Boolean);
-
-  let current = localStorage.getItem(KEY) ||
-    (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-
-  function apply(theme, persist = true, triggerBG = true) {
-    current = theme;
-    ROOT.setAttribute('data-theme', theme);
-    ICONS().forEach(p => p.setAttribute('d', THEME_ICONS[theme]));
-    const label = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
-    BTNS.forEach(btn => btn.setAttribute('aria-label', label));
-    if (persist)   localStorage.setItem(KEY, theme);
-    if (triggerBG) BGEngine.setTheme(theme);
-  }
-
-  const toggle = () => apply(current === 'dark' ? 'light' : 'dark');
-  BTNS.forEach(btn => btn.addEventListener('click', toggle));
-  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => apply(e.matches ? 'light' : 'dark'));
-
-  /* Apply visual state now; BGEngine.init() handles background on DOMContentLoaded */
-  apply(current, false, false);
-
-  return { apply, getCurrent: () => current };
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   SCREEN AWARENESS — sets CSS tokens, no scale() transform
-════════════════════════════════════════════════════════ */
-const ScreenAwareness = (() => {
-  const ROOT = document.documentElement;
-  function run() {
-    const vw = window.innerWidth, vh = window.innerHeight;
-    const device = vw <= 768 ? 'mobile' : vw <= 1024 ? 'tablet' : 'desktop';
-    document.body.setAttribute('data-device',      device);
-    document.body.setAttribute('data-orientation', vw < vh ? 'portrait' : 'landscape');
-    if (device === 'mobile') {
-      ROOT.style.setProperty('--header-h',   '60px');
-      ROOT.style.setProperty('--header-top', '10px');
-      ROOT.style.setProperty('--page-gutter','14px');
-    } else if (device === 'tablet') {
-      ROOT.style.setProperty('--header-h',   '70px');
-      ROOT.style.setProperty('--header-top', '16px');
-      ROOT.style.setProperty('--footer-h',   '60px');
-      ROOT.style.setProperty('--page-gutter','16px');
-    } else {
-      ROOT.style.setProperty('--header-h',   '76px');
-      ROOT.style.setProperty('--header-top', '20px');
-      ROOT.style.setProperty('--footer-h',   '60px');
-      ROOT.style.setProperty('--page-gutter','20px');
-    }
-  }
-  let pending = false;
-  new ResizeObserver(() => {
-    if (!pending) { pending = true; requestAnimationFrame(() => { run(); pending = false; }); }
-  }).observe(ROOT);
-  window.addEventListener('resize', run, { passive: true });
-  run();
-  return { run };
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   PARALLAX + TILT PHYSICS
-════════════════════════════════════════════════════════ */
-const ParallaxEngine = (() => {
-  const FOCAL = 0.866, TILT = 10, EASE = 0.068;
-  const DEPTH = { bg: 0.010, card: 0.046 };
-  let rawX = 0, rawY = 0, curX = 0, curY = 0;
-  const scene = document.getElementById('parallax-scene');
-  let cards = [], bgEl = null;
-
-  const gather = () => { cards = Array.from(scene.querySelectorAll('.parallax-layer')); bgEl = BGEngine.getAsset(); };
-  function updateFocal() {
-    const f = Math.round(Math.hypot(window.innerWidth, window.innerHeight) * FOCAL);
-    document.documentElement.style.setProperty('--focal', f + 'px');
-    scene.style.perspective = f + 'px'; scene.style.perspectiveOrigin = '50% 50%';
-  }
-  const onPointer = e => { const hw = window.innerWidth/2, hh = window.innerHeight/2; rawX = (e.clientX-hw)/hw; rawY = (e.clientY-hh)/hh; };
-  const onGyro    = e => {
-    if (e.gamma !== null) rawX = Math.max(-1, Math.min(1,  e.gamma/45));
-    if (e.beta  !== null) rawY = Math.max(-1, Math.min(1, (e.beta-30)/45));
-  };
-  function tick() {
-    curX += (rawX - curX) * EASE; curY += (rawY - curY) * EASE;
-    const hw = window.innerWidth/2, hh = window.innerHeight/2;
-    const freshBg = BGEngine.getAsset(); if (freshBg !== bgEl) bgEl = freshBg;
-    if (bgEl) bgEl.style.transform = `translate3d(${(curX*DEPTH.bg*hw).toFixed(2)}px,${(curY*DEPTH.bg*hh).toFixed(2)}px,0)`;
-    for (const el of cards) {
-      const d = DEPTH[el.getAttribute('data-depth')] ?? DEPTH.card;
-      const tx = (curX*d*hw).toFixed(2), ty = (curY*d*hh).toFixed(2);
-      if (el.classList.contains('tilt-card')) {
-        el.style.transform = `translate3d(${tx}px,${ty}px,0) rotateY(${(curX*TILT).toFixed(3)}deg) rotateX(${(-curY*TILT).toFixed(3)}deg)`;
-        el.style.boxShadow = `${(curX*14).toFixed(1)}px ${((curY*9)+14).toFixed(1)}px 48px var(--blue-shadow),0 1px 0 rgba(0,170,255,0.12) inset`;
-      } else { el.style.transform = `translate3d(${tx}px,${ty}px,0)`; }
-    }
-    requestAnimationFrame(tick);
-  }
-  function init() {
-    gather(); updateFocal();
-    window.addEventListener('pointermove', onPointer, { passive:true });
-    window.addEventListener('mousemove',   onPointer, { passive:true });
-    window.addEventListener('deviceorientation', onGyro, { passive:true });
-    window.addEventListener('resize', () => { updateFocal(); gather(); }, { passive:true });
-    requestAnimationFrame(tick);
-  }
-  return { init, gather };
-})();
-
-
-/* ════ SIDE NAV ════ */
-function openSideNav() {
-  document.getElementById('sideNav').classList.add('open');
-  document.getElementById('sideNavOverlay').classList.add('open');
-  document.getElementById('hamburgerBtn').classList.add('open');
-  document.getElementById('sideNavOverlay').setAttribute('aria-hidden','false');
-  document.body.classList.add('modal-lock');
-}
-function closeSideNav() {
-  document.getElementById('sideNav').classList.remove('open');
-  document.getElementById('sideNavOverlay').classList.remove('open');
-  document.getElementById('hamburgerBtn').classList.remove('open');
-  document.getElementById('sideNavOverlay').setAttribute('aria-hidden','true');
-  if (!document.querySelector('.modal-overlay.active')) document.body.classList.remove('modal-lock');
-}
-document.getElementById('sideNavOverlay').addEventListener('click', closeSideNav);
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    closeSideNav();
-    const open = document.querySelector('.modal-overlay.active');
-    if (open) closeModal(open.id);
-  }
-});
-
-/* ════ MODALS ════ */
-function openModal(id) {
-  const el = document.getElementById(id); if (!el) return;
-  el.classList.add('active'); document.body.classList.add('modal-lock');
-  const first = el.querySelector('button, input, select, textarea, a');
-  if (first) setTimeout(() => first.focus(), 50);
-}
-function closeModal(id) {
-  const el = document.getElementById(id); if (!el) return;
-  el.classList.remove('active');
-  if (!document.querySelector('.modal-overlay.active') && !document.getElementById('sideNav').classList.contains('open'))
-    document.body.classList.remove('modal-lock');
-}
-document.querySelectorAll('.modal-overlay').forEach(ov => {
-  ov.addEventListener('click', e => { if (e.target === ov) closeModal(ov.id); });
-});
-function submitForm(modalId, formName) {
-  alert(`✓ Your ${formName} has been received. A licensed AYR TGW advisor will contact you shortly.`);
-  closeModal(modalId);
-}
-
-/* ════════════════════════════════════════════════════════
-   BOOT
-   BGEngine.init() must be called here — this is what actually
-   triggers the background + overlay to load on first paint.
-════════════════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
-  ScreenAwareness.run();
-  ParallaxEngine.init();
-  BGEngine.init(ThemeEngine.getCurrent());
-});
+  const btn=document.getElementById('menuBtn'),nav=document.getElementById('mobNav'),cls=document.getElementById('mobClose');
+  btn.addEventListener('click',()=>nav.classList.add('open'));
+  cls.addEventListener('click',()=>nav.classList.remove('open'));
+  document.addEventListener('click',e=>{if(nav.classList.contains('open')&&!nav.contains(e.target)&&e.target!==btn)nav.classList.remove('open')});
 </script>
 </body>
 </html>
