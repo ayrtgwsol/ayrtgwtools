@@ -153,43 +153,13 @@ html.light-mode .dnav-link:hover{color:#000000;}
 .dd-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
 .dd-menu a:hover,.dd-menu a.active{color:#fff;background:rgba(0,74,173,.14);}
 
-/* ── AIRTABLE PAT MODAL ── */
-.pat-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-.pat-overlay.hidden{display:none;}
-.pat-box{background:#0a0f1e;border:1px solid rgba(0,74,173,.55);border-radius:16px;padding:32px 28px;max-width:420px;width:calc(100% - 40px);box-shadow:0 24px 64px rgba(0,0,0,.6);}
-.pat-box h3{font-size:1.05rem;font-weight:800;color:#f3f4f6;margin-bottom:6px;}
-.pat-box p{font-size:.78rem;color:#6b7280;line-height:1.6;margin-bottom:18px;}
-.pat-box a{color:#3b82f6;text-decoration:none;}
-.pat-box a:hover{text-decoration:underline;}
-.pat-input{width:100%;background:rgba(17,24,39,.80);border:1px solid rgba(55,65,81,.80);border-radius:8px;color:#f3f4f6;font-size:.85rem;padding:10px 13px;outline:none;font-family:monospace;margin-bottom:14px;box-sizing:border-box;}
-.pat-input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15);}
-.pat-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:8px;background:#004aad;border:1px solid rgba(0,74,173,.60);color:#fff;font-size:.82rem;font-weight:700;cursor:pointer;transition:background .2s;}
-.pat-btn:hover{background:#0053c8;}
-.pat-btn-skip{background:transparent;border-color:rgba(55,65,81,.60);color:#6b7280;margin-left:10px;}
-.pat-btn-skip:hover{color:#f3f4f6;border-color:#6b7280;}
-/* Config gear button */
-.pat-config-btn{position:fixed;bottom:84px;right:26px;z-index:400;width:44px;height:44px;border-radius:50%;background:rgba(0,74,173,.85);border:1px solid rgba(0,74,173,.50);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,74,173,.35);transition:all .25s;backdrop-filter:blur(10px);color:#fff;font-size:1.1rem;}
-.pat-config-btn:hover{background:#004aad;transform:scale(1.08);}
 
 </style>
+
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
 
-<!-- AIRTABLE PAT CONFIGURATION MODAL -->
-<div class="pat-overlay hidden" id="patOverlay">
-  <div class="pat-box">
-    <h3>🔑 Airtable Connection</h3>
-    <p>Enter your Airtable Personal Access Token (PAT) to enable form submissions.<br>
-    <a href="https://airtable.com/create/tokens" target="_blank" rel="noopener">Get your PAT →</a><br>
-    <span style="color:#4b5563;font-size:.72rem;">Required scope: <code style="color:#60a5fa;">data.records:write</code> on base <code style="color:#60a5fa;">appdtWUAAIOXKZV6F</code></span></p>
-    <input class="pat-input" id="patInput" type="password" placeholder="patXXXXXXXXXXXXXX.XXXXXXXX…" autocomplete="off" spellcheck="false">
-    <div>
-      <button class="pat-btn" onclick="savePAT()">Save &amp; Connect</button>
-      <button class="pat-btn pat-btn-skip" onclick="closePATModal()">Skip for now</button>
-    </div>
-  </div>
-</div>
-<button class="pat-config-btn" id="patConfigBtn" onclick="openPATModal()" title="Configure Airtable PAT">🔑</button>
+
 
 <!-- BACKGROUND STACK -->
 <div class="bg-stack" id="bgStack">
@@ -217,7 +187,6 @@ html.light-mode .dnav-link:hover{color:#000000;}
         </div>
       </li>
       <li><a href="inquiry.html" class="dnav-link">Inquiry</a></li>
-      <li><a href="agents.html" class="dnav-link">Agent</a></li>
       </ul>
       <button class="hamburger-btn" id="hamburgerBtn2" aria-label="Open navigation menu">
         <span></span><span></span><span></span>
@@ -241,119 +210,34 @@ html.light-mode .dnav-link:hover{color:#000000;}
     <a href="session-feedback.html" class="drawer-links-a">Session Feedback</a>
     <a href="service-feedback.html" class="drawer-links-a">Service Feedback</a>
     <a href="inquiry.html" class="drawer-links-a">Inquiry</a>
-    <a href="agents.html" class="drawer-links-a">Agent</a>
   </div>
 </nav>
 <style>
 @media(min-width:768px){#desktopNavList{display:flex!important;}#hamburgerBtn2{display:none!important;}}
 </style>
 
+
 <main class="max-w-3xl mx-auto px-6 py-14 relative z-10">
   <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-500 bg-clip-text text-transparent mb-2">Partner Registration</h1>
-  <p class="text-gray-400 text-base mb-10 leading-relaxed max-w-xl">Register your business for a digital marketing partnership with AYR TGW Solutions. Complete the agreement details below.</p>
+  <p class="text-gray-400 text-base mb-8 leading-relaxed max-w-xl">Digital marketing partnership agreements, ad placement selections and invoicing preferences.</p>
 
-  <div id="formContent">
-    <!-- Business Info -->
-    <div class="panel mb-5">
-      <div class="panel-title">Business Information</div>
-      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
-        <div class="fg"><label>Contact Name <span class="req">*</span></label><input type="text" id="contact_name" placeholder="Your full name" required></div>
-        <div class="fg"><label>Business Name <span class="req">*</span></label><input type="text" id="business_name" placeholder="Company or brand name" required></div>
-      </div>
-      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
-        <div class="fg"><label>Business Email <span class="req">*</span></label><input type="email" id="business_email" placeholder="contact@business.com" required></div>
-        <div class="fg"><label>Personal / Billing Email <span class="req">*</span></label><input type="email" id="email" placeholder="personal@email.com" required></div>
-      </div>
-      <div class="grid grid-cols-2 gap-4 field-grid">
-        <div class="fg"><label>Region of Operation <span class="req">*</span></label><input type="text" id="region_operation" placeholder="e.g. Ontario, GTA, Canada-wide" required></div>
-        <div class="fg"><label>Social Handle or Website URL <span class="req">*</span></label><input type="url" id="social_handle_url" placeholder="https://instagram.com/handle" required></div>
-      </div>
-    </div>
-
-    <!-- Ad Placement -->
-    <div class="panel mb-5">
-      <div class="panel-title">Ad Placement Preferences</div>
-      <p class="text-gray-500 text-xs mb-4 leading-relaxed">Select all placement types you are interested in:</p>
-      <div class="flex flex-wrap gap-2" id="adGrid">
-        <button type="button" class="ad-chip" onclick="toggleAd(this,'Instagram Story')">📱 Instagram Story</button>
-        <button type="button" class="ad-chip" onclick="toggleAd(this,'Instagram Post')">🖼️ Instagram Post</button>
-        <button type="button" class="ad-chip" onclick="toggleAd(this,'Facebook Post')">📘 Facebook Post</button>
-        <button type="button" class="ad-chip" onclick="toggleAd(this,'YouTube Pre-Roll')">▶️ YouTube Pre-Roll</button>
-        <button type="button" class="ad-chip" onclick="toggleAd(this,'Email Newsletter')">📧 Email Newsletter</button>
-        <button type="button" class="ad-chip" onclick="toggleAd(this,'Referral Link')">🔗 Referral Link</button>
-        <button type="button" class="ad-chip" onclick="toggleAd(this,'Event Sponsorship')">🎪 Event Sponsorship</button>
-        <button type="button" class="ad-chip" onclick="toggleAd(this,'LinkedIn Post')">💼 LinkedIn Post</button>
-      </div>
-    </div>
-
-    <!-- Agreement -->
-    <div class="panel mb-5">
-      <div class="panel-title">Agreement Details</div>
-      <div class="grid grid-cols-2 gap-4 field-grid">
-        <div class="fg"><label>Preferred Discussion Method <span class="req">*</span></label>
-          <select id="discussion_method" required><option value="">Select…</option><option>Zoom Call</option><option>Phone Call</option><option>In-Person Meeting</option><option>Email Exchange</option><option>WhatsApp</option></select></div>
-        <div class="fg"><label>Invoice / Payment Method <span class="req">*</span></label>
-          <select id="invoice_payment_method" required><option value="">Select…</option><option>E-Transfer</option><option>PayPal</option><option>Stripe / Credit Card</option><option>Cheque</option><option>Cryptocurrency</option><option>Wire Transfer</option></select></div>
-      </div>
-    </div>
-
-    <div class="flex justify-end mt-6">
-      <button id="submitBtn" onclick="submitPartner()" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Register Partnership
-      </button>
-    </div>
-  </div>
-
-  <!-- SUCCESS -->
-  <div id="successState" class="hidden text-center py-16" style="animation:fadeUp .5s ease">
-    <div class="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/40 flex items-center justify-center mx-auto mb-5">
-      <svg class="w-7 h-7 stroke-green-400" fill="none" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-    </div>
-    <h2 class="text-3xl font-extrabold text-green-400 mb-3">Partnership Registered</h2>
-    <p class="text-gray-400 max-w-md mx-auto mb-8 leading-relaxed">Your registration has been received. The AYR TGW team will be in touch within 2 business days to confirm details and schedule your first discussion.</p>
-    <a href="index.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all">← Return to Hub</a>
+  <div style="width:100%;max-width:740px;margin:0 auto;">
+    <iframe
+      src="https://docs.google.com/forms/d/e/1FAIpQLScl9C29S7OPhEfeE97f6uCWhX61Y-qZ_y_9nU7Z6-lI6I5vfw/viewform?embedded=true"
+      width="100%"
+      height="900"
+      frameborder="0"
+      marginheight="0"
+      marginwidth="0"
+      style="border-radius:12px;border:1px solid rgba(55,65,81,0.6);display:block;"
+      loading="lazy"
+    >Loading form…</iframe>
   </div>
 </main>
 
 <div class="toast" id="toast"></div>
 
-<script>
 
-function checkATKey(key){
-  var pat=window.getATPAT?window.getATPAT():key;
-  if(!pat||pat.includes('YOUR_AIRTABLE_PAT_HERE')){
-    window.openPATModal&&window.openPATModal();
-    return false;
-  }
-  return true;
-}
-
-/* ══ AIRTABLE CONFIGURATION ══════════════════════════════════════════
-   To connect this form to Airtable, replace 'YOUR_AIRTABLE_PAT_HERE'
-   below with your Personal Access Token (PAT).
-   Get yours at: https://airtable.com/create/tokens
-   Required scopes: data.records:write on base appdtWUAAIOXKZV6F
-   ═══════════════════════════════════════════════════════════════════ */
-const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tblccEqo6D46RRmeK',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
-const selectedAds=new Set();
-function toggleAd(el,val){el.classList.toggle('selected');selectedAds.has(val)?selectedAds.delete(val):selectedAds.add(val);}
-function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
-async function submitPartner(){
-  const btn=document.getElementById('submitBtn');
-  for(const el of document.querySelectorAll('#formContent [required]')){if(el.tagName==='SELECT'&&!el.value){el.focus();showToast('Please complete all required fields.','error');return;}if(el.tagName!=='SELECT'&&!el.value.trim()){el.focus();showToast('Please complete all required fields.','error');return;}}
-  if(selectedAds.size===0){showToast('Please select at least one Ad Placement.','error');return;}
-  btn.disabled=true;btn.textContent='Submitting…';
-  if(!window.getATPAT()){window.openPATModal();btn.disabled=false;btn.textContent='Submit';return;}
-  const fields={'Contact_Name':document.getElementById('contact_name').value,'Business_Name':document.getElementById('business_name').value,'Business_Email':document.getElementById('business_email').value,'Email':document.getElementById('email').value,'Region_Operation':document.getElementById('region_operation').value,'Social_Handle_URL':document.getElementById('social_handle_url').value,'Ad_Placement':Array.from(selectedAds).join(', '),'Discussion_Method':document.getElementById('discussion_method').value,'Invoice_Payment_Method':document.getElementById('invoice_payment_method').value};
-  Object.keys(fields).forEach(k=>{if(!fields[k])delete fields[k];});
-  try{
-    const res=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,{method:'POST',headers:{'Authorization':`Bearer ${window.getATPAT()}`,'Content-Type':'application/json'},body:JSON.stringify({records:[{fields}],typecast:true})});
-    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Failed');}
-    document.getElementById('formContent').style.display='none';
-    document.getElementById('successState').classList.remove('hidden');
-  }catch(e){showToast('Error: '+e.message,'error');btn.disabled=false;btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Register Partnership';}
-}
-</script>
 <script>
 (function(){
   var btn=document.getElementById('hamburgerBtn2');
@@ -413,41 +297,7 @@ async function submitPartner(){
 })();
 </script>
 
-<script>
-/* ── AIRTABLE PAT RUNTIME CONFIG ── */
-(function(){
-  var STORAGE_KEY = 'ayr_at_pat';
-  window.getATPAT = function(){ return sessionStorage.getItem(STORAGE_KEY) || ''; };
-  window.openPATModal = function(){
-    var overlay = document.getElementById('patOverlay');
-    var input = document.getElementById('patInput');
-    if(overlay) overlay.classList.remove('hidden');
-    if(input){ input.value = window.getATPAT(); setTimeout(function(){ input.focus(); }, 100); }
-  };
-  window.closePATModal = function(){
-    var overlay = document.getElementById('patOverlay');
-    if(overlay) overlay.classList.add('hidden');
-  };
-  window.savePAT = function(){
-    var input = document.getElementById('patInput');
-    var val = input ? input.value.trim() : '';
-    if(!val){ input.style.borderColor='#ef4444'; return; }
-    sessionStorage.setItem(STORAGE_KEY, val);
-    window.closePATModal();
-    if(typeof showToast === 'function') showToast('Airtable PAT saved ✓', 'success');
-  };
-  // Allow Enter key in PAT input
-  document.addEventListener('DOMContentLoaded', function(){
-    var inp = document.getElementById('patInput');
-    if(inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') window.savePAT(); });
-    // Auto-open if no PAT set
-    if(!window.getATPAT()) setTimeout(window.openPATModal, 600);
-    // Show/hide config button based on PAT status
-    var btn = document.getElementById('patConfigBtn');
-    if(btn && window.getATPAT()) btn.style.opacity = '0.55';
-  });
-})();
-</script>
+
 
 </body>
 </html>

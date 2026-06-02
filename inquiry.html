@@ -159,43 +159,13 @@ html.light-mode .dnav-link:hover{color:#000000;}
 .dd-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
 .dd-menu a:hover,.dd-menu a.active{color:#fff;background:rgba(0,74,173,.14);}
 
-/* ── AIRTABLE PAT MODAL ── */
-.pat-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-.pat-overlay.hidden{display:none;}
-.pat-box{background:#0a0f1e;border:1px solid rgba(0,74,173,.55);border-radius:16px;padding:32px 28px;max-width:420px;width:calc(100% - 40px);box-shadow:0 24px 64px rgba(0,0,0,.6);}
-.pat-box h3{font-size:1.05rem;font-weight:800;color:#f3f4f6;margin-bottom:6px;}
-.pat-box p{font-size:.78rem;color:#6b7280;line-height:1.6;margin-bottom:18px;}
-.pat-box a{color:#3b82f6;text-decoration:none;}
-.pat-box a:hover{text-decoration:underline;}
-.pat-input{width:100%;background:rgba(17,24,39,.80);border:1px solid rgba(55,65,81,.80);border-radius:8px;color:#f3f4f6;font-size:.85rem;padding:10px 13px;outline:none;font-family:monospace;margin-bottom:14px;box-sizing:border-box;}
-.pat-input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15);}
-.pat-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:8px;background:#004aad;border:1px solid rgba(0,74,173,.60);color:#fff;font-size:.82rem;font-weight:700;cursor:pointer;transition:background .2s;}
-.pat-btn:hover{background:#0053c8;}
-.pat-btn-skip{background:transparent;border-color:rgba(55,65,81,.60);color:#6b7280;margin-left:10px;}
-.pat-btn-skip:hover{color:#f3f4f6;border-color:#6b7280;}
-/* Config gear button */
-.pat-config-btn{position:fixed;bottom:84px;right:26px;z-index:400;width:44px;height:44px;border-radius:50%;background:rgba(0,74,173,.85);border:1px solid rgba(0,74,173,.50);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,74,173,.35);transition:all .25s;backdrop-filter:blur(10px);color:#fff;font-size:1.1rem;}
-.pat-config-btn:hover{background:#004aad;transform:scale(1.08);}
 
 </style>
+
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
 
-<!-- AIRTABLE PAT CONFIGURATION MODAL -->
-<div class="pat-overlay hidden" id="patOverlay">
-  <div class="pat-box">
-    <h3>🔑 Airtable Connection</h3>
-    <p>Enter your Airtable Personal Access Token (PAT) to enable form submissions.<br>
-    <a href="https://airtable.com/create/tokens" target="_blank" rel="noopener">Get your PAT →</a><br>
-    <span style="color:#4b5563;font-size:.72rem;">Required scope: <code style="color:#60a5fa;">data.records:write</code> on base <code style="color:#60a5fa;">appdtWUAAIOXKZV6F</code></span></p>
-    <input class="pat-input" id="patInput" type="password" placeholder="patXXXXXXXXXXXXXX.XXXXXXXX…" autocomplete="off" spellcheck="false">
-    <div>
-      <button class="pat-btn" onclick="savePAT()">Save &amp; Connect</button>
-      <button class="pat-btn pat-btn-skip" onclick="closePATModal()">Skip for now</button>
-    </div>
-  </div>
-</div>
-<button class="pat-config-btn" id="patConfigBtn" onclick="openPATModal()" title="Configure Airtable PAT">🔑</button>
+
 
 <!-- BACKGROUND STACK -->
 <div class="bg-stack" id="bgStack">
@@ -223,7 +193,6 @@ html.light-mode .dnav-link:hover{color:#000000;}
         </div>
       </li>
       <li><a href="inquiry.html" class="dnav-link active" aria-current="page">Inquiry</a></li>
-      <li><a href="agents.html" class="dnav-link">Agent</a></li>
       </ul>
       <button class="hamburger-btn" id="hamburgerBtn2" aria-label="Open navigation menu">
         <span></span><span></span><span></span>
@@ -247,112 +216,34 @@ html.light-mode .dnav-link:hover{color:#000000;}
     <a href="session-feedback.html" class="drawer-links-a">Session Feedback</a>
     <a href="service-feedback.html" class="drawer-links-a">Service Feedback</a>
     <a href="inquiry.html" class="drawer-links-a active" aria-current="page">Inquiry</a>
-    <a href="agents.html" class="drawer-links-a">Agent</a>
   </div>
 </nav>
 <style>
 @media(min-width:768px){#desktopNavList{display:flex!important;}#hamburgerBtn2{display:none!important;}}
 </style>
 
+
 <main class="max-w-3xl mx-auto px-6 py-14 relative z-10">
   <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-500 bg-clip-text text-transparent mb-2">Rapid Inquiry</h1>
-  <p class="text-gray-400 text-base mb-10 leading-relaxed max-w-xl">Submit an inquiry, support request, or lead referral. Our team monitors submissions and routes responses by priority level.</p>
+  <p class="text-gray-400 text-base mb-8 leading-relaxed max-w-xl">Lead response and validation. Emergency level triage and agent routing.</p>
 
-  <div id="formContent">
-    <div class="panel mb-5">
-      <div class="panel-title">Contact &amp; Routing</div>
-      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
-        <div class="fg"><label>Full Name <span class="req">*</span></label><input type="text" id="full_name" placeholder="Your full name" required></div>
-        <div class="fg"><label>Email <span class="req">*</span></label><input type="email" id="email" placeholder="your@email.com" required></div>
-      </div>
-      <div class="grid grid-cols-2 gap-4 mb-4 field-grid">
-        <div class="fg"><label>Contact Method <span class="req">*</span></label>
-          <select id="contact_method" required><option value="">Select…</option><option>Email</option><option>Phone Call</option><option>Text Message</option><option>WhatsApp</option></select></div>
-        <div class="fg"><label>Contact Detail <span class="req">*</span></label><input type="text" id="contact_detail" placeholder="Phone or preferred handle" required></div>
-      </div>
-      <div class="grid grid-cols-2 gap-4 field-grid">
-        <div class="fg"><label>Inquiry Type <span class="req">*</span></label>
-          <select id="inquiry_type" required><option value="">Select type…</option><option>General Question</option><option>Client Support</option><option>New Lead Referral</option><option>Agent Support</option><option>Partner Query</option><option>Complaint</option><option>Billing</option></select></div>
-        <div class="fg"><label>Assign to Agent Email <span class="req">*</span></label><input type="email" id="agent_email" placeholder="agent@wfg.com" required></div>
-      </div>
-    </div>
-
-    <div class="panel mb-5">
-      <div class="panel-title">Inquiry Details</div>
-      <div class="fg mb-4"><label>Inquiry Subject / Title <span class="req">*</span></label><input type="text" id="inquiry_title" placeholder="Brief one-line summary of your inquiry" required></div>
-      <div class="fg mb-4"><label>What Is This Regarding? <span class="req">*</span></label><input type="text" id="inquiry_regarding" placeholder="e.g. Life insurance quote, claim status, referral follow-up" required></div>
-      <div class="fg"><label>Detailed Inquiry <span class="req">*</span></label><textarea id="detailed_inquiry" required placeholder="Provide as much detail as possible. Include dates, amounts, policy numbers if applicable…"></textarea></div>
-    </div>
-
-    <div class="panel mb-5">
-      <div class="panel-title">Priority Level</div>
-      <p class="text-gray-500 text-xs mb-4 leading-relaxed">How urgently does this need to be addressed?</p>
-      <div class="flex gap-3 flex-wrap">
-        <button type="button" class="em-btn low sel" onclick="setEmergency(this,'Low')">🟢 Low</button>
-        <button type="button" class="em-btn medium" onclick="setEmergency(this,'Medium')">🟡 Medium</button>
-        <button type="button" class="em-btn high" onclick="setEmergency(this,'High — Urgent')">🔴 High — Urgent</button>
-      </div>
-      <input type="hidden" id="emergency_level" value="Low">
-      <div class="cb-row mt-5">
-        <input type="checkbox" id="client_consent">
-        <label for="client_consent">I consent to AYR TGW Solutions retaining and processing this inquiry for the purpose of providing a response and appropriate follow-up.</label>
-      </div>
-    </div>
-
-    <div class="flex justify-end mt-6">
-      <button id="submitBtn" onclick="submitInquiry()" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Inquiry
-      </button>
-    </div>
-  </div>
-
-  <div id="successState" class="hidden text-center py-16">
-    <div class="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/40 flex items-center justify-center mx-auto mb-5">
-      <svg class="w-7 h-7 stroke-green-400" fill="none" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-    </div>
-    <h2 class="text-3xl font-extrabold text-green-400 mb-3">Inquiry Received</h2>
-    <p class="text-gray-400 max-w-md mx-auto mb-8 leading-relaxed">Your message has been submitted and routed. Expect a response within the timeframe corresponding to your priority level.</p>
-    <a href="index.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all">← Return to Hub</a>
+  <div style="width:100%;max-width:740px;margin:0 auto;">
+    <iframe
+      src="https://docs.google.com/forms/d/e/1FAIpQLSeX3vC6z0b0jL72B1nC0I0yT6_5vI5o8B-A37W0Wn_m7n6A_g/viewform?embedded=true"
+      width="100%"
+      height="900"
+      frameborder="0"
+      marginheight="0"
+      marginwidth="0"
+      style="border-radius:12px;border:1px solid rgba(55,65,81,0.6);display:block;"
+      loading="lazy"
+    >Loading form…</iframe>
   </div>
 </main>
 
 <div class="toast" id="toast"></div>
 
-<script>
 
-function checkATKey(key){
-  var pat=window.getATPAT?window.getATPAT():key;
-  if(!pat||pat.includes('YOUR_AIRTABLE_PAT_HERE')){
-    window.openPATModal&&window.openPATModal();
-    return false;
-  }
-  return true;
-}
-
-/* ══ AIRTABLE CONFIGURATION ══════════════════════════════════════════
-   To connect this form to Airtable, replace 'YOUR_AIRTABLE_PAT_HERE'
-   below with your Personal Access Token (PAT).
-   Get yours at: https://airtable.com/create/tokens
-   Required scopes: data.records:write on base appdtWUAAIOXKZV6F
-   ═══════════════════════════════════════════════════════════════════ */
-const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tbliJ1HFN1qUN6X5P',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
-function setEmergency(el,val){document.querySelectorAll('.em-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');document.getElementById('emergency_level').value=val;}
-function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3500);}
-async function submitInquiry(){
-  const btn=document.getElementById('submitBtn');
-  for(const el of document.querySelectorAll('#formContent [required]')){if(el.tagName==='SELECT'&&!el.value){el.focus();showToast('Please complete all required fields.','error');return;}if(el.tagName!=='SELECT'&&!el.value.trim()){el.focus();showToast('Please complete all required fields.','error');return;}}
-  if(!document.getElementById('client_consent').checked){showToast('Please accept the consent checkbox.','error');return;}
-  btn.disabled=true;btn.textContent='Sending…';
-  const fields={'Full_Name':document.getElementById('full_name').value,'Email':document.getElementById('email').value,'Contact_Method':document.getElementById('contact_method').value,'Contact_Detail':document.getElementById('contact_detail').value,'Inquiry_Type':document.getElementById('inquiry_type').value,'Agent_Email':document.getElementById('agent_email').value,'Inquiry_Title':document.getElementById('inquiry_title').value,'Inquiry_Regarding':document.getElementById('inquiry_regarding').value,'Detailed_Inquiry':document.getElementById('detailed_inquiry').value,'Emergency_Level':document.getElementById('emergency_level').value,'Client_Consent':true};
-  Object.keys(fields).forEach(k=>{if(fields[k]===''||fields[k]===null)delete fields[k];});
-  try{
-    const res=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,{method:'POST',headers:{'Authorization':`Bearer ${window.getATPAT()}`,'Content-Type':'application/json'},body:JSON.stringify({records:[{fields}],typecast:true})});
-    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Failed');}
-    document.getElementById('formContent').style.display='none';
-    document.getElementById('successState').classList.remove('hidden');
-  }catch(e){showToast('Error: '+e.message,'error');btn.disabled=false;btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Inquiry';}
-}
-</script>
 <script>
 (function(){
   var btn=document.getElementById('hamburgerBtn2');
@@ -412,41 +303,7 @@ async function submitInquiry(){
 })();
 </script>
 
-<script>
-/* ── AIRTABLE PAT RUNTIME CONFIG ── */
-(function(){
-  var STORAGE_KEY = 'ayr_at_pat';
-  window.getATPAT = function(){ return sessionStorage.getItem(STORAGE_KEY) || ''; };
-  window.openPATModal = function(){
-    var overlay = document.getElementById('patOverlay');
-    var input = document.getElementById('patInput');
-    if(overlay) overlay.classList.remove('hidden');
-    if(input){ input.value = window.getATPAT(); setTimeout(function(){ input.focus(); }, 100); }
-  };
-  window.closePATModal = function(){
-    var overlay = document.getElementById('patOverlay');
-    if(overlay) overlay.classList.add('hidden');
-  };
-  window.savePAT = function(){
-    var input = document.getElementById('patInput');
-    var val = input ? input.value.trim() : '';
-    if(!val){ input.style.borderColor='#ef4444'; return; }
-    sessionStorage.setItem(STORAGE_KEY, val);
-    window.closePATModal();
-    if(typeof showToast === 'function') showToast('Airtable PAT saved ✓', 'success');
-  };
-  // Allow Enter key in PAT input
-  document.addEventListener('DOMContentLoaded', function(){
-    var inp = document.getElementById('patInput');
-    if(inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') window.savePAT(); });
-    // Auto-open if no PAT set
-    if(!window.getATPAT()) setTimeout(window.openPATModal, 600);
-    // Show/hide config button based on PAT status
-    var btn = document.getElementById('patConfigBtn');
-    if(btn && window.getATPAT()) btn.style.opacity = '0.55';
-  });
-})();
-</script>
+
 
 </body>
 </html>

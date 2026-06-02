@@ -178,43 +178,14 @@ html.light-mode .dnav-link:hover{color:#000000;}
 .dd-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
 .dd-menu a:hover,.dd-menu a.active{color:#fff;background:rgba(0,74,173,.14);}
 
-/* ── AIRTABLE PAT MODAL ── */
-.pat-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-.pat-overlay.hidden{display:none;}
-.pat-box{background:#0a0f1e;border:1px solid rgba(0,74,173,.55);border-radius:16px;padding:32px 28px;max-width:420px;width:calc(100% - 40px);box-shadow:0 24px 64px rgba(0,0,0,.6);}
-.pat-box h3{font-size:1.05rem;font-weight:800;color:#f3f4f6;margin-bottom:6px;}
-.pat-box p{font-size:.78rem;color:#6b7280;line-height:1.6;margin-bottom:18px;}
-.pat-box a{color:#3b82f6;text-decoration:none;}
-.pat-box a:hover{text-decoration:underline;}
-.pat-input{width:100%;background:rgba(17,24,39,.80);border:1px solid rgba(55,65,81,.80);border-radius:8px;color:#f3f4f6;font-size:.85rem;padding:10px 13px;outline:none;font-family:monospace;margin-bottom:14px;box-sizing:border-box;}
-.pat-input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15);}
-.pat-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:8px;background:#004aad;border:1px solid rgba(0,74,173,.60);color:#fff;font-size:.82rem;font-weight:700;cursor:pointer;transition:background .2s;}
-.pat-btn:hover{background:#0053c8;}
-.pat-btn-skip{background:transparent;border-color:rgba(55,65,81,.60);color:#6b7280;margin-left:10px;}
-.pat-btn-skip:hover{color:#f3f4f6;border-color:#6b7280;}
-/* Config gear button */
-.pat-config-btn{position:fixed;bottom:84px;right:26px;z-index:400;width:44px;height:44px;border-radius:50%;background:rgba(0,74,173,.85);border:1px solid rgba(0,74,173,.50);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,74,173,.35);transition:all .25s;backdrop-filter:blur(10px);color:#fff;font-size:1.1rem;}
-.pat-config-btn:hover{background:#004aad;transform:scale(1.08);}
+
 
 </style>
+
 </head>
 <body class="relative min-h-screen overflow-x-hidden">
 
-<!-- AIRTABLE PAT CONFIGURATION MODAL -->
-<div class="pat-overlay hidden" id="patOverlay">
-  <div class="pat-box">
-    <h3>🔑 Airtable Connection</h3>
-    <p>Enter your Airtable Personal Access Token (PAT) to enable form submissions.<br>
-    <a href="https://airtable.com/create/tokens" target="_blank" rel="noopener">Get your PAT →</a><br>
-    <span style="color:#4b5563;font-size:.72rem;">Required scope: <code style="color:#60a5fa;">data.records:write</code> on base <code style="color:#60a5fa;">appdtWUAAIOXKZV6F</code></span></p>
-    <input class="pat-input" id="patInput" type="password" placeholder="patXXXXXXXXXXXXXX.XXXXXXXX…" autocomplete="off" spellcheck="false">
-    <div>
-      <button class="pat-btn" onclick="savePAT()">Save &amp; Connect</button>
-      <button class="pat-btn pat-btn-skip" onclick="closePATModal()">Skip for now</button>
-    </div>
-  </div>
-</div>
-<button class="pat-config-btn" id="patConfigBtn" onclick="openPATModal()" title="Configure Airtable PAT">🔑</button>
+
 
 <!-- BACKGROUND STACK -->
 <div class="bg-stack" id="bgStack">
@@ -242,7 +213,6 @@ html.light-mode .dnav-link:hover{color:#000000;}
         </div>
       </li>
       <li><a href="inquiry.html" class="dnav-link">Inquiry</a></li>
-      <li><a href="agents.html" class="dnav-link">Agent</a></li>
       </ul>
       <button class="hamburger-btn" id="hamburgerBtn2" aria-label="Open navigation menu">
         <span></span><span></span><span></span>
@@ -266,7 +236,6 @@ html.light-mode .dnav-link:hover{color:#000000;}
     <a href="session-feedback.html" class="drawer-links-a">Session Feedback</a>
     <a href="service-feedback.html" class="drawer-links-a active" aria-current="page">Service Feedback</a>
     <a href="inquiry.html" class="drawer-links-a">Inquiry</a>
-    <a href="agents.html" class="drawer-links-a">Agent</a>
   </div>
 </nav>
 <style>
@@ -334,7 +303,7 @@ html.light-mode .dnav-link:hover{color:#000000;}
         </button>
         <button id="submitBtn" onclick="submitFeedback()" class="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          Save to Airtable
+          Send via Email
         </button>
       </div>
     </div>
@@ -364,82 +333,7 @@ html.light-mode .dnav-link:hover{color:#000000;}
 
 <div class="toast" id="toast"></div>
 
-<script>
 
-  return true;
-}
-
-function checkATKey(key){
-  var pat=window.getATPAT?window.getATPAT():key;
-  if(!pat||pat.includes('YOUR_AIRTABLE_PAT_HERE')){
-    window.openPATModal&&window.openPATModal();
-    return false;
-  }
-  return true;
-}
-
-/* ══ AIRTABLE CONFIGURATION ══════════════════════════════════════════
-   To connect this form to Airtable, replace 'YOUR_AIRTABLE_PAT_HERE'
-   below with your Personal Access Token (PAT).
-   Get yours at: https://airtable.com/create/tokens
-   Required scopes: data.records:write on base appdtWUAAIOXKZV6F
-   ═══════════════════════════════════════════════════════════════════ */
-const BASE_ID='appdtWUAAIOXKZV6F',TABLE_ID='tblXua0Gg8iMQPxaF',AT_KEY='YOUR_AIRTABLE_PAT_HERE';
-let currentRating=5;
-
-function setRating(val){
-  currentRating=val;
-  document.getElementById('star_rating').value=val;
-  document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('lit',i<val));
-  updatePreview();
-}
-
-function updatePreview(){
-  const q=document.getElementById('feedback_text').value.trim();
-  const n=document.getElementById('author_name').value.trim();
-  const svc=document.getElementById('service_type').value;
-  const stars='★'.repeat(currentRating)+'☆'.repeat(5-currentRating);
-  document.getElementById('prev_quote').textContent=q||"Your client's service review will appear here as you type…";
-  document.getElementById('prev_author').textContent=n?'— '+n:'— Client Name';
-  document.getElementById('prev_stars').textContent=stars;
-  document.getElementById('prev_service').textContent=svc?'#AYRTGWSolutions · '+svc.replace(/\s+/g,''):'#AYRTGWSolutions · #FinancialAdvisory';
-}
-
-function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3800);}
-
-async function downloadImage(){
-  const btn=document.getElementById('downloadBtn');
-  btn.disabled=true;btn.textContent='Rendering…';
-  try{
-    const el=document.getElementById('graphicCapture');
-    const canvas=await html2canvas(el,{scale:3,useCORS:true,allowTaint:true,backgroundColor:null,logging:false,width:el.offsetWidth,height:el.offsetHeight});
-    const link=document.createElement('a');
-    const name=document.getElementById('author_name').value.trim()||'service-review';
-    link.download='ayr-service-'+name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now()+'.png';
-    link.href=canvas.toDataURL('image/png');
-    link.click();
-    showToast('PNG downloaded successfully!','success');
-  }catch(e){showToast('Render error: '+e.message,'error');}
-  finally{btn.disabled=false;btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PNG (4:5)';}
-}
-
-async function submitFeedback(){const name=document.getElementById('author_name').value.trim();
-  const text=document.getElementById('feedback_text').value.trim();
-  const consent=document.getElementById('social_consent').checked;
-  const svc=document.getElementById('service_type').value;
-  const rating=document.getElementById('star_rating').value;
-  if(!name||!text){showToast('Please enter a name and feedback text.','error');return;}
-  const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Saving…';
-  if(!window.getATPAT()){window.openPATModal();btn.disabled=false;btn.textContent='Save to Airtable';return;}
-  const feedbackFull='['+rating+'/5 ★] ['+(svc||'General')+'] '+text;
-  try{
-    const res=await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,{method:'POST',headers:{'Authorization':`Bearer ${window.getATPAT()}`,'Content-Type':'application/json'},body:JSON.stringify({records:[{fields:{'Name':name,'Feedback_Text':feedbackFull,'Social_Consent':consent?'Yes':'No'}}],typecast:true})});
-    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Failed');}
-    showToast('Saved to Airtable ✓','success');
-  }catch(e){showToast('Error: '+e.message,'error');}
-  finally{btn.disabled=false;btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Save to Airtable';}
-}
-</script>
 <script>
 (function(){
   var btn=document.getElementById('hamburgerBtn2');
@@ -499,40 +393,118 @@ async function submitFeedback(){const name=document.getElementById('author_name'
 })();
 </script>
 
+
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     EmailJS SDK  —  https://www.emailjs.com/
+     SETUP CHECKLIST:
+       1. Sign up at https://www.emailjs.com/
+       2. Create an Email Service  →  copy your Service ID
+       3. Create an Email Template with variables:
+            {{page_type}}, {{author_name}}, {{service_type}},
+            {{star_rating}}, {{feedback_text}},
+            {{social_consent}}, {{image_data}}, {{timestamp}}
+       4. Copy your Public Key (Account → API Keys)
+       5. Paste all three values below where indicated
+     ═══════════════════════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-/* ── AIRTABLE PAT RUNTIME CONFIG ── */
-(function(){
-  var STORAGE_KEY = 'ayr_at_pat';
-  window.getATPAT = function(){ return sessionStorage.getItem(STORAGE_KEY) || ''; };
-  window.openPATModal = function(){
-    var overlay = document.getElementById('patOverlay');
-    var input = document.getElementById('patInput');
-    if(overlay) overlay.classList.remove('hidden');
-    if(input){ input.value = window.getATPAT(); setTimeout(function(){ input.focus(); }, 100); }
-  };
-  window.closePATModal = function(){
-    var overlay = document.getElementById('patOverlay');
-    if(overlay) overlay.classList.add('hidden');
-  };
-  window.savePAT = function(){
-    var input = document.getElementById('patInput');
-    var val = input ? input.value.trim() : '';
-    if(!val){ input.style.borderColor='#ef4444'; return; }
-    sessionStorage.setItem(STORAGE_KEY, val);
-    window.closePATModal();
-    if(typeof showToast === 'function') showToast('Airtable PAT saved ✓', 'success');
-  };
-  // Allow Enter key in PAT input
-  document.addEventListener('DOMContentLoaded', function(){
-    var inp = document.getElementById('patInput');
-    if(inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') window.savePAT(); });
-    // Auto-open if no PAT set
-    if(!window.getATPAT()) setTimeout(window.openPATModal, 600);
-    // Show/hide config button based on PAT status
-    var btn = document.getElementById('patConfigBtn');
-    if(btn && window.getATPAT()) btn.style.opacity = '0.55';
-  });
-})();
+// ┌─────────────────────────────────────────────────────────────┐
+// │  EMAILJS CONFIGURATION — paste your values here            │
+// └─────────────────────────────────────────────────────────────┘
+const EMAILJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY_HERE';   // e.g. "user_xxxxxxxxxxxx"
+const EMAILJS_SERVICE_ID  = 'YOUR_EMAILJS_SERVICE_ID_HERE';   // e.g. "service_xxxxxxx"
+const EMAILJS_TEMPLATE_ID = 'YOUR_EMAILJS_TEMPLATE_ID_HERE';  // e.g. "template_xxxxxxx"
+
+(function(){ emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); })();
+
+let currentRating = 5;
+
+function setRating(val){
+  currentRating = val;
+  document.getElementById('star_rating').value = val;
+  document.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('lit', i < val));
+  updatePreview();
+}
+
+function updatePreview(){
+  const q    = document.getElementById('feedback_text').value.trim();
+  const n    = document.getElementById('author_name').value.trim();
+  const svc  = document.getElementById('service_type').value;
+  const stars = '★'.repeat(currentRating) + '☆'.repeat(5 - currentRating);
+  document.getElementById('prev_quote').textContent  = q   || "Your client's service review will appear here as you type…";
+  document.getElementById('prev_author').textContent = n   ? '— ' + n : '— Client Name';
+  document.getElementById('prev_stars').textContent  = stars;
+  document.getElementById('prev_service').textContent = svc
+    ? '#AYRTGWSolutions · ' + svc.replace(/\s+/g,'')
+    : '#AYRTGWSolutions · #FinancialAdvisory';
+}
+
+function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3800);}
+
+async function downloadImage(){
+  const btn=document.getElementById('downloadBtn');
+  btn.disabled=true; btn.textContent='Rendering…';
+  try{
+    const el=document.getElementById('graphicCapture');
+    const canvas=await html2canvas(el,{scale:3,useCORS:true,allowTaint:true,backgroundColor:null,logging:false,width:el.offsetWidth,height:el.offsetHeight});
+    const link=document.createElement('a');
+    const name=document.getElementById('author_name').value.trim()||'service-review';
+    link.download='ayr-service-'+name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now()+'.png';
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+    showToast('PNG downloaded successfully!','success');
+  }catch(e){showToast('Render error: '+e.message,'error');}
+  finally{btn.disabled=false;btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PNG (4:5)';}
+}
+
+async function submitFeedback(){
+  const name    = document.getElementById('author_name').value.trim();
+  const text    = document.getElementById('feedback_text').value.trim();
+  const consent = document.getElementById('social_consent').checked;
+  const svc     = document.getElementById('service_type').value;
+  const rating  = document.getElementById('star_rating').value;
+  if(!name || !text){ showToast('Please enter a name and review text.','error'); return; }
+
+  // Guard: remind developer to configure EmailJS
+  if(EMAILJS_PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY_HERE'){
+    showToast('⚠ EmailJS not configured — see code comments.','error');
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Capturing & Sending…';
+
+  try{
+    // 1. Render the graphic canvas
+    const el     = document.getElementById('graphicCapture');
+    const canvas = await html2canvas(el, {scale:2, useCORS:true, allowTaint:true, backgroundColor:null, logging:false});
+    const imgB64 = canvas.toDataURL('image/png');   // base64 PNG
+
+    // 2. Send via EmailJS
+    const templateParams = {
+      page_type      : 'Service Feedback',
+      author_name    : name,
+      service_type   : svc || 'General Advisory',
+      star_rating    : rating + '/5',
+      feedback_text  : text,
+      social_consent : consent ? 'Yes — client has consented' : 'No',
+      image_data     : imgB64,
+      timestamp      : new Date().toLocaleString('en-CA', {timeZone:'America/Toronto'})
+    };
+
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+    showToast('Review sent via email ✓', 'success');
+  } catch(e) {
+    console.error('EmailJS error:', e);
+    showToast('Send failed: ' + (e.text || e.message || JSON.stringify(e)), 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Send via Email';
+  }
+}
 </script>
 
 </body>
