@@ -298,7 +298,7 @@ html.light-mode .dnav-link:hover{color:#000000;}
           <div id="graphicCapture">
             <div class="overlay-mask"></div>
             <div class="overlay-content">
-              <div class="ov-logo">AYR TGW Solutions &nbsp;·&nbsp; Financial Advisory</div>
+              <div class="ov-logo">AYR TGW Solutions</div>
               <div class="ov-quote-mark">"</div>
               <div class="ov-quote" id="prev_quote">Your client's testimonial will appear here as you type…</div>
               <div class="ov-divider"></div>
@@ -429,46 +429,111 @@ function showToast(msg,type){
   setTimeout(function(){t.classList.remove('show');},3800);
 }
 
-// ── Download — FIXED capture dimensions ──
+// ── Download — offscreen 1080×1350 clone render ──
+// Strategy: build an exact 1080×1350px offscreen replica of graphicCapture,
+// inject the background as a real <img> element (html2canvas cannot read
+// cross-origin CSS background-image), capture it, then tear down.
 async function downloadImage(fmt){
   fmt=fmt||'png';
   var btnId=fmt==='jpg'?'downloadBtnJpg':'downloadBtnPng';
   var btn=document.getElementById(btnId);
   btn.disabled=true;
   btn.textContent='Rendering…';
+
+  // Target export size — Instagram 4:5 standard
+  var OUT_W=1080, OUT_H=1350;
+
+  var offscreen=null;
   try{
-    var el=document.getElementById('graphicCapture');
-    // Use the parent frame for reliable dimensions — graphicCapture is position:absolute inset:0
-    var frame=document.getElementById('previewFrame');
-    var w=frame.offsetWidth;
-    var h=frame.offsetHeight;
-    var canvas=await html2canvas(el,{
-      scale:3,
+    var src=document.getElementById('graphicCapture');
+
+    // 1. Build offscreen container positioned off-screen (not display:none — h2c needs layout)
+    offscreen=document.createElement('div');
+    offscreen.style.cssText='position:fixed;left:-9999px;top:0;width:'+OUT_W+'px;height:'+OUT_H+'px;overflow:hidden;z-index:-1;';
+
+    // 2. Background image as a real <img> so html2canvas can paint it
+    var bgImg=document.createElement('img');
+    bgImg.src='./background/session.jpg';
+    bgImg.crossOrigin='anonymous';
+    bgImg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;';
+    offscreen.appendChild(bgImg);
+
+    // 3. Gradient overlay mask
+    var mask=document.createElement('div');
+    mask.style.cssText='position:absolute;inset:0;background:linear-gradient(to top,rgba(3,7,18,.96) 0%,rgba(3,7,18,.58) 48%,rgba(3,7,18,.12) 100%);';
+    offscreen.appendChild(mask);
+
+    // 4. Deep-clone the overlay-content from live preview (carries the live text values)
+    var liveContent=src.querySelector('.overlay-content');
+    var clonedContent=liveContent.cloneNode(true);
+    // Scale font sizes proportionally from preview width to 1080px
+    var previewW=document.getElementById('previewFrame').offsetWidth||400;
+    var scale=OUT_W/previewW;
+    clonedContent.style.cssText=
+      'position:absolute;bottom:0;left:0;right:0;z-index:2;'+
+      'padding:'+Math.round(24*scale)+'px '+Math.round(22*scale)+'px '+Math.round(26*scale)+'px;'+
+      'display:flex;flex-direction:column;gap:'+Math.round(9*scale)+'px;'+
+      'font-family:"Inter",sans-serif;box-sizing:border-box;';
+
+    // Scale each text element
+    var elems=clonedContent.querySelectorAll('.ov-logo,.ov-quote-mark,.ov-quote,.ov-author,.ov-tag,.ov-divider');
+    elems.forEach(function(el){
+      var cs=window.getComputedStyle(el);
+      var fs=parseFloat(cs.fontSize);
+      if(fs&&fs>0) el.style.fontSize=(fs*scale)+'px';
+      var lh=parseFloat(cs.lineHeight);
+      if(lh&&lh>0) el.style.lineHeight=(lh*scale)+'px';
+      if(el.classList.contains('ov-divider')){
+        el.style.width=Math.round(36*scale)+'px';
+        el.style.height=Math.round(1.5*scale)+'px';
+        el.style.minHeight='0';
+      }
+      if(el.classList.contains('ov-quote')) el.style.minHeight=(36*scale)+'px';
+    });
+    offscreen.appendChild(clonedContent);
+
+    document.body.appendChild(offscreen);
+
+    // 5. Wait for background image to fully load before capturing
+    await new Promise(function(resolve,reject){
+      if(bgImg.complete&&bgImg.naturalWidth>0){resolve();}
+      else{bgImg.onload=resolve;bgImg.onerror=reject;}
+    });
+
+    // 6. Capture the offscreen element at scale:1 — it is already at full output resolution
+    var canvas=await html2canvas(offscreen,{
+      scale:1,
       useCORS:true,
-      allowTaint:true,
+      allowTaint:false,
       backgroundColor:'#0a0f1e',
       logging:false,
-      width:w,
-      height:h,
-      windowWidth:w,
-      windowHeight:h
+      width:OUT_W,
+      height:OUT_H,
+      windowWidth:OUT_W,
+      windowHeight:OUT_H,
+      scrollX:0,
+      scrollY:0,
+      x:0,
+      y:0
     });
+
     var name=document.getElementById('author_name').value.trim()||'session-feedback';
     var mimeType=fmt==='jpg'?'image/jpeg':'image/png';
     var ext=fmt==='jpg'?'jpg':'png';
-    var dataUrl=canvas.toDataURL(mimeType,fmt==='jpg'?0.92:1.0);
-    // Cross-browser anchor download (append + remove to work in Firefox)
+    var quality=fmt==='jpg'?0.95:1.0;
+    var dataUrl=canvas.toDataURL(mimeType,quality);
     var link=document.createElement('a');
     link.download='ayr-session-'+name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now()+'.'+ext;
     link.href=dataUrl;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    showToast((fmt==='jpg'?'JPG':'PNG')+' downloaded successfully!','success');
+    showToast((fmt==='jpg'?'JPG':'PNG')+' downloaded — 1080×1350px','success');
   }catch(e){
     showToast('Render error: '+e.message,'error');
-    console.error('[AYR download]',e);
+    console.error('[AYR session download]',e);
   }finally{
+    if(offscreen&&offscreen.parentNode) document.body.removeChild(offscreen);
     btn.disabled=false;
     btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download '+(fmt==='jpg'?'JPG':'PNG')+' (4:5)';
   }
