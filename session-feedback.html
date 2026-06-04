@@ -272,13 +272,13 @@ html.light-mode .dnav-link:hover{color:#000000;}
 
       <div class="panel">
         <div class="panel-title">Actions</div>
-        <button id="downloadBtn" onclick="downloadImage()" class="w-full mb-3 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all">
+        <button id="downloadBtnPng" onclick="downloadImage('png')" class="w-full mb-3 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download PNG (4:5)
         </button>
-        <button id="submitBtn" onclick="submitFeedback()" class="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-blue-700 hover:bg-blue-600 border border-blue-600 text-white text-sm font-semibold transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-blue-500/20">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          Send via Email
+        <button id="downloadBtnJpg" onclick="downloadImage('jpg')" class="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-gray-700 text-gray-400 hover:border-blue-500 hover:text-white text-sm font-semibold transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download JPG (4:5)
         </button>
       </div>
     </div>
@@ -401,72 +401,30 @@ function updatePreview(){
 
 function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3800);}
 
-async function downloadImage(){
-  const btn=document.getElementById('downloadBtn');
+async function downloadImage(fmt){
+  fmt = fmt || 'png';
+  const btnId = fmt === 'jpg' ? 'downloadBtnJpg' : 'downloadBtnPng';
+  const btn=document.getElementById(btnId);
   btn.disabled=true;btn.textContent='Rendering…';
   try{
     const el=document.getElementById('graphicCapture');
     const canvas=await html2canvas(el,{scale:3,useCORS:true,allowTaint:true,backgroundColor:null,logging:false,width:el.offsetWidth,height:el.offsetHeight});
     const link=document.createElement('a');
     const name=document.getElementById('author_name').value.trim()||'session-feedback';
-    link.download='ayr-session-'+name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now()+'.png';
-    link.href=canvas.toDataURL('image/png');
+    const mimeType = fmt === 'jpg' ? 'image/jpeg' : 'image/png';
+    const ext = fmt === 'jpg' ? 'jpg' : 'png';
+    link.download='ayr-session-'+name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now()+'.'+ext;
+    link.href=canvas.toDataURL(mimeType, fmt === 'jpg' ? 0.92 : 1.0);
     link.click();
-    showToast('PNG downloaded successfully!','success');
+    showToast((fmt==='jpg'?'JPG':'PNG')+' downloaded successfully!','success');
   }catch(e){showToast('Render error: '+e.message,'error');}
   finally{
     btn.disabled=false;
-    btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PNG (4:5)';
+    btn.innerHTML='<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download '+(fmt==='jpg'?'JPG':'PNG')+' (4:5)';
   }
 }
 
-async function submitFeedback(){
-  const name    = document.getElementById('author_name').value.trim();
-  const text    = document.getElementById('feedback_text').value.trim();
-  const consent = document.getElementById('social_consent').checked;
-  if(!name)  { showToast('Please enter a client name.','error');     return; }
-  if(!text)  { showToast('Please enter a testimonial.','error');     return; }
-  if(!consent){ showToast('Social consent checkbox required.','error'); return; }
 
-  // Guard: remind developer to configure EmailJS
-  if(EMAILJS_PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY_HERE'){
-    showToast('⚠ EmailJS not configured — see code comments.','error');
-    return;
-  }
-
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.textContent = 'Capturing & Sending…';
-
-  try{
-    // 1. Render the graphic canvas
-    const el     = document.getElementById('graphicCapture');
-    const canvas = await html2canvas(el, {scale:2, useCORS:true, allowTaint:true, backgroundColor:null, logging:false});
-    const imgB64 = canvas.toDataURL('image/png');   // base64 PNG
-
-    // 2. Send via EmailJS — image_data holds the base64 string.
-    //    In your EmailJS template you can reference it as {{image_data}}.
-    //    NOTE: EmailJS free tier has a 50 KB attachment limit; for larger
-    //    images consider uploading to a CDN first and sending the URL instead.
-    const templateParams = {
-      page_type      : 'Session Feedback',
-      author_name    : name,
-      feedback_text  : text,
-      social_consent : consent ? 'Yes — client has consented' : 'No',
-      image_data     : imgB64,
-      timestamp      : new Date().toLocaleString('en-CA', {timeZone:'America/Toronto'})
-    };
-
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-    showToast('Feedback sent via email ✓', 'success');
-  } catch(e) {
-    console.error('EmailJS error:', e);
-    showToast('Send failed: ' + (e.text || e.message || JSON.stringify(e)), 'error');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Send via Email';
-  }
-}
 </script>
 
 </body>
