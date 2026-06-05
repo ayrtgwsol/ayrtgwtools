@@ -104,22 +104,7 @@ html.light-mode .theme-toggle .icon-sun{display:block;}
 
 @media(max-width:640px){.portal-grid{grid-template-columns:1fr;}.stat-inner{gap:24px;}}
 
-/* FEEDBACK DROPDOWN - JS controlled with delay */
-.dropdown-trigger{position:relative;cursor:pointer;}
-.dropdown-menu{
-  visibility:hidden;opacity:0;pointer-events:none;
-  position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);
-  background:rgba(3,7,18,0.97);border:1px solid rgba(0,74,173,.45);
-  border-radius:10px;padding:6px 0;min-width:164px;z-index:300;
-  backdrop-filter:blur(18px);
-  transition:opacity .18s ease,visibility .18s ease;
-}
-.dropdown-menu::before{
-  content:'';position:absolute;top:-10px;left:0;right:0;height:10px;
-}
-.dropdown-menu.dd-open{visibility:visible;opacity:1;pointer-events:auto;}
-.dropdown-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
-.dropdown-menu a:hover{color:#fff;background:rgba(0,74,173,.18);}
+
 </style>
 </head>
 <body>
@@ -141,13 +126,7 @@ html.light-mode .theme-toggle .icon-sun{display:block;}
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="clients.html">Client</a></li>
         <li><a href="partners.html">Partner</a></li>
-        <li><a href="session-feedback.html" class="dropdown-trigger">
-          Feedback ▾
-          <div class="dropdown-menu">
-            <a href="session-feedback.html">Session Feedback</a>
-            <a href="service-feedback.html">Service Feedback</a>
-          </div>
-        </a></li>
+        <li><a href="feedback.html">Feedback</a></li>
         <li><a href="inquiry.html">Inquiry</a></li>
       </ul>
       <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
@@ -169,8 +148,7 @@ html.light-mode .theme-toggle .icon-sun{display:block;}
     <a href="index.html" class="drawer-links-a active">Home</a>
     <a href="clients.html" class="drawer-links-a">Client</a>
     <a href="partners.html" class="drawer-links-a">Partner</a>
-    <a href="session-feedback.html" class="drawer-links-a">Session Feedback</a>
-    <a href="service-feedback.html" class="drawer-links-a">Service Feedback</a>
+    <a href="feedback.html" class="drawer-links-a">Feedback</a>
     <a href="inquiry.html" class="drawer-links-a">Inquiry</a>
   </div>
 </nav>
@@ -216,21 +194,12 @@ html.light-mode .theme-toggle .icon-sun{display:block;}
         <div class="p-arrow">Enter Module →</div>
       </a>
 
-      <a href="session-feedback.html" class="portal-card">
+      <a href="feedback.html" class="portal-card">
         <div class="p-icon">
           <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
-        <div class="p-name">Session Feedback</div>
-        <div class="p-desc">Live image overlay generator — capture session testimonials as shareable social graphics.</div>
-        <div class="p-arrow">Enter Module →</div>
-      </a>
-
-      <a href="service-feedback.html" class="portal-card">
-        <div class="p-icon">
-          <svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
-        </div>
-        <div class="p-name">Service Feedback</div>
-        <div class="p-desc">Service review image overlay generator for branded testimonial social media posts.</div>
+        <div class="p-name">Client Feedback</div>
+        <div class="p-desc">Session & service testimonial image generator — capture branded social graphics for both feedback types in one tool.</div>
         <div class="p-arrow">Enter Module →</div>
       </a>
 
@@ -284,21 +253,6 @@ drawerOverlay.addEventListener('click',closeDrawer);
 })();
 </script>
 
-<script>
-(function(){
-  var HIDE_DELAY = 3000; // 3 seconds
-  document.querySelectorAll('.dropdown-trigger').forEach(function(trigger){
-    var menu = trigger.querySelector('.dropdown-menu,.dd-menu');
-    if(!menu) return;
-    var hideTimer = null;
-    function showMenu(){ clearTimeout(hideTimer); menu.classList.add('dd-open'); }
-    function scheduleHide(){ hideTimer = setTimeout(function(){ menu.classList.remove('dd-open'); }, HIDE_DELAY); }
-    trigger.addEventListener('mouseenter', showMenu);
-    trigger.addEventListener('mouseleave', scheduleHide);
-    menu.addEventListener('mouseenter', showMenu);
-    menu.addEventListener('mouseleave', scheduleHide);
-  });
-})();
 </script>
 </body>
 </html>

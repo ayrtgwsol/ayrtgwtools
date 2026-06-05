@@ -136,22 +136,6 @@ html.light-mode .dnav-link:hover{color:#000000;}
 .hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
 /* ─────────────────────────────────────────── */
 
-/* FEEDBACK DROPDOWN - JS controlled with delay */
-.dropdown-trigger{position:relative;cursor:pointer;display:flex;align-items:center;}
-.dd-menu{
-  visibility:hidden;opacity:0;pointer-events:none;
-  position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);
-  background:rgba(3,7,18,0.97);border:1px solid rgba(0,74,173,.45);
-  border-radius:10px;padding:6px 0;min-width:168px;z-index:300;
-  backdrop-filter:blur(18px);
-  transition:opacity .18s ease,visibility .18s ease;
-}
-.dd-menu::before{
-  content:'';position:absolute;top:-10px;left:0;right:0;height:10px;
-}
-.dd-menu.dd-open{visibility:visible;opacity:1;pointer-events:auto;}
-.dd-menu a{display:block;padding:9px 16px;font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;white-space:nowrap;transition:color .15s,background .15s;}
-.dd-menu a:hover,.dd-menu a.active{color:#fff;background:rgba(0,74,173,.14);}
 
 
 </style>
@@ -180,12 +164,7 @@ html.light-mode .dnav-link:hover{color:#000000;}
       <li><a href="index.html" class="dnav-link">Home</a></li>
       <li><a href="clients.html" class="dnav-link">Client</a></li>
       <li><a href="partners.html" class="dnav-link active" aria-current="page">Partner</a></li>
-      <li class="dropdown-trigger"><a class="dnav-link" href="session-feedback.html">Feedback ▾</a>
-        <div class="dd-menu">
-          <a href="session-feedback.html" class="dnav-link">Session Feedback</a>
-          <a href="service-feedback.html" class="dnav-link">Service Feedback</a>
-        </div>
-      </li>
+      <li><a href="feedback.html" class="dnav-link">Feedback</a></li>
       <li><a href="inquiry.html" class="dnav-link">Inquiry</a></li>
       </ul>
       <button class="hamburger-btn" id="hamburgerBtn2" aria-label="Open navigation menu">
@@ -207,8 +186,7 @@ html.light-mode .dnav-link:hover{color:#000000;}
     <a href="index.html" class="drawer-links-a">Home</a>
     <a href="clients.html" class="drawer-links-a">Client</a>
     <a href="partners.html" class="drawer-links-a active" aria-current="page">Partner</a>
-    <a href="session-feedback.html" class="drawer-links-a">Session Feedback</a>
-    <a href="service-feedback.html" class="drawer-links-a">Service Feedback</a>
+    <a href="feedback.html" class="drawer-links-a">Feedback</a>
     <a href="inquiry.html" class="drawer-links-a">Inquiry</a>
   </div>
 </nav>
@@ -280,22 +258,6 @@ html.light-mode .dnav-link:hover{color:#000000;}
 })();
 </script>
 
-<script>
-(function(){
-  var HIDE_DELAY = 3000; // 3 seconds
-  document.querySelectorAll('.dropdown-trigger').forEach(function(trigger){
-    var menu = trigger.querySelector('.dropdown-menu,.dd-menu');
-    if(!menu) return;
-    var hideTimer = null;
-    function showMenu(){ clearTimeout(hideTimer); menu.classList.add('dd-open'); }
-    function scheduleHide(){ hideTimer = setTimeout(function(){ menu.classList.remove('dd-open'); }, HIDE_DELAY); }
-    trigger.addEventListener('mouseenter', showMenu);
-    trigger.addEventListener('mouseleave', scheduleHide);
-    menu.addEventListener('mouseenter', showMenu);
-    menu.addEventListener('mouseleave', scheduleHide);
-  });
-})();
-</script>
 
 
 
