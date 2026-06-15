@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AYR TGW | Ai Automation</title>
+<link rel="icon" type="image/png" href="./background/icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'YD Yoonche Bold';src:local('YD Yoonche Bold'),local('YDYooncheB');font-weight:700;font-style:normal;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+:root{--brand:#004aad;--brand-rgb:0,74,173;--ai-accent:#7c3aed;--ai-accent2:#a855f7;}
+body{font-family:'YD Yoonche Bold','Inter',system-ui,sans-serif;background-color:#030712;color:#ffffff;min-height:100vh;overflow-x:hidden;transition:background-color .3s,color .3s;}
+html.light-mode body{background-color:#eef2ff;color:#000000;}
+html.light-mode .bg-stack .bg-img{opacity:.12!important;}
+html.light-mode .bg-stack .bg-overlay{opacity:.28!important;}
+.bg-stack{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.bg-stack .bg-img{position:absolute;inset:0;background-image:url('./background/Background-Desktop.png');background-size:cover;background-position:center top;background-repeat:no-repeat;opacity:.50;}
+.bg-stack .bg-overlay{position:absolute;inset:0;background-image:url('./background/Overlay-Dark-Desktop.png');background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.85;}
+.glow-bloom{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at 50% 0%,rgba(124,58,237,.20) 0%,rgba(3,7,18,0) 65%);}
+@media(max-width:767px){.bg-stack .bg-img{background-image:url('./background/Background-Mobile.png');}.bg-stack .bg-overlay{background-image:url('./background/Overlay-Dark-Mobile.png');}}
+
+/* ═══ FLOATING HEADER ═══ */
+.site-header-wrap{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:calc(100% - 40px);max-width:1240px;z-index:50;}
+.site-header{background:rgba(3,7,18,0.68);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(0,74,173,.40);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.35),0 0 0 1px rgba(0,74,173,.10);}
+html.light-mode .site-header{background:rgba(238,242,255,0.88);border-color:rgba(0,74,173,.28);box-shadow:0 8px 32px rgba(0,74,173,.12);}
+.header-inner{padding:0 22px;height:66px;display:flex;align-items:center;justify-content:space-between;}
+.site-logo{display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;}
+.site-logo img{height:44px;width:auto;object-fit:contain;display:block;}
+.header-spacer{height:96px;}
+
+/* Desktop nav with dropdowns */
+.desktop-nav{display:none;align-items:center;gap:6px;list-style:none;margin:0;padding:0;}
+@media(min-width:768px){.desktop-nav{display:flex;}.hamburger-btn{display:none!important;}}
+.desktop-nav>li{position:relative;}
+.nav-top-link{font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;transition:color .2s;position:relative;padding:6px 10px;border-radius:8px;font-family:inherit;display:flex;align-items:center;gap:5px;background:transparent;border:none;cursor:pointer;}
+.nav-top-link::after{content:'';position:absolute;bottom:1px;left:10px;right:10px;height:1.5px;background:var(--brand);width:0;transition:width .2s;}
+.nav-top-link:hover{color:#ffffff;}
+html.light-mode .nav-top-link:hover{color:#000000;}
+.nav-top-link:hover::after,.nav-top-link.active::after{width:calc(100% - 20px);}
+.nav-top-link.active{color:var(--brand);}
+.nav-top-link .caret{font-size:.55rem;opacity:.6;transition:transform .2s;}
+.nav-dropdown-wrap:hover .caret,.nav-dropdown-wrap.open .caret{transform:rotate(180deg);}
+
+/* Dropdown menu */
+.nav-dropdown{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);min-width:160px;background:rgba(3,7,18,.92);backdrop-filter:blur(20px);border:1px solid rgba(0,74,173,.35);border-radius:12px;padding:6px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;transform:translateX(-50%) translateY(-6px);z-index:60;}
+.nav-dropdown-wrap:hover .nav-dropdown{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
+html.light-mode .nav-dropdown{background:rgba(238,242,255,.96);border-color:rgba(0,74,173,.22);}
+.nav-dropdown a{display:block;padding:9px 14px;font-size:.74rem;font-weight:700;letter-spacing:.05em;color:#9ca3af;text-decoration:none;border-radius:7px;transition:all .15s;white-space:nowrap;}
+.nav-dropdown a:hover{color:#fff;background:rgba(0,74,173,.15);}
+.nav-dropdown a.active{color:var(--brand);}
+html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
+.nav-dropdown .dropdown-section-label{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(107,114,128,.7);padding:6px 14px 3px;pointer-events:none;}
+
+/* Hamburger */
+.hamburger-btn{display:flex;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:transparent;border:1px solid rgba(55,65,81,.60);border-radius:8px;cursor:pointer;padding:8px;transition:border-color .2s;}
+.hamburger-btn:hover{border-color:var(--brand);}
+.hamburger-btn span{display:block;height:1.5px;background:#9ca3af;border-radius:2px;transition:all .25s;}
+.hamburger-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.mobile-drawer{position:fixed;top:0;right:0;width:280px;height:100vh;background:#020917;border-left:1px solid rgba(55,65,81,.65);transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);z-index:200;display:flex;flex-direction:column;}
+.mobile-drawer.open{transform:translateX(0);}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid rgba(55,65,81,.45);}
+.drawer-head img{height:36px;width:auto;}
+.drawer-close{background:none;border:none;color:#6b7280;font-size:1.5rem;cursor:pointer;line-height:1;padding:2px 6px;transition:color .2s;}
+.drawer-close:hover{color:#f3f4f6;}
+.drawer-links{display:flex;flex-direction:column;padding:10px 0;flex:1;overflow-y:auto;}
+.drawer-links-a{display:block;padding:13px 24px;color:#9ca3af;font-size:.9375rem;font-weight:500;text-decoration:none;letter-spacing:.03em;border-left:3px solid transparent;transition:all .18s;}
+.drawer-links-a:hover{color:#f3f4f6;background:rgba(0,74,173,.06);border-left-color:var(--brand);}
+.drawer-links-a.active{color:var(--brand);border-left-color:var(--brand);background:rgba(0,74,173,.06);}
+.drawer-section-label{padding:10px 24px 4px;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(107,114,128,.65);}
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(3,7,18,.55);z-index:199;backdrop-filter:blur(2px);}
+.drawer-overlay.open{display:block;}
+.content-layer{position:relative;z-index:2;}
+
+/* ═══ HERO ═══ */
+.hero{max-width:1280px;margin:0 auto;padding:72px 28px 48px;text-align:center;}
+.eyebrow{font-size:.68rem;letter-spacing:.32em;text-transform:uppercase;color:var(--ai-accent2);opacity:.9;margin-bottom:18px;}
+.hero-title{font-size:clamp(2.6rem,7vw,5.2rem);font-weight:800;letter-spacing:-.03em;line-height:.96;margin-bottom:20px;}
+.hero-title .line1{display:block;background:linear-gradient(to right,#ffffff,#c9d6e8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+html.light-mode .hero-title .line1{background:linear-gradient(to right,#000000,#1a3a6e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-title .line2{display:block;background:linear-gradient(90deg,var(--ai-accent),var(--ai-accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-motto{font-size:1.1rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(90deg,var(--ai-accent),var(--ai-accent2),#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;}
+.hero-tagline{color:#9ca3af;font-size:1rem;line-height:1.7;max-width:580px;margin:0 auto 48px;}
+html.light-mode .hero-tagline{color:#374151;}
+
+/* ═══ SHOWCASE ZIGZAG ═══ */
+.showcase-section{max-width:1200px;margin:0 auto;padding:0 28px 80px;}
+.showcase-eyebrow{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ai-accent2);opacity:.8;text-align:center;margin-bottom:48px;}
+.showcase-row{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:72px;}
+.showcase-row.reverse{direction:rtl;}
+.showcase-row.reverse>*{direction:ltr;}
+.showcase-text{display:flex;flex-direction:column;gap:14px;}
+.showcase-user-label{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ai-accent2);opacity:.8;}
+.showcase-user-name{font-size:1.6rem;font-weight:800;letter-spacing:-.02em;color:#f3f4f6;line-height:1.1;}
+html.light-mode .showcase-user-name{color:#111827;}
+.showcase-biz-name{font-size:.82rem;font-weight:600;color:rgba(168,85,247,.75);letter-spacing:.04em;}
+.showcase-divider{width:40px;height:2px;background:linear-gradient(90deg,var(--ai-accent),var(--ai-accent2));border-radius:2px;}
+.showcase-review{font-size:.92rem;color:#d1d5db;line-height:1.7;font-style:italic;}
+html.light-mode .showcase-review{color:#374151;}
+.showcase-review::before{content:'\201C';font-size:2.2rem;line-height:.4;color:rgba(168,85,247,.4);display:block;margin-bottom:6px;}
+.showcase-img-wrap{position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(124,58,237,.30);box-shadow:0 20px 60px rgba(0,0,0,.50);}
+.showcase-img-wrap::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(0,74,173,.08));z-index:1;pointer-events:none;}
+.demo-image-placeholder{width:100%;aspect-ratio:16/9;background:rgba(17,24,39,.70);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+.demo-image-placeholder .demo-icon{width:56px;height:56px;border-radius:12px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.30);display:flex;align-items:center;justify-content:center;}
+.demo-image-placeholder .demo-icon svg{width:26px;height:26px;stroke:rgba(168,85,247,.70);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.demo-image-placeholder .demo-label{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(107,114,128,.60);}
+.demo-image-placeholder .demo-size{font-size:.58rem;color:rgba(107,114,128,.40);letter-spacing:.08em;}
+@media(max-width:768px){.showcase-row,.showcase-row.reverse{grid-template-columns:1fr;direction:ltr;gap:24px;}}
+
+/* ═══ PRICING ═══ */
+.pricing-section{max-width:860px;margin:0 auto;padding:0 28px 80px;text-align:center;}
+.pricing-eyebrow{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ai-accent2);opacity:.8;margin-bottom:16px;}
+.pricing-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-.02em;color:#f3f4f6;margin-bottom:10px;}
+html.light-mode .pricing-title{color:#111827;}
+.pricing-sub{font-size:.9rem;color:#6b7280;margin-bottom:40px;}
+.pricing-card{background:rgba(3,7,18,0.52);backdrop-filter:blur(14px);border:1px solid rgba(124,58,237,.40);border-radius:20px;padding:40px 36px;position:relative;overflow:hidden;}
+html.light-mode .pricing-card{background:rgba(255,255,255,.80);border-color:rgba(124,58,237,.25);}
+.pricing-card::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,rgba(168,85,247,.60),transparent);}
+.pricing-row{display:flex;justify-content:center;align-items:flex-end;gap:40px;flex-wrap:wrap;margin-bottom:28px;}
+.price-item{text-align:center;}
+.price-amount{font-size:2.8rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(90deg,var(--ai-accent),var(--ai-accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.price-label{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:#6b7280;margin-top:6px;}
+.price-note{font-size:.72rem;color:rgba(168,85,247,.65);margin-top:4px;}
+.price-divider{width:1px;height:60px;background:rgba(55,65,81,.60);align-self:center;}
+.pricing-tagline{font-size:1rem;font-weight:700;color:#d1d5db;margin-top:4px;}
+html.light-mode .pricing-tagline{color:#374151;}
+.pricing-cta{margin-top:28px;}
+.cta-link{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:linear-gradient(135deg,var(--ai-accent),var(--ai-accent2));border-radius:12px;color:#fff;font-size:.82rem;font-weight:700;letter-spacing:.06em;text-decoration:none;transition:all .25s;box-shadow:0 8px 28px rgba(124,58,237,.35);}
+.cta-link:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(124,58,237,.50);}
+.cta-link svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ═══ FOOTER ═══ */
+.site-footer{border-top:1px solid rgba(55,65,81,.40);padding:32px 28px;text-align:center;}
+html.light-mode .site-footer{border-color:rgba(0,74,173,.15);}
+.footer-tagline{font-size:.9rem;color:#9ca3af;margin-bottom:8px;}
+html.light-mode .footer-tagline{color:#6b7280;}
+.footer-email{font-size:.82rem;color:var(--ai-accent2);text-decoration:none;letter-spacing:.04em;}
+.footer-email:hover{color:#fff;}
+html.light-mode .footer-email:hover{color:#000;}
+.footer-copy{font-size:.65rem;color:rgba(107,114,128,.50);margin-top:10px;letter-spacing:.06em;}
+
+/* ═══ THEME TOGGLE ═══ */
+.theme-toggle{position:fixed;bottom:26px;right:26px;z-index:300;width:50px;height:50px;border-radius:50%;background:rgba(124,58,237,.90);border:2px solid rgba(124,58,237,.55);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(124,58,237,.40);transition:all .3s;backdrop-filter:blur(12px);}
+.theme-toggle:hover{background:var(--ai-accent);transform:scale(1.08);}
+.theme-toggle svg{width:22px;height:22px;fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.theme-toggle .icon-moon{display:block;}
+.theme-toggle .icon-sun{display:none;}
+html.light-mode .theme-toggle .icon-moon{display:none;}
+html.light-mode .theme-toggle .icon-sun{display:block;}
+</style>
+</head>
+<body>
+
+<div class="bg-stack" id="bgStack">
+  <div class="bg-img"></div>
+  <div class="bg-overlay"></div>
+</div>
+<div class="glow-bloom"></div>
+
+<!-- FLOATING HEADER -->
+<div class="site-header-wrap">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="site-logo">
+        <img src="./background/icon.png" alt="AYR TGW Tools Hub" onerror="this.src='./Logo2.png'">
+      </a>
+      <ul class="desktop-nav" id="desktopNavList">
+        <li><a href="index.html" class="nav-top-link">Home</a></li>
+        <li class="nav-dropdown-wrap">
+          <button class="nav-top-link" type="button">Finance <span class="caret">▾</span></button>
+          <div class="nav-dropdown">
+            <a href="clients.html">Clients</a>
+            <a href="feedback.html">Feedback</a>
+          </div>
+        </li>
+        <li class="nav-dropdown-wrap">
+          <button class="nav-top-link active" type="button">Ai Automation <span class="caret">▾</span></button>
+          <div class="nav-dropdown">
+            <a href="ai-automation.html" class="active">Service</a>
+            <a href="ai-automation-feedback.html">Feedback</a>
+          </div>
+        </li>
+        <li><a href="inquiry.html" class="nav-top-link">Inquiry</a></li>
+      </ul>
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+</div>
+<div class="header-spacer"></div>
+
+<!-- MOBILE DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<nav class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-head">
+    <img src="./background/icon.png" alt="AYR TGW Tools Hub" onerror="this.src='./Logo2.png'">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <div class="drawer-links">
+    <a href="index.html" class="drawer-links-a">Home</a>
+    <div class="drawer-section-label">Finance</div>
+    <a href="clients.html" class="drawer-links-a" style="padding-left:32px;">Clients</a>
+    <a href="feedback.html" class="drawer-links-a" style="padding-left:32px;">Feedback</a>
+    <div class="drawer-section-label">Ai Automation</div>
+    <a href="ai-automation.html" class="drawer-links-a active" style="padding-left:32px;">Service</a>
+    <a href="ai-automation-feedback.html" class="drawer-links-a" style="padding-left:32px;">Feedback</a>
+    <a href="inquiry.html" class="drawer-links-a">Inquiry</a>
+  </div>
+</nav>
+
+<!-- CONTENT -->
+<div class="content-layer">
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="eyebrow">AYR TGW Solutions</p>
+    <h1 class="hero-title">
+      <span class="line1">Ai Automation</span>
+      <span class="line2">Services</span>
+    </h1>
+    <p class="hero-motto">Support &nbsp;·&nbsp; Afford &nbsp;·&nbsp; Growth</p>
+    <p class="hero-tagline">We support small and local businesses with Ai Automated Systems to take the data management load off their back — so you can focus on what you do best.</p>
+  </section>
+
+  <!-- USER SHOWCASE -->
+  <section class="showcase-section">
+    <p class="showcase-eyebrow">Client Showcase</p>
+
+    <!-- ROW 1: Text Left, Image Right -->
+    <div class="showcase-row">
+      <div class="showcase-text">
+        <span class="showcase-user-label">Client 01</span>
+        <div class="showcase-user-name">Maria Santos</div>
+        <div class="showcase-biz-name">Santos Bakery & Café — Mississauga, ON</div>
+        <div class="showcase-divider"></div>
+        <p class="showcase-review">Before AYR set up our automation, I was manually updating inventory and sending follow-up emails every evening. Now the system handles it overnight. I have my evenings back and my orders haven't missed a beat.</p>
+      </div>
+      <div class="showcase-img-wrap">
+        <div class="demo-image-placeholder">
+          <div class="demo-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <div class="demo-label">Interface Demo</div>
+          <div class="demo-size">1920 × 1080</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2: Image Left, Text Right -->
+    <div class="showcase-row reverse">
+      <div class="showcase-text">
+        <span class="showcase-user-label">Client 02</span>
+        <div class="showcase-user-name">Derek Okafor</div>
+        <div class="showcase-biz-name">Okafor Auto Detailing — Brampton, ON</div>
+        <div class="showcase-divider"></div>
+        <p class="showcase-review">The booking and client follow-up pipeline AYR built for us cut our no-show rate in half within the first month. The system texts clients automatically and logs everything in one place. It's been a game changer for a two-person operation.</p>
+      </div>
+      <div class="showcase-img-wrap">
+        <div class="demo-image-placeholder">
+          <div class="demo-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <div class="demo-label">Interface Demo</div>
+          <div class="demo-size">1920 × 1080</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 3: Text Left, Image Right -->
+    <div class="showcase-row">
+      <div class="showcase-text">
+        <span class="showcase-user-label">Client 03</span>
+        <div class="showcase-user-name">Priya Nambiar</div>
+        <div class="showcase-biz-name">Nambiar Wellness Studio — Hamilton, ON</div>
+        <div class="showcase-divider"></div>
+        <p class="showcase-review">Running a wellness studio means I should be present with clients, not buried in spreadsheets. AYR's automation handles our intake forms, waiver tracking, and monthly billing summaries. The ROI was visible within the first billing cycle.</p>
+      </div>
+      <div class="showcase-img-wrap">
+        <div class="demo-image-placeholder">
+          <div class="demo-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <div class="demo-label">Interface Demo</div>
+          <div class="demo-size">1920 × 1080</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section">
+    <p class="pricing-eyebrow">Transparent Pricing</p>
+    <h2 class="pricing-title">Built for Small Business Budgets</h2>
+    <p class="pricing-sub">No hidden fees. No enterprise lock-in. One setup, ongoing support.</p>
+    <div class="pricing-card">
+      <div class="pricing-row">
+        <div class="price-item">
+          <div class="price-amount">$1,000</div>
+          <div class="price-label">Setup Fee</div>
+          <div class="price-note">Negotiable — let's talk</div>
+        </div>
+        <div class="price-divider"></div>
+        <div class="price-item">
+          <div class="price-amount">$35<span style="font-size:1.4rem;">/mo</span></div>
+          <div class="price-label">Automation Hosting</div>
+          <div class="price-note">Ongoing system maintenance</div>
+        </div>
+      </div>
+      <p class="pricing-tagline">We support you to grow.</p>
+      <div class="pricing-cta">
+        <a href="mailto:ayrtgwsolutions@gmail.com" class="cta-link">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Get a Custom Quote
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p class="footer-tagline">We support you to grow.</p>
+    <a href="mailto:ayrtgwsolutions@gmail.com" class="footer-email">ayrtgwsolutions@gmail.com</a>
+    <p class="footer-copy">© 2025 AYR TGW Solutions. All rights reserved.</p>
+  </footer>
+
+</div><!-- .content-layer -->
+
+<!-- THEME TOGGLE -->
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+  <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+
+<script>
+// Drawer
+(function(){
+  var btn=document.getElementById('hamburgerBtn');
+  var drawer=document.getElementById('mobileDrawer');
+  var overlay=document.getElementById('drawerOverlay');
+  var closeBtn=document.getElementById('drawerClose');
+  function openD(){drawer.classList.add('open');overlay.classList.add('open');btn.classList.add('open');document.body.style.overflow='hidden';}
+  function closeD(){drawer.classList.remove('open');overlay.classList.remove('open');btn.classList.remove('open');document.body.style.overflow='';}
+  btn.addEventListener('click',openD);
+  closeBtn.addEventListener('click',closeD);
+  overlay.addEventListener('click',closeD);
+})();
+// Theme
+(function(){
+  var btn=document.getElementById('themeToggle');
+  if(localStorage.getItem('ayr-theme')==='light')document.documentElement.classList.add('light-mode');
+  btn.addEventListener('click',function(){
+    document.documentElement.classList.toggle('light-mode');
+    localStorage.setItem('ayr-theme',document.documentElement.classList.contains('light-mode')?'light':'dark');
+  });
+})();
+// Video BG
+(function(){
+  var bgStack=document.getElementById('bgStack');
+  if(!bgStack)return;
+  var vid=document.createElement('video');
+  vid.src='./background/Background-Desktop.mp4';
+  vid.autoplay=true;vid.muted=true;vid.loop=true;vid.playsInline=true;
+  vid.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.35;';
+  vid.addEventListener('canplay',function(){bgStack.querySelector('.bg-img').style.display='none';bgStack.appendChild(vid);},{once:true});
+  vid.load();
+})();
+</script>
+</body>
+</html>

@@ -105,6 +105,25 @@ html.light-mode .theme-toggle .icon-sun{display:block;}
 @media(max-width:640px){.portal-grid{grid-template-columns:1fr;}.stat-inner{gap:24px;}}
 
 
+
+/* ── DROPDOWN NAV ── */
+.desktop-nav>li,#desktopNavList>li{position:relative;}
+.nav-top-link{font-size:.78rem;font-weight:700;color:#9ca3af;text-decoration:none;letter-spacing:.04em;transition:color .2s;position:relative;padding:6px 10px;border-radius:8px;font-family:inherit;display:flex;align-items:center;gap:5px;background:transparent;border:none;cursor:pointer;}
+.nav-top-link::after{content:'';position:absolute;bottom:1px;left:10px;right:10px;height:1.5px;background:var(--brand);width:0;transition:width .2s;}
+.nav-top-link:hover{color:#ffffff;}
+html.light-mode .nav-top-link:hover{color:#000000;}
+.nav-top-link:hover::after,.nav-top-link.active::after{width:calc(100% - 20px);}
+.nav-top-link.active{color:var(--brand);}
+.nav-top-link .caret{font-size:.55rem;opacity:.6;transition:transform .2s;}
+.nav-dropdown-wrap:hover .caret{transform:rotate(180deg);}
+.nav-dropdown{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);min-width:160px;background:rgba(3,7,18,.92);backdrop-filter:blur(20px);border:1px solid rgba(0,74,173,.35);border-radius:12px;padding:6px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;transform:translateX(-50%) translateY(-6px);z-index:60;}
+.nav-dropdown-wrap:hover .nav-dropdown{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
+html.light-mode .nav-dropdown{background:rgba(238,242,255,.96);border-color:rgba(0,74,173,.22);}
+.nav-dropdown a{display:block;padding:9px 14px;font-size:.74rem;font-weight:700;letter-spacing:.05em;color:#9ca3af;text-decoration:none;border-radius:7px;transition:all .15s;white-space:nowrap;}
+.nav-dropdown a:hover{color:#fff;background:rgba(0,74,173,.15);}
+.nav-dropdown a.active{color:var(--brand);}
+html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
+.drawer-section-label{padding:10px 24px 4px;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(107,114,128,.65);}
 </style>
 </head>
 <body>
@@ -123,11 +142,22 @@ html.light-mode .theme-toggle .icon-sun{display:block;}
         <img src="./background/icon.png" alt="AYR TGW Tools Hub" onerror="this.src='./Logo2.png'">
       </a>
       <ul class="desktop-nav" id="desktopNavList">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="clients.html">Client</a></li>
-        <li><a href="partners.html">Partner</a></li>
-        <li><a href="feedback.html">Feedback</a></li>
-        <li><a href="inquiry.html">Inquiry</a></li>
+        <li><a href="index.html" class="nav-top-link active">Home</a></li>
+        <li class="nav-dropdown-wrap">
+          <button class="nav-top-link" type="button">Finance <span class="caret">▾</span></button>
+          <div class="nav-dropdown">
+            <a href="clients.html">Clients</a>
+            <a href="feedback.html">Feedback</a>
+          </div>
+        </li>
+        <li class="nav-dropdown-wrap">
+          <button class="nav-top-link" type="button">Ai Automation <span class="caret">▾</span></button>
+          <div class="nav-dropdown">
+            <a href="ai-automation.html">Service</a>
+            <a href="ai-automation-feedback.html">Feedback</a>
+          </div>
+        </li>
+        <li><a href="inquiry.html" class="nav-top-link">Inquiry</a></li>
       </ul>
       <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
         <span></span><span></span><span></span>
@@ -146,9 +176,12 @@ html.light-mode .theme-toggle .icon-sun{display:block;}
   </div>
   <div class="drawer-links">
     <a href="index.html" class="drawer-links-a active">Home</a>
-    <a href="clients.html" class="drawer-links-a">Client</a>
-    <a href="partners.html" class="drawer-links-a">Partner</a>
-    <a href="feedback.html" class="drawer-links-a">Feedback</a>
+    <div class="drawer-section-label">Finance</div>
+    <a href="clients.html" class="drawer-links-a" style="padding-left:32px;">Clients</a>
+    <a href="feedback.html" class="drawer-links-a" style="padding-left:32px;">Feedback</a>
+    <div class="drawer-section-label">Ai Automation</div>
+    <a href="ai-automation.html" class="drawer-links-a" style="padding-left:32px;">Service</a>
+    <a href="ai-automation-feedback.html" class="drawer-links-a" style="padding-left:32px;">Feedback</a>
     <a href="inquiry.html" class="drawer-links-a">Inquiry</a>
   </div>
 </nav>
