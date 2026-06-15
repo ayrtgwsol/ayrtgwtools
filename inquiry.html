@@ -163,6 +163,25 @@ html.light-mode .nav-dropdown{background:rgba(238,242,255,.96);border-color:rgba
 .nav-dropdown a.active{color:var(--brand);}
 html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 .drawer-section-label{padding:10px 24px 4px;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(107,114,128,.65);}
+
+/* ── DROPDOWN HOVER BRIDGE ── */
+.nav-dropdown-wrap{padding-bottom:0;}
+.nav-dropdown{
+  top:100% !important;
+  padding-top:10px !important;
+  margin-top:0 !important;
+}
+.nav-dropdown::before{
+  content:'';
+  display:block;
+  position:absolute;
+  top:-10px;left:0;right:0;
+  height:10px;
+  background:transparent;
+}
+
+.nav-dropdown-wrap.open .nav-dropdown{opacity:1 !important;pointer-events:auto !important;transform:translateX(-50%) translateY(0) !important;}
+.nav-dropdown-wrap.open .caret{transform:rotate(180deg) !important;}
 </style>
 
 </head>
@@ -299,6 +318,32 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 
 
 
+
+
+<script>
+/* Dropdown hover with close-delay so user can travel to options */
+(function(){
+  var timers={};
+  document.querySelectorAll('.nav-dropdown-wrap').forEach(function(wrap,i){
+    wrap.addEventListener('mouseenter',function(){
+      clearTimeout(timers[i]);
+      wrap.classList.add('open');
+    });
+    wrap.addEventListener('mouseleave',function(){
+      timers[i]=setTimeout(function(){
+        wrap.classList.remove('open');
+      },120);
+    });
+    var dd=wrap.querySelector('.nav-dropdown');
+    if(dd){
+      dd.addEventListener('mouseenter',function(){clearTimeout(timers[i]);});
+      dd.addEventListener('mouseleave',function(){
+        timers[i]=setTimeout(function(){wrap.classList.remove('open');},120);
+      });
+    }
+  });
+})();
+</script>
 
 </body>
 </html>
