@@ -176,6 +176,11 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 
 .nav-dropdown-wrap.open .nav-dropdown{opacity:1 !important;pointer-events:auto !important;transform:translateX(-50%) translateY(0) !important;}
 .nav-dropdown-wrap.open .caret{transform:rotate(180deg) !important;}
+.header-brand,.drawer-brand{display:inline-flex;align-items:center;gap:14px;}
+.vgt-logo{display:inline-flex;align-items:center;text-decoration:none;color:inherit;}
+.vgt-logo img{height:44px;width:auto;object-fit:contain;display:block;}
+.drawer-brand .vgt-logo img{height:36px;}
+.vgt-text{font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:20px;line-height:1;}
 </style>
 
 </head>
@@ -195,9 +200,12 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 <div class="site-header-wrap">
   <header class="site-header">
     <div class="header-inner">
-      <a href="index.html" class="site-logo">
+      <div class="header-brand">
+        <a href="index.html" class="site-logo">
         <img src="./background/icon.png" alt="HGR TGW Tools Hub" class="site-logo-img" onerror="this.src='./Logo2.png'">
       </a>
+        <a href="https://vgt.hgr.foundation" class="vgt-logo" target="_blank" rel="noopener" aria-label="VGT"><img src="./background/vgt.png" alt="VGT" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="vgt-text" style="display:none">VGT</span></a>
+      </div>
       <ul style="list-style:none;margin:0;padding:0;" id="desktopNavList">
         <li><a href="index.html" class="nav-top-link">Home</a></li>
         <li class="nav-dropdown-wrap">
@@ -229,7 +237,10 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 <div class="drawer-overlay" id="drawerOverlay2"></div>
 <nav class="mobile-drawer" id="mobileDrawer2" aria-label="Mobile navigation">
   <div class="drawer-head">
-    <img src="./background/icon.png" alt="HGR TGW Tools Hub" onerror="this.src='./Logo2.png'">
+    <div class="drawer-brand">
+      <img src="./background/icon.png" alt="HGR TGW Tools Hub" onerror="this.src='./Logo2.png'">
+      <a href="https://vgt.hgr.foundation" class="vgt-logo" target="_blank" rel="noopener" aria-label="VGT"><img src="./background/vgt.png" alt="VGT" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="vgt-text" style="display:none">VGT</span></a>
+    </div>
     <button class="drawer-close" id="drawerClose2" aria-label="Close menu">&#x2715;</button>
   </div>
   <div class="drawer-links">
