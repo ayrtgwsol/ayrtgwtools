@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="./background/icon.png">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AYR TGW Solutions | Feedback</title>
+<title>HGR TGW Solutions | Feedback</title>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -224,7 +224,7 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="site-logo">
-        <img src="./background/icon.png" alt="AYR TGW Tools Hub" onerror="this.src='./Logo2.png'">
+        <img src="./background/icon.png" alt="HGR TGW Tools Hub" onerror="this.src='./Logo2.png'">
       </a>
       <ul style="list-style:none;margin:0;padding:0;" id="desktopNavList">
         <li><a href="index.html" class="nav-top-link">Home</a></li>
@@ -257,7 +257,7 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 <div class="drawer-overlay" id="drawerOverlay2"></div>
 <nav class="mobile-drawer" id="mobileDrawer2" aria-label="Mobile navigation">
   <div class="drawer-head">
-    <img src="./background/icon.png" alt="AYR TGW Tools Hub" onerror="this.src='./Logo2.png'">
+    <img src="./background/icon.png" alt="HGR TGW Tools Hub" onerror="this.src='./Logo2.png'">
     <button class="drawer-close" id="drawerClose2" aria-label="Close menu">&#x2715;</button>
   </div>
   <div class="drawer-links">
@@ -341,7 +341,7 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
         </div>
         <div class="cb-row">
           <input type="checkbox" id="social_consent" onchange="updatePreview()">
-          <label for="social_consent" id="consentLabel">Client has given verbal or written consent for this testimonial to be shared on AYR TGW social media channels.</label>
+          <label for="social_consent" id="consentLabel">Client has given verbal or written consent for this testimonial to be shared on HGR TGW social media channels.</label>
         </div>
       </div>
 
@@ -377,7 +377,7 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
           </div>
           <div class="review-field full">
             <div class="review-field-lbl">Graphic Tag</div>
-            <div class="review-field-val" id="rv_tag" style="color:#60a5fa;">#AYRTGWSolutions · #FinancialFreedom</div>
+            <div class="review-field-val" id="rv_tag" style="color:#60a5fa;">#HGRTGWSolutions · #FinancialFreedom</div>
           </div>
         </div>
       </div>
@@ -404,14 +404,14 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
           <div id="graphicCapture">
             <div class="overlay-mask"></div>
             <div class="overlay-content">
-              <div class="ov-logo">AYR TGW Solutions</div>
+              <div class="ov-logo">HGR TGW Solutions</div>
               <!-- stars row: visible only in service tab -->
               <div class="ov-stars stars-row" id="prev_stars">★★★★★</div>
               <div class="ov-quote-mark">"</div>
               <div class="ov-quote" id="prev_quote">Your client's feedback will appear here as you type…</div>
               <div class="ov-divider"></div>
               <div class="ov-author" id="prev_author">— Client Name</div>
-              <div class="ov-tag" id="prev_tag">#AYRTGWSolutions &nbsp;·&nbsp; #FinancialFreedom</div>
+              <div class="ov-tag" id="prev_tag">#HGRTGWSolutions &nbsp;·&nbsp; #FinancialFreedom</div>
             </div>
           </div>
         </div>
@@ -459,10 +459,10 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 // ── Theme ──
 (function(){
   var btn=document.getElementById('themeToggle');
-  if(localStorage.getItem('ayr-theme')==='light')document.documentElement.classList.add('light-mode');
+  if(localStorage.getItem('hgr-theme')==='light')document.documentElement.classList.add('light-mode');
   if(btn)btn.addEventListener('click',function(){
     document.documentElement.classList.toggle('light-mode');
-    localStorage.setItem('ayr-theme',document.documentElement.classList.contains('light-mode')?'light':'dark');
+    localStorage.setItem('hgr-theme',document.documentElement.classList.contains('light-mode')?'light':'dark');
   });
 })();
 
@@ -489,8 +489,8 @@ function switchTab(tab){
   document.getElementById('reviewPanelTitle').textContent=tab==='session'?'Session Review':'Service Review';
   document.getElementById('feedbackLabel').textContent=tab==='session'?'Feedback / Testimonial Text':'Review / Testimonial Text';
   document.getElementById('consentLabel').textContent=tab==='session'
-    ?'Client has given verbal or written consent for this testimonial to be shared on AYR TGW social media channels.'
-    :'Client has given verbal or written consent for this review to be shared on AYR TGW social media channels.';
+    ?'Client has given verbal or written consent for this testimonial to be shared on HGR TGW social media channels.'
+    :'Client has given verbal or written consent for this review to be shared on HGR TGW social media channels.';
 
   // Reset rating display when switching to service
   if(tab==='service') setRating(currentRating);
@@ -528,8 +528,8 @@ function updatePreview(){
 
   // tag line
   var tagLine=isService
-    ?(svc?'#AYRTGWSolutions · '+svc.replace(/\s+/g,''):'#AYRTGWSolutions · #FinancialAdvisory')
-    :'#AYRTGWSolutions · #FinancialFreedom';
+    ?(svc?'#HGRTGWSolutions · '+svc.replace(/\s+/g,''):'#HGRTGWSolutions · #FinancialAdvisory')
+    :'#HGRTGWSolutions · #FinancialFreedom';
 
   // Preview
   document.getElementById('prev_quote').textContent=q||(isService?"Your client's service review will appear here as you type…":"Your client's testimonial will appear here as you type…");
@@ -656,7 +656,7 @@ async function downloadImage(fmt){
     });
 
     var name=document.getElementById('author_name').value.trim()||'feedback';
-    var prefix=isService?'ayr-service-':'ayr-session-';
+    var prefix=isService?'hgr-service-':'hgr-session-';
     var mimeType=fmt==='jpg'?'image/jpeg':'image/png';
     var ext=fmt==='jpg'?'jpg':'png';
     var dataUrl=canvas.toDataURL(mimeType,fmt==='jpg'?0.95:1.0);
@@ -669,7 +669,7 @@ async function downloadImage(fmt){
     showToast((fmt==='jpg'?'JPG':'PNG')+' downloaded — 1080×1350px','success');
   }catch(e){
     showToast('Render error: '+e.message,'error');
-    console.error('[AYR feedback download]',e);
+    console.error('[HGR feedback download]',e);
   }finally{
     if(offscreen&&offscreen.parentNode) document.body.removeChild(offscreen);
     btn.disabled=false;

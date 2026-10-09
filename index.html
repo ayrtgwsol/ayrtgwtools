@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AYR TGW Tools Hub</title>
+<title>HGR TGW Tools Hub</title>
 <link rel="icon" type="image/png" href="./background/icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -158,7 +158,7 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="site-logo">
-        <img src="./background/icon.png" alt="AYR TGW Tools Hub" onerror="this.src='./Logo2.png'">
+        <img src="./background/icon.png" alt="HGR TGW Tools Hub" onerror="this.src='./Logo2.png'">
       </a>
       <ul class="desktop-nav" id="desktopNavList">
         <li><a href="index.html" class="nav-top-link active">Home</a></li>
@@ -191,7 +191,7 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 <div class="drawer-overlay" id="drawerOverlay"></div>
 <nav class="mobile-drawer" id="mobileDrawer">
   <div class="drawer-head">
-    <img src="./background/icon.png" alt="AYR TGW Tools Hub" onerror="this.src='./Logo2.png'">
+    <img src="./background/icon.png" alt="HGR TGW Tools Hub" onerror="this.src='./Logo2.png'">
     <button class="drawer-close" id="drawerClose" aria-label="Close menu">&#x2715;</button>
   </div>
   <div class="drawer-links">
@@ -217,9 +217,9 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 <!-- CONTENT -->
 <div class="content-layer">
   <section class="hero">
-    <p class="eyebrow">AYR TGW Solutions</p>
+    <p class="eyebrow">HGR TGW Solutions</p>
     <h1 class="hero-title">
-      <span class="line1">AYR TGW</span>
+      <span class="line1">HGR TGW</span>
       <span class="line2">TOOLS HUB</span>
     </h1>
     <p class="hero-desc">Select an operation module from the navigation to manage client onboarding, partner registrations, agent metrics, or generate dynamic social media feedback graphics.</p>
@@ -228,10 +228,10 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
   <div class="stat-strip">
     <div class="stat-inner">
       <div class="stat-item"><div class="stat-val">7</div><div class="stat-lbl">Active Modules</div></div>
-      <div class="stat-item"><div class="stat-val">AYR</div><div class="stat-lbl">TGW Network</div></div>
+      <div class="stat-item"><div class="stat-val">HGR</div><div class="stat-lbl">TGW Network</div></div>
       <div class="stat-item"><div class="stat-val">24/7</div><div class="stat-lbl">Live Intake</div></div>
     </div><div class="stat-lbl">Active Modules</div></div>
-      <div class="stat-item"><div class="stat-val">AYR</div><div class="stat-lbl">TGW Network</div></div>
+      <div class="stat-item"><div class="stat-val">HGR</div><div class="stat-lbl">TGW Network</div></div>
       
       <div class="stat-item"><div class="stat-val">24/7</div><div class="stat-lbl">Live Intake</div></div>
     </div>
@@ -315,10 +315,10 @@ drawerOverlay.addEventListener('click',closeDrawer);
 // Theme
 (function(){
   var btn=document.getElementById('themeToggle');
-  if(localStorage.getItem('ayr-theme')==='light')document.documentElement.classList.add('light-mode');
+  if(localStorage.getItem('hgr-theme')==='light')document.documentElement.classList.add('light-mode');
   btn.addEventListener('click',function(){
     document.documentElement.classList.toggle('light-mode');
-    localStorage.setItem('ayr-theme',document.documentElement.classList.contains('light-mode')?'light':'dark');
+    localStorage.setItem('hgr-theme',document.documentElement.classList.contains('light-mode')?'light':'dark');
   });
 })();
 // Video BG

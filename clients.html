@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="./background/icon.png">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AYR TGW Solutions | Client Onboarding</title>
+<title>HGR TGW Solutions | Client Onboarding</title>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -211,7 +211,7 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="site-logo">
-        <img src="./background/icon.png" alt="AYR TGW Tools Hub" class="site-logo-img" onerror="this.src='./Logo2.png'">
+        <img src="./background/icon.png" alt="HGR TGW Tools Hub" class="site-logo-img" onerror="this.src='./Logo2.png'">
       </a>
       <ul style="list-style:none;margin:0;padding:0;" id="desktopNavList">
         <li><a href="index.html" class="nav-top-link">Home</a></li>
@@ -244,7 +244,7 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 <div class="drawer-overlay" id="drawerOverlay2"></div>
 <nav class="mobile-drawer" id="mobileDrawer2" aria-label="Mobile navigation">
   <div class="drawer-head">
-    <img src="./background/icon.png" alt="AYR TGW Tools Hub" onerror="this.src='./Logo2.png'">
+    <img src="./background/icon.png" alt="HGR TGW Tools Hub" onerror="this.src='./Logo2.png'">
     <button class="drawer-close" id="drawerClose2" aria-label="Close menu">&#x2715;</button>
   </div>
   <div class="drawer-links">
@@ -274,7 +274,7 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 <!-- MAIN -->
 <main class="max-w-3xl mx-auto px-6 py-14 relative z-10">
   <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-500 bg-clip-text text-transparent mb-2">Client Onboarding</h1>
-  <p class="text-gray-400 text-base mb-8 leading-relaxed max-w-xl">Complete your Financial Needs Analysis. All information is securely handled under AYR TGW compliance standards.</p>
+  <p class="text-gray-400 text-base mb-8 leading-relaxed max-w-xl">Complete your Financial Needs Analysis. All information is securely handled under HGR TGW compliance standards.</p>
 
   <div style="width:100%;max-width:740px;margin:0 auto;">
     <iframe
@@ -328,10 +328,10 @@ html.light-mode .nav-dropdown a:hover{color:#000;background:rgba(0,74,173,.08);}
 // Theme
 (function(){
   var btn=document.getElementById('themeToggle');
-  if(localStorage.getItem('ayr-theme')==='light')document.documentElement.classList.add('light-mode');
+  if(localStorage.getItem('hgr-theme')==='light')document.documentElement.classList.add('light-mode');
   if(btn)btn.addEventListener('click',function(){
     document.documentElement.classList.toggle('light-mode');
-    localStorage.setItem('ayr-theme',document.documentElement.classList.contains('light-mode')?'light':'dark');
+    localStorage.setItem('hgr-theme',document.documentElement.classList.contains('light-mode')?'light':'dark');
   });
 })();
 </script>
